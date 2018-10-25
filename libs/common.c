@@ -20,6 +20,6 @@ char* input(){
 }
 
 
-int findInVector(char* command){
+int findInVector(char* subvector, char* vector){
 	
 }

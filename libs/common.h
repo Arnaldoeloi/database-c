@@ -35,14 +35,18 @@ int execute(char* command);
 
 
 /*
-*	Responsável por encontrar
-*	um subvetor em um vetor
+*	Responsável por descobrir se
+*	um vetor está contido no outro
 *
+*	Recebe
+*	@char* subvector	
+*	@char* vector
+*	
 *	Retorna
 *	@int 
 *	
 *	1->encontrou;
 *	0->não encontrou;
 */
-int findInVector(char* command);
+int findInVector(char* subvector, char* vector);
 
