@@ -15,7 +15,7 @@ char* input(){
 		string[i]=getchar();
 		i++;
 	}
-	string[i]='\0';
+	string[i-1]='\0';
 	return string;
 }
 

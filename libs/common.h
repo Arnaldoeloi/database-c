@@ -10,7 +10,7 @@ void commandVersion();
 /*
 *	Responsável por ler
 *	da entrada padrão.
-*
+*	
 *	Retorna
 *	@char* string lida
 */
@@ -21,6 +21,9 @@ char* input();
 *	Responsável por executar o
 *	comando de banco de dados
 *	passado por parametro
+*
+*	Recebe
+*	@char* comando_para_execução_no_banco
 *
 *	Retorna
 *	@int 
