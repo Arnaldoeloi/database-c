@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "database_operations.h"
 
 
 void commandVersion(){
