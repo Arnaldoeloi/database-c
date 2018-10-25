@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "database_operations.h"
+
 
 void commandVersion(){
-	printf("0.0.1 All rights reserved to Go Horse interprise LTDA.\n");
+	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
 }
 
 char* input(){
-
 	char*string = malloc(sizeof(char));
 
 	int i=0;
@@ -18,4 +19,9 @@ char* input(){
 	i++;
 	string[i]='\0';
 	return string;
+}
+
+
+int findInVector(char* command){
+	
 }
