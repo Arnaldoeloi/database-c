@@ -21,5 +21,17 @@ char* input(){
 
 
 int findInVector(char* subvector, char* vector){
-	
+	int comparison[strlen(vector)];
+
+	if (strlen(vector) < strlen(subvector)){
+		return 0;
+	} else{
+		for (int i=0; vector[i] == "\0"; i++){
+			if(vector[i] ==  subvector[i]){
+				comparison[i] = 1;
+				if (i = strlen(vector)) return 1;
+			}
+			else return 0;
+		}
+	}
 }
