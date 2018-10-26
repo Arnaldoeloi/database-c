@@ -26,12 +26,12 @@ char* input(){
 
 
 int findInVector(char* subvector, char* vector){
-	if (strlen(vector) < strlen(subvector)){
+	if (strlen(subvector) > strlen(vector)){
 		return 0;
 	}else{
-		for (int i=0; vector[i] != '\0'; i++){
-			if(vector[i] ==  subvector[i]){
-				if (i == (int)strlen(vector)-1) return 1;
+		for (int i=0; subvector[i] != '\0'; i++){
+			if(subvector[i] ==  subvector[i]){
+				if (i == (int)strlen(subvector)-1) return 1;
 			}else{
 				return 0;
 			} 
