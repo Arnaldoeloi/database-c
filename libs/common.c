@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 void commandVersion(){
 	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
+}
+
+void printHelp(){
+	printf("Aqui digitaremos todos os comandos%s\n");
 }
 
 char* input(){
@@ -22,4 +27,24 @@ char* input(){
 
 int findInVector(char* subvector, char* vector){
 	
+}
+
+int execute(char* command){
+	if((strcmp("help", command)==0) || (strcmp("man", command)==0)){
+		printHelp();
+	}else if(findInVector("create database ", command)){
+		printf("Creating database\n");
+	}else if(findInVector("create ", command)){
+		printf("Creating table\n");
+	}else if(findInVector("alter table ", command)){
+		printf("Creating table\n");
+	}else if(findInVector("insert into ", command)){
+		printf("Creating table\n");
+	}else if(findInVector("delete from ", command)){
+		printf("Creating table\n");
+	}else if(findInVector("drop database ", command)){
+		printf("Creating table\n");
+	}else if(findInVector("select ", command)){
+		printf("Creating table\n");
+	}
 }

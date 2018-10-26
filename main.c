@@ -6,6 +6,7 @@
 int main(){
 	commandVersion();
 	char*v=input();
+	
 	if(strcmp("create database",v)==0){
 		printf("Uhuuuuuuulll!!!!!!!!!!!!!!!!\n");
 	}else{
