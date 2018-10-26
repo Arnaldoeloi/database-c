@@ -67,6 +67,7 @@ void split(char* string, char caractere){
 			spaces++;
 		}
 	}
+
 	char* matrix[spaces+1];
 	int posLastWord=0;
 	for (int i = 0; i < spaces+1; i++){
@@ -80,3 +81,28 @@ void split(char* string, char caractere){
 		printf("\n");
 	}
 }
+
+
+/*
+int main () {
+	
+   char str[80] = "This is www.tutorialspoint.com website";
+   char robalo[80][80];
+   const char s[2] = " ";
+   char *token;
+   token = strtok(str, s);
+
+   for(int x=0; token != NULL; x++) {
+      printf( " %s\n", token );
+
+      for(int i=0; i < strlen(token); i++){
+        robalo[x][i] = token[i];
+      }
+      token = strtok(NULL, s);
+
+   }
+   printf("%s", robalo[0]);
+   return(0);
+}
+*/
+>>>>>>> be630319ead2d6d2bf14db57eb4eadff3ebdc93e
