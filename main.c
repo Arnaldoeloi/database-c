@@ -5,11 +5,12 @@
 
 int main(){
 	commandVersion();
-	char*v=input();
-	if(strcmp("create database",v)==0){
-		printf("Uhuuuuuuulll!!!!!!!!!!!!!!!!\n");
-	}else{
-		printf("%s", v);
+	while(1){
+		char*v=input();
+		if(strcmp("exit",v)==0){
+			break;
+		}
+		execute(v);
 	}
-
+	return 0;
 }	
