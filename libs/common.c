@@ -61,13 +61,22 @@ int execute(char* command){
 
 void split(char* string, char caractere){
 	int spaces=0;
+	printf("SPACES: %i\n", spaces);
 	for (int i = 0; i < string[i]!='\0'; i++){
 		if(string[i]==caractere){
 			spaces++;
 		}
 	}
-	char* matrix[spaces];
-	for (int i = 0; i < spaces; ++i){
-		/* code */
+	char* matrix[spaces+1];
+	int posLastWord=0;
+	for (int i = 0; i < spaces+1; i++){
+		for (int j = posLastWord; j < string[j]!=caractere; j++){
+			matrix[i]=realloc(matrix[i], posLastWord*(sizeof(char))+sizeof(char));
+			matrix[i][j]=string[j];
+			printf("%c", string[j] );
+			posLastWord++;
+			if(string[j]=='\n' || string[j]=='\0')break;
+		}
+		printf("\n");
 	}
 }
