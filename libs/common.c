@@ -8,7 +8,7 @@ void commandVersion(){
 }
 
 void printHelp(){
-	printf("Aqui digitaremos todos os comandos%s\n");
+	printf("Aqui digitaremos todos os comandos\n");
 }
 
 char* input(){
