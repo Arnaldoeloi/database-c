@@ -50,3 +50,16 @@ int execute(char* command);
 */
 int findInVector(char* subvector, char* vector);
 
+/*
+*	Responsável por quebrar um string
+*	em um vetor a cada caractere encontrado
+*
+*	Recebe
+*	@char* string
+*	@char caractere
+*	
+*	Retorna
+*	@char**
+*	
+*/
+char** split(char* string, char caractere);

@@ -11,12 +11,14 @@
 void select();
 void create();
 
-void createDatabase(){
+void createDatabase(char* name){
 	struct stat st = {0};
 
-	if (stat("/some/directory", &st) == -1) {
+	if (stat(name, &st) == -1) {
 		printf("Deu certo\n");
-	    mkdir("/some/directory", 0700);
+	    mkdir(name, 0777);
+	}else{
+		printf("A pasta já existe.\n");
 	}
 
 }

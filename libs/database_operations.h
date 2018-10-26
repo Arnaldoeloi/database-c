@@ -2,7 +2,7 @@
 
 void select();
 void create();
-void createDatabase();
+void createDatabase(char* name);
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
