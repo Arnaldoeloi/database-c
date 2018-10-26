@@ -7,10 +7,12 @@ int main(){
 	commandVersion();
 	while(1){
 		char*v=input();
+		//split(v,' ');
 		if(strcmp("exit",v)==0){
 			break;
 		}
 		execute(v);
 	}
+
 	return 0;
 }	

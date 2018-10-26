@@ -62,4 +62,4 @@ int findInVector(char* subvector, char* vector);
 *	@char**
 *	
 */
-char** split(char* string, char caractere);
+void split(char* string, char caractere);

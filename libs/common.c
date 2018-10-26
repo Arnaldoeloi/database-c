@@ -30,7 +30,7 @@ int findInVector(char* subvector, char* vector){
 		return 0;
 	}else{
 		for (int i=0; subvector[i] != '\0'; i++){
-			if(subvector[i] ==  subvector[i]){
+			if(subvector[i] ==  vector[i]){
 				if (i == (int)strlen(subvector)-1) return 1;
 			}else{
 				return 0;
@@ -47,14 +47,25 @@ int execute(char* command){
 	}else if(findInVector("create ", command)){
 		printf("Creating table\n");
 	}else if(findInVector("alter table ", command)){
-		printf("Creating table\n");
+		printf("Altering table\n");
 	}else if(findInVector("insert into ", command)){
-		printf("Creating table\n");
+		printf("Inserting into table\n");
 	}else if(findInVector("delete from ", command)){
-		printf("Creating table\n");
+		printf("Deleting table\n");
 	}else if(findInVector("drop database ", command)){
-		printf("Creating table\n");
+		printf("Drop table\n");
 	}else if(findInVector("select ", command)){
-		printf("Creating table\n");
+		printf("Select table\n");
+	}
+}
+
+void split(char* string, char caractere){
+	
+	for (int i = 0; i < string[i]!='\0'; i++){
+		if(string[i]==caractere){
+			printf("\n");
+		}else{
+			printf("%c", string[i]);
+		}
 	}
 }
