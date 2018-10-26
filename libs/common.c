@@ -69,3 +69,25 @@ void split(char* string, char caractere){
 		}
 	}
 }
+/*
+int main () {
+	
+   char str[80] = "This is www.tutorialspoint.com website";
+   char robalo[80][80];
+   const char s[2] = " ";
+   char *token;
+   token = strtok(str, s);
+
+   for(int x=0; token != NULL; x++) {
+      printf( " %s\n", token );
+
+      for(int i=0; i < strlen(token); i++){
+        robalo[x][i] = token[i];
+      }
+      token = strtok(NULL, s);
+
+   }
+   printf("%s", robalo[0]);
+   return(0);
+}
+*/
