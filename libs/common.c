@@ -60,12 +60,14 @@ int execute(char* command){
 }
 
 void split(char* string, char caractere){
-	
+	int spaces=0;
 	for (int i = 0; i < string[i]!='\0'; i++){
 		if(string[i]==caractere){
-			printf("\n");
-		}else{
-			printf("%c", string[i]);
+			spaces++;
 		}
+	}
+	char* matrix[spaces];
+	for (int i = 0; i < spaces; ++i){
+		/* code */
 	}
 }
