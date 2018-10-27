@@ -75,7 +75,12 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 		}
 		token = strtok(NULL, caracteres);
 	}
-	return m[pos];
+	word=NULL;
+	for (int i = 0; i < (int)strlen(m[pos])); i++){
+		word=realloc(word, i*sizeof(char)+sizeof(char));
+		word[i]=m[pos][i];
+	}
+	return word;
 }
 
 
