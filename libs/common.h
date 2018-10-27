@@ -57,9 +57,10 @@ int findInVector(char* subvector, char* vector);
 *	Recebe
 *	@char* string
 *	@char* caracteres
+*	@int   pos	
 *	
 *	Retorna
-*	@char**
+*	@char*
 *	
 */
-char** split(char* string, char* caracteres);
+char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos);

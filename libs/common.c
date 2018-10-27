@@ -62,25 +62,26 @@ int execute(char* command){
 	}
 }
 
-char** split(char* string, char* caracteres){
-	//char string[80] = "This is www.tutorialspoint.com website";
-		
-	char m[strlen(string)][strlen(string)];
+char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
+	char m[80][80];
+	const char s[2] = " ";
 	char *token;
 	token = strtok(string, caracteres);
 
-	char** words=NULL;	
-
-	int i=0;
-	for(int x=0; token != NULL; x++) {
-		printf( "%s\n", token);
-		words[x]=(char*) calloc(strlen(token)+1, sizeof(char));
-		words[x]=token;
-	   	token = strtok(NULL, caracteres);
+	for(int i=0; token != NULL; i++) {
+		printf( " %s\n", token );
+		for(int j=0; j < (int)strlen(token); j++){
+			m[i][j] = token[j];
+		}
+		token = strtok(NULL, caracteres);
 	}
-	return words;
+	return m[pos];
 }
 
+
+Database commandToDatabase(char* command){
+
+}
 
 
 
