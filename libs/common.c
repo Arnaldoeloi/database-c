@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "database_operations.h"
+#include "database_types.h"
 
 void commandVersion(){
 	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
@@ -43,6 +44,8 @@ int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0)){
 		printHelp();
 	}else if(findInVector("create database ", command)){
+		
+		createDatabase(name);
 		printf("Creating database\n");
 	}else if(findInVector("create ", command)){
 		printf("Creating table\n");
@@ -59,28 +62,26 @@ int execute(char* command){
 	}
 }
 
-void split(char* string, char caractere){
-	int spaces=0;
-	printf("SPACES: %i\n", spaces);
-	for (int i = 0; i < string[i]!='\0'; i++){
-		if(string[i]==caractere){
-			spaces++;
-		}
-	}
+char** split(char* string, char* caracteres){
+	//char string[80] = "This is www.tutorialspoint.com website";
+		
+	char m[strlen(string)][strlen(string)];
+	char *token;
+	token = strtok(string, caracteres);
 
-	char* matrix[spaces+1];
-	int posLastWord=0;
-	for (int i = 0; i < spaces+1; i++){
-		for (int j = posLastWord; j < string[j]!=caractere; j++){
-			matrix[i]=realloc(matrix[i], posLastWord*(sizeof(char))+sizeof(char));
-			matrix[i][j]=string[j];
-			printf("%c", string[j] );
-			posLastWord++;
-			if(string[j]=='\n' || string[j]=='\0')break;
-		}
-		printf("\n");
+	char** words=NULL;	
+
+	int i=0;
+	for(int x=0; token != NULL; x++) {
+		printf( "%s\n", token);
+		words[x]=(char*) calloc(strlen(token)+1, sizeof(char));
+		words[x]=token;
+	   	token = strtok(NULL, caracteres);
 	}
+	return words;
 }
+
+
 
 
 /*

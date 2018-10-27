@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //Bibliotecas de arquivos
 #include <sys/types.h>
@@ -8,12 +9,12 @@
 //fim bibliotecas de tratamento de arquivos
 
 
-void select();
-void create();
+void selectFromTable();
+void createTable();
 
 void createDatabase(char* name){
 	struct stat st = {0};
-
+	//strcat("dbs/", name);
 	if (stat(name, &st) == -1) {
 		printf("Deu certo\n");
 	    mkdir(name, 0777);

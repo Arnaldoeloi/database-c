@@ -56,10 +56,10 @@ int findInVector(char* subvector, char* vector);
 *
 *	Recebe
 *	@char* string
-*	@char caractere
+*	@char* caracteres
 *	
 *	Retorna
 *	@char**
 *	
 */
-void split(char* string, char caractere);
+char** split(char* string, char* caracteres);

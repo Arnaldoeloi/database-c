@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-void select();
-void create();
+void selectFromTable();
+void createTable();
 void createDatabase(char* name);
 void deleteFromTable();
 void alterTableModify();
