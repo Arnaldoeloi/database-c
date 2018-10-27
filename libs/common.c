@@ -40,13 +40,35 @@ int findInVector(char* subvector, char* vector){
 	}
 }
 
+
+char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
+	char m[100][100];
+	char *token;
+	token = strtok(string, caracteres);
+
+	for(int i=0; token != NULL; i++) {
+		for(int j=0; j < (int)strlen(token); j++){
+			m[i][j] = token[j];
+		}
+		token = strtok(NULL, caracteres);
+	}
+
+	char* word=NULL;
+	for (int i = 0; i < (int)strlen(m[pos]); i++){
+		word=realloc(word, i*sizeof(char)+sizeof(char));
+		word[i]=m[pos][i];
+	}
+	return word;
+}
+
+
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0)){
 		printHelp();
 	}else if(findInVector("create database ", command)){
-		
-		createDatabase(name);
+		char* name = wordInPositionAfterSeparations(command, " ", 2);
 		printf("Creating database\n");
+		createDatabase(name);
 	}else if(findInVector("create ", command)){
 		printf("Creating table\n");
 	}else if(findInVector("alter table ", command)){
@@ -62,26 +84,6 @@ int execute(char* command){
 	}
 }
 
-char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[80][80];
-	const char s[2] = " ";
-	char *token;
-	token = strtok(string, caracteres);
-
-	for(int i=0; token != NULL; i++) {
-		printf( " %s\n", token );
-		for(int j=0; j < (int)strlen(token); j++){
-			m[i][j] = token[j];
-		}
-		token = strtok(NULL, caracteres);
-	}
-	word=NULL;
-	for (int i = 0; i < (int)strlen(m[pos])); i++){
-		word=realloc(word, i*sizeof(char)+sizeof(char));
-		word[i]=m[pos][i];
-	}
-	return word;
-}
 
 
 Database commandToDatabase(char* command){
