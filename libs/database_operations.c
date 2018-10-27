@@ -14,6 +14,7 @@ void createTable();
 
 void createDatabase(char* name){
 	struct stat st = {0};
+	char* path=name;
 	strcat("dbs/", path);
 	if (stat(name, &st) == -1) {
 		printf("Deu certo\n");
