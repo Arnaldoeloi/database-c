@@ -36,7 +36,7 @@ int main(){
 	// usuarios.data[4][0] = "Marjory Marjority";
 	// usuarios.data[4][1] = "(22) 8 3441-2101";
 
-	PrintTable(usuarios);
+	printTable(usuarios);
 
 	return 0;
 }	
