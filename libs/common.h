@@ -64,3 +64,4 @@ int findInVector(char* subvector, char* vector);
 *	
 */
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos);
+

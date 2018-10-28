@@ -3,15 +3,32 @@
 #include <string.h>
 #include "database_operations.h"
 #include "database_types.h"
+#include "colors.h"
 
 void commandVersion(){
 	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
-	printf("Digite 'help' ou 'man' para ver os comandos.");
+	printf("Digite ");
+	yellow();
+	printf("help ");
+	resetColor();
+	printf("ou ");
+	yellow(); 
+	printf("man ");
+	resetColor();
+	printf("para ver os comandos.\n");
+
 }
 
 void printHelp(){
-	printf("-----------------\\-------//-----------------\n");
-	printf("Aqui digitaremos todos os comandos\n");
+	printf("-----------------\\-------//----------------------------------\\-------//-----------------\n");
+	printf("Criar um *novo* banco de dados (disponivel na pasta 'dbs/'):\n");
+	printf("create database *nome_do_banco*\n");
+	printf("\n\n");
+   	printf("Criar uma *nova* tabela:\n");
+	printf("create *nome_da_banco*\n");
+	printf("\n\n");
+
+	printf("Digite *exit* para sair do programa.\n");
 }
 
 char* input(){
@@ -65,7 +82,7 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 
 
 int execute(char* command){
-	if((strcmp("help", command)==0) || (strcmp("man", command)==0 || (strcmp("manual", command)==0) || (strcmp("commands", command)==0){
+	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
 	}else if(findInVector("create database ", command)){
 		char* name = wordInPositionAfterSeparations(command, " ", 2);
