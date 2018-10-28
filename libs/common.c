@@ -139,9 +139,7 @@ Database commandToDatabase(char* command){
 
 
 void PrintTable(Table table){
-/*Passo 1 - Comparar todos os valores de uma table e printa-los
-*\
-
+	
 }
 
 /*Table usuarios;
