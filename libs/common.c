@@ -149,17 +149,19 @@ Table commandCreateTabletoTable(char* command){
 
 void printTable(Table table){
 	//bigOne é um vetor string que armazenará a maior variável do tipo string em uma coluna;
-	char** bigOne = (char**)calloc(table.numCols,sizeof(char**));
+	char** bigestStringInCols = (char**)calloc(table.numCols,sizeof(char**));
+
 	for (int i=0; i < table.numRows; i++){
-		bigOne[i] = (char*)calloc(strlen(table.data[i][0]),sizeof(char*));
+		bigestStringInCols[i] = (char*)calloc(strlen(table.data[i][0]),sizeof(char*));
 		for (int j=0; j < table.numCols; j++){
-			if (strcmp(bigOne[i],table.data[j][0]) == 0 || strcmp(bigOne[i],table.data[j][0])> 0){
+			if (strcmp(bigestStringInCols[i],table.data[j][0]) == 0 || strcmp(bigOne[i],table.data[j][0])> 0){
 				continue;
 			} else{
-				bigOne[i] = table.data[i][0];
+				bigestStringInCols[i] = table.data[i][0];
 			}
 		}
 	}
+
 }
 
 /*Table usuarios;
