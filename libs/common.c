@@ -126,7 +126,10 @@ int execute(char* command){
 		printf("Drop table\n");
 	}else if(findInVector("select ", command)){
 		printf("Selecting data from table\n");
-		countRowsInCsv("dbs/escola/planilha.csv");
+		int rows=countRowsInCsv("dbs/escola/planilha.csv");
+		printf("Rows: %f",rows);
+		csvToTable("dbs/escola/planilha.csv");
+
 	}else{
 		boldRed();
 		printf("Comando não encontrado.\n");

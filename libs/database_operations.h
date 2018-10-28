@@ -4,7 +4,7 @@
 Database commandToDatabase(char* command);
 int countRowsInCsv(char* pathToFile);
 void selectFromTable();
-void createTable();
+void createTable(Table table);
 void createDatabase(Database db);
 void deleteFromTable();
 void alterTableModify();

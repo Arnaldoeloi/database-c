@@ -37,7 +37,7 @@ void createDatabase(Database db){
 }
 
 void selectFromTable();
-void createTable();
+void createTable(Table table);
 
 
 void deleteFromTable();
@@ -72,9 +72,13 @@ Table csvToTable(char* pathToFile){
 	if( file == NULL ) {
 		printf( "Erro na abertura do arquivo!\n" );
 	}else{
-
+		while((ch=fgetc(file))!=EOF){
+			printf("%c",ch);
+		}
 	}
 	fclose(file);
+	Table tb=NULL;
+	return tb;
 }
 
 
