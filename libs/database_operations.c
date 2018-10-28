@@ -68,6 +68,7 @@ int countRowsInCsv(char* pathToFile){
 Table csvToTable(char* pathToFile){
 	FILE *file;
 	file = fopen( pathToFile, "r" );
+	char ch;
 	//FILE *file = fopen( pathToFile, "r" );
 	if( file == NULL ) {
 		printf( "Erro na abertura do arquivo!\n" );
@@ -77,8 +78,12 @@ Table csvToTable(char* pathToFile){
 		}
 	}
 	fclose(file);
-	Table tb=NULL;
-	return tb;
+	Table usuarios;
+	usuarios.name = "usuarios";
+	usuarios.database = "escola";
+	usuarios.collums = "id,nome,senha,e-mail";
+	usuarios.data = "0,pedro,corinthinas,pedro@gmail.com";
+	return usuarios;
 }
 
 
