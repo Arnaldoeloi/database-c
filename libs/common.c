@@ -60,27 +60,45 @@ void printHelp(){
 
 
 Table commandCreateTabletoTable(char* command){
-	
-
 	Table table;
-	table.name = "TODO";
+	table.name;
 	table.database = "TODO";
 	table.numRows=1;
-	table.numCols=4;
-	
-	char* row = betweenParenthesis(command);
-	printf("row=   %s\n", row);
-	
+	table.numCols=0;
+	int count=0;
+
 	char *end_str=NULL;
-    char *token = strtok_r(row, ",", &end_str); //separa os dados para cada \n
+    char *token = strtok_r(command, " ", &end_str); //separa os dados para cada \n
+	while (count < 1){
+		char *end_token=NULL;
+        token = strtok_r(NULL, " ", &end_str);
+		count++;
+	}
+	table.name=token;
+	char* row = betweenParenthesis(command);
+	
+	end_str=NULL;
+    token = strtok_r(row, ",", &end_str); //separa os dados para cada \n
 	
 	
 	table.data=(char***) calloc(1, sizeof(char***));
-    while (token != NULL){
+	table.data[0]=(char**) calloc(1, sizeof(char**));
+
+    count=0;
+	while (token != NULL){
+		table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
 		char *end_token=NULL;
+		table.data[0][count]=token;
         printf("NOVOS DADOS = %s\n", token);
-        token = strtok_r(NULL, "\n", &end_str);	
-    }
+		table.numCols++;
+        token = strtok_r(NULL, ",\n", &end_str);
+		count++;
+	}
+
+	//print com os dados
+	for(int i=0; i < table.numCols; i++){
+		printf("%s\n",table.data[0][i]);
+	}
 }
 
 
@@ -199,8 +217,8 @@ int execute(char* command){
 		yellow();
 		printf("Creating table\n");
 		resetColor();
-		betweenParenthesis(command);
-		//commandCreateTabletoTable(command);
+		//betweenParenthesis(command);
+		commandCreateTabletoTable(command);
 
 
 	}else if(findInVector("alter table ", command)){
