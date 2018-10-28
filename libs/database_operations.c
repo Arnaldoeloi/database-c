@@ -90,6 +90,8 @@ Table csvToTable(char* pathToFile){
 	char ch;
 	char* wholeFile=NULL;	
 
+	int rows=countRowsInCsv(pathToFile);
+	int cols=countColsInCsv(pathToFile);
 	//FILE *file = fopen( pathToFile, "r" );
 	if( file == NULL ) {
 		printf( "Erro na abertura do arquivo!\n" );
@@ -108,7 +110,7 @@ Table csvToTable(char* pathToFile){
 	
 	char *token;
    	token = strtok(wholeFile, "\n");
-	char* m[countRowsInCsv(pathToFile)];
+	char* m[rows];
 
 	int count=0;
 	while( token != NULL ) {
@@ -118,10 +120,15 @@ Table csvToTable(char* pathToFile){
 		count++;
 	}
 
-	for(int i=0; i<countRowsInCsv(pathToFile); i++){
-		for(int j=0; j< countColsInCsv(pathToFile); j++){
-			printf("#%f: %s", j, wordInPositionAfterSeparations(m[i], ",", j));
-			
+	for(int i=0; i<rows; i++){
+
+		for(int j=0; j< cols; j++){
+			char* t;
+			t=strtok(m[i], ",");
+			while(t!=NULL){
+				t=strtok(NULL, ",");
+				printf("%s\n",t);
+			}
 		}
 	}
    
