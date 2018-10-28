@@ -18,11 +18,11 @@ char* concat(char *string1, char *string2){
 void createDatabase(char* name){
 	struct stat st = {0};
 	char* path= NULL;
-	path = concat("dbs/", name);
+	path = concat("dbs/", name); //concatena o nome do banco com a pasta onde ele será armazenado
 	printf("Caminho do banco: %s\n", path);
-	if (stat(path, &st) == -1) {
+	if (stat(path, &st) == -1) { //verifica a existência do arquivo
 		printf("O arquivo não existe, criando...\n");
-	    if(mkdir(path, 0777)==-1){
+	    if(mkdir(path, 0777)==-1){ //cria o arquivo com permissão 0777
 			printf("Ocorreu um problema, tente criar com outro nome ou execute o programa com privilegios de administrador.");
 			perror("mkdir");
 		}else{
