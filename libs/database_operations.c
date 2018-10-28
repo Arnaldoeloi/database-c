@@ -69,21 +69,27 @@ Table csvToTable(char* pathToFile){
 	FILE *file;
 	file = fopen( pathToFile, "r" );
 	char ch;
-	
+	char* wholeFile=NULL;	
 
 	//FILE *file = fopen( pathToFile, "r" );
 	if( file == NULL ) {
 		printf( "Erro na abertura do arquivo!\n" );
 	}else{
+		int count=0;
 		while((ch=fgetc(file))!=EOF){
 			printf("%c",ch);
+			wholeFile=realloc(wholeFile, count*sizeof(char) + sizeof(char));
+			wholeFile[count]=ch;
+			count++;
 		}
 	}
+
+
 	fclose(file);
 	Table usuarios;
 	usuarios.name = "usuarios";
 	usuarios.database = "escola";
-	usuarios.collums = "id,nome,senha,e-mail";
+	//usuarios.collums = "id,nome,senha,e-mail";
 	usuarios.data = (char***) calloc(1, sizeof(char***));
 	usuarios.data[0][0] = "0,pedro,corinthinas,pedro@gmail.com";
 	return usuarios;
