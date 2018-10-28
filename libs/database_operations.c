@@ -89,7 +89,6 @@ Table csvToTable(char* pathToFile){
 	Table usuarios;
 	usuarios.name = "usuarios";
 	usuarios.database = "escola";
-	//usuarios.collums = "id,nome,senha,e-mail";
 	usuarios.data = (char***) calloc(1, sizeof(char***));
 	usuarios.data[0][0] = "0,pedro,corinthinas,pedro@gmail.com";
 	return usuarios;

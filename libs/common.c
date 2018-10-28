@@ -4,6 +4,8 @@
 #include "database_operations.h"
 #include "colors.h"
 
+void PrintTable(Table table);
+
 void commandVersion(){
 	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
 	printf("Digite ");
@@ -169,8 +171,10 @@ Database commandToDatabase(char* command){
 
 
 void PrintTable(Table table){
+	
 	int size;
 	size = sizeof(table.data)/sizeof(table.data[0]);
+	printf("%s", size);
 	for (int i=0; i < size; i++){
 
 	}
