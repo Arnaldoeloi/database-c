@@ -151,15 +151,19 @@ void printTable(Table table){
 	//bigOne é um vetor string que armazenará a maior variável do tipo string em uma coluna;
 	char** bigestStringInCols = (char**)calloc(table.numCols,sizeof(char**));
 
-	for (int i=0; i < table.numRows; i++){
+	for (int i=0; i < table.numCols; i++){
 		bigestStringInCols[i] = (char*)calloc(strlen(table.data[i][0]),sizeof(char*));
-		for (int j=0; j < table.numCols; j++){
+		for (int j=0; j < table.numRows; j++){
 			if (strcmp(bigestStringInCols[i],table.data[j][0]) == 0 || strcmp(bigOne[i],table.data[j][0])> 0){
 				continue;
 			} else{
 				bigestStringInCols[i] = table.data[i][0];
 			}
 		}
+	}
+
+	for (int i=0; i < table.numRows; i++){
+
 	}
 
 }
