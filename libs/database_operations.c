@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "database_types.h"
+#include "strings.h"
 
 //Bibliotecas de arquivos
 #include <sys/types.h>
@@ -64,6 +65,24 @@ int countRowsInCsv(char* pathToFile){
 	return rows;
 }
 
+int countColsInCsv(char* pathToFile){
+	int cols=0;
+	char ch;
+	FILE *arq;
+	arq = fopen(pathToFile, "r");
+	if(arq == NULL)
+		return -1;
+	else{
+		while( (ch=fgetc(arq))!= EOF ){
+			if(ch == ','){
+				cols++;
+			}
+		}
+	}
+	fclose(arq);
+	return cols+1;
+}
+
 
 Table csvToTable(char* pathToFile){
 	FILE *file;
@@ -77,21 +96,42 @@ Table csvToTable(char* pathToFile){
 	}else{
 		int count=0;
 		while((ch=fgetc(file))!=EOF){
-			printf("%c",ch);
+			//printf("%c",ch);
 			wholeFile=realloc(wholeFile, count*sizeof(char) + sizeof(char));
 			wholeFile[count]=ch;
 			count++;
 		}
+		wholeFile=realloc(wholeFile, count*sizeof(char) + sizeof(char));
+		wholeFile[count]='\0';
+	}
+	fclose(file);
+	
+	char *token;
+   	token = strtok(wholeFile, "\n");
+	char* m[countRowsInCsv(pathToFile)];
+
+	int count=0;
+	while( token != NULL ) {
+		printf("LINHA INTEIRA: %s\n\n\n", token);
+    	token = strtok(NULL, "\n");
+		m[count]=token;
+		count++;
 	}
 
+	for(int i=0; i<countRowsInCsv(pathToFile); i++){
+		for(int j=0; j< countColsInCsv(pathToFile); j++){
+			printf("#%f: %s", j, wordInPositionAfterSeparations(m[i], ",", j));
+			
+		}
+	}
+   
 
-	fclose(file);
-	Table usuarios;
-	usuarios.name = "usuarios";
-	usuarios.database = "escola";
-	//usuarios.collums = "id,nome,senha,e-mail";
-	usuarios.data = (char***) calloc(1, sizeof(char***));
-	usuarios.data[0][0] = "0,pedro,corinthinas,pedro@gmail.com";
+	   Table usuarios;
+	   usuarios.name = "usuarios";
+	   usuarios.database = "escola";
+	// //usuarios.collums = "id,nome,senha,e-mail";
+	// usuarios.data = (char***) calloc(1, sizeof(char***));
+	// usuarios.data[0][0] = "0,pedro,corinthinas,pedro@gmail.com";
 	return usuarios;
 }
 

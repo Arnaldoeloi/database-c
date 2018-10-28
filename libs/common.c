@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "database_operations.h"
+#include "strings.h"
 #include "colors.h"
 
 void commandVersion(){
@@ -85,43 +86,6 @@ int findInVector(char* subvector, char* vector){
 }
 
 
-char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[100][strlen(string)];
-	char *token;
-	token = strtok(string, caracteres);
-	
-	for(int i=0; token != NULL; i++) {
-		for(int j=0; j < (int)strlen(token)+1; j++){
-			m[i][j] = token[j];
-		}
-		token = strtok(NULL, caracteres);
-	}
-
-	char* word=NULL;
-	for (int i = 0; i < (int)strlen(m[pos])+1; i++){
-		word=realloc(word, i*sizeof(char)+sizeof(char));
-		word[i]=m[pos][i];
-	}
-	return word;
-}
-
-
-int numberOfWords(char* string, char* caracteres){
-	char m[100][strlen(string)];
-	char *token;
-	int nWords;
-	token = strtok(string, caracteres);
-	
-	for(int i=0; token != NULL; i++) {
-		for(int j=0; j < (int)strlen(token); j++){
-			m[i][j] = token[j];
-		}
-		token = strtok(NULL, caracteres);
-		nWords = i + 1;
-	}
-	return nWords;
-}
-
 
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
@@ -144,7 +108,7 @@ int execute(char* command){
 	}else if(findInVector("select ", command)){
 		printf("Selecting data from table\n");
 		int rows=countRowsInCsv("dbs/escola/planilha.csv");
-		printf("Rows: %f",rows);
+		//printf("Rows: %f",rows);
 		csvToTable("dbs/escola/planilha.csv");
 
 	}else{
