@@ -69,6 +69,8 @@ Table csvToTable(char* pathToFile){
 	FILE *file;
 	file = fopen( pathToFile, "r" );
 	char ch;
+	
+
 	//FILE *file = fopen( pathToFile, "r" );
 	if( file == NULL ) {
 		printf( "Erro na abertura do arquivo!\n" );
