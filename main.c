@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libs/common.h" //Biblioteca com comandos padrões (leitura do comando)
-#include "libs/database_types.h"
 
 int main(){
 	commandVersion();

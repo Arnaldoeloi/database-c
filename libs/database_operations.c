@@ -84,6 +84,8 @@ int countColsInCsv(char* pathToFile){
 		while( (ch=fgetc(arq))!= EOF ){
 			if(ch == ','){
 				cols++;
+			}else if(ch == '\n'){
+				break;
 			}
 		}
 	}
@@ -132,12 +134,12 @@ Table csvToTable(char* pathToFile){
     while (token != NULL){
 		table.data[row]=(char**) calloc(1, sizeof(char**));
         char *end_token=NULL;
-        printf("NOVOS DADOS = %s\n", token);
+        //printf("NOVOS DADOS = %s\n", token);
         char *token2 = strtok_r(token, ",", &end_token); //separa os dados a cada ,
         while (token2 != NULL){
 			table.data[row][col]=(char*)malloc(strlen(token2)*sizeof(char));
 			table.data[row][col]=token2;
-            printf("table.data[%i][%i] = %s\n",row,col, table.data[row][col]);
+            //printf("table.data[%i][%i] = %s\n",row,col, table.data[row][col]);
             token2 = strtok_r(NULL, ",", &end_token);
 			col++;
         }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "database_types.h"
 
 /*
 *	Printa a versão do
@@ -6,6 +7,7 @@
 */
 void commandVersion();
 
+void printTable(Table table);
 
 /*
 *	Responsável por ler

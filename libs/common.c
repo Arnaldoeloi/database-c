@@ -5,7 +5,6 @@
 #include "strings.h"
 #include "colors.h"
 
-void PrintTable(Table table);
 
 void commandVersion(){
 	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
@@ -88,72 +87,21 @@ int findInVector(char* subvector, char* vector){
 }
 
 
-
-int execute(char* command){
-	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
-		printHelp();
-	}else if(findInVector("create database ", command) || findInVector("CREATE DATABASE ", command)){
-		//char* name = wordInPositionAfterSeparations(command, " ", 2);
-		yellow();
-		printf("\nCreating database\n");
-		resetColor();
-		
-		command=lowerCase(command);
-		Database db=commandToDatabase(command);
-		createDatabase(db);
-	}else if(findInVector("create ", command)){
-		yellow();
-		printf("Creating table\n");
-		resetColor();
-
-		betweenParenthesis(command);
-	}else if(findInVector("alter table ", command)){
-		printf("Altering table\n");
-	}else if(findInVector("insert into ", command)){
-		printf("Inserting into table\n");
-	}else if(findInVector("delete from ", command)){
-		printf("Deleting table\n");
-	}else if(findInVector("drop database ", command)){
-		printf("Drop table\n");
-	}else if(findInVector("select ", command)){
-		printf("Selecting data from table\n");
-		int rows=countRowsInCsv("dbs/escola/planilha.csv");
-		//printf("Rows: %f",rows);
-		csvToTable("dbs/escola/planilha.csv");
-
-	}else{
-		boldRed();
-		printf("Comando não encontrado.\n");
-		resetColor();
-		printf("Você não quis dizer ");
-		boldGreen();
-		printf("help ");
-		printf("?\n");
-		resetColor();
-	}
-}
-
-
-
-Database commandToDatabase(char* command){
-	Database db;
-	db.name = wordInPositionAfterSeparations(command, " ", 2);
-	return db;
-}
-
-Table commandCreateTabletoTable(char* command){
-
-}
-
-
-
 void printTable(Table table){
 	//bigOne é um vetor string que armazenará a maior variável do tipo string em uma coluna;
+	printf("char** biggestStringInCols\n");
 	char** biggestStringInCols = (char**)calloc(table.numCols,sizeof(char**));
 
+	printf("Entrará no primeiro for.\n");
 	for (int i=0; i < table.numCols; i++){
-		biggestStringInCols[i] = (char*)calloc(strlen(table.data[i][0]),sizeof(char*));
-		for (int j=0; j < table.numRows; j++){
+		printf("biggestStringInCols[%i] = (char*)calloc(strlen(table.data[i][0]),sizeof(char*));\n", i);
+		int size=(int) strlen(table.data[i][0]);
+		printf("strlen(table.data[%i][0]= %i\n", i, size);
+
+		biggestStringInCols[i] = (char*) calloc ( strlen(table.data[i][0]), sizeof(char*));
+		
+		for (int j=0; j < table.numRows-1; j++){
+			printf("if dentro do for que tá dentro do for[%i][%i]|\n", i, j);
 			if (strcmp(biggestStringInCols[i],table.data[j][0]) == 0 || strcmp(biggestStringInCols[i],table.data[j][0])> 0){
 				continue;
 			} else{
@@ -183,6 +131,90 @@ void printTable(Table table){
 		}
 	}
 }
+
+void tstPrnt(Table table){
+	//printf("table.senha[0][3]=%s", table.data[0][3]);
+	printf("table.numRows=%i\n", table.numRows);
+	printf("table.numCols=%i\n", table.numCols);
+	for(int i=0; i < table.numRows; i++){
+		//printf("\t\n|i:%i|\n-------||------\n", i);
+		if(i==0){
+			magenta();
+		}else{
+			yellow();
+		}
+		for(int j=0; j < table.numCols; j++){
+			//printf("\t|j:%i|", j);
+			printf("|%s\t\t\t\t|", table.data[i][j]);
+		}
+		if(i==0){
+			resetColor();
+		}
+		printf("\n");
+	}
+}
+
+int execute(char* command){
+	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
+		printHelp();
+	}else if(findInVector("create database ", command) || findInVector("CREATE DATABASE ", command)){
+		//char* name = wordInPositionAfterSeparations(command, " ", 2);
+		yellow();
+		printf("\nCreating database\n");
+		resetColor();
+		
+		command=lowerCase(command);
+		Database db=commandToDatabase(command);
+		createDatabase(db);
+	}else if(findInVector("create ", command)){
+		yellow();
+		printf("Creating table\n");
+		resetColor();
+		betweenParenthesis(command);
+	}else if(findInVector("alter table ", command)){
+		printf("Altering table\n");
+	}else if(findInVector("insert into ", command)){
+		printf("Inserting into table\n");
+	}else if(findInVector("delete from ", command)){
+		printf("Deleting table\n");
+	}else if(findInVector("drop database ", command)){
+		printf("Drop table\n");
+	}else if(findInVector("select ", command)){
+		printf("Selecting data from table\n");
+		//printf("Rows: %f",rows);
+
+		printf("executará csvToTable.\n");
+		Table t = csvToTable("dbs/escola/planilha.csv");
+		printf("executará printTable.\n");
+		tstPrnt(t);
+
+	}else{
+		boldRed();
+		printf("Comando não encontrado.\n");
+		resetColor();
+		printf("Você não quis dizer ");
+		boldGreen();
+		printf("help ");
+		printf("?\n");
+		resetColor();
+	}
+}
+
+
+
+Database commandToDatabase(char* command){
+	Database db;
+	db.name = wordInPositionAfterSeparations(command, " ", 2);
+	return db;
+}
+
+Table commandCreateTabletoTable(char* command){
+
+}
+
+
+
+
 
 /*Table usuarios;
 	usuarios.name = "usuarios";
