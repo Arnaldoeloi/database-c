@@ -1,6 +1,8 @@
 typedef struct{
 	char* name;
 	char* database;
+	int numRows;
+	int numCols;
 	char*** data;
 }Table;
 

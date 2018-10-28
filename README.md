@@ -6,5 +6,5 @@ Foi utilizado o GCC 7.3.0 (Debian 7.3.0-19), mas é possível que em versões su
 
 Para compilar na versão atual execute, na pasta do repositório:
 
-gcc main.c libs/common.c libs/database_operations.c libs/colors.c -o exec -g -W
+gcc main.c libs/common.c libs/database_operations.c libs/colors.c libs/strings.c -o exec -g -W
 
