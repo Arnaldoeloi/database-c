@@ -20,18 +20,41 @@ void commandVersion(){
 
 void printHelp(){
 	printf("-----------------\\-------//----------------------------------\\-------//-----------------\n");
-	printf("Criar um *novo* banco de dados (disponivel na pasta 'dbs/'):\n");
+	printf("Criar um novo ");
+	yellow();
+	printf("banco de dados ");
+	resetColor();
+	printf("(disponivel na pasta 'dbs/'):\n\n");
 	green();
-	printf("create database ");
+	printf("\tcreate database ");
 	magenta();
 	printf("nome_do_banco\n");
 	resetColor();
-	printf("\n\n");
-   	printf("Criar uma *nova* tabela:\n");
-	printf("create *nome_da_banco*\n");
+
 	printf("\n\n");
 
-	printf("Digite *exit* para sair do programa.\n");
+	printf("Criar uma nova ");
+	yellow();
+	printf("tabela ");
+	resetColor();
+	printf("(disponivel na pasta 'dbs/");
+	yellow();
+	printf("nome_do_banco ");
+	resetColor();
+	printf("'):\n\n");
+	green();
+	printf("\tcreate ");
+	magenta();
+	printf("nome_da_tabela\n");
+	resetColor();
+
+	printf("\n\n");
+
+	printf("Digite ");
+	boldRed();
+	printf("exit ");
+	resetColor();
+	printf("para sair do programa.\n");
 }
 
 char* input(){
