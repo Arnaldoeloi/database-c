@@ -88,47 +88,60 @@ int findInVector(char* subvector, char* vector){
 
 
 void printTable(Table table){
-	//bigOne é um vetor string que armazenará a maior variável do tipo string em uma coluna;
-	printf("char** biggestStringInCols\n");
-	char** biggestStringInCols = (char**)calloc(table.numCols,sizeof(char**));
+	//printf("table.senha[0][3]=%s", table.data[0][3]);
+	printf("table.numRows=%i\n", table.numRows);
+	printf("table.numCols=%i\n", table.numCols);
+	for(int i=0; i < table.numRows; i++){
 
-	printf("Entrará no primeiro for.\n");
-	for (int i=0; i < table.numCols; i++){
-		printf("biggestStringInCols[%i] = (char*)calloc(strlen(table.data[i][0]),sizeof(char*));\n", i);
-		int size=(int) strlen(table.data[i][0]);
-		printf("strlen(table.data[%i][0]= %i\n", i, size);
-
-		biggestStringInCols[i] = (char*) calloc ( strlen(table.data[i][0]), sizeof(char*));
-		
-		for (int j=0; j < table.numRows-1; j++){
-			printf("if dentro do for que tá dentro do for[%i][%i]|\n", i, j);
-			if (strcmp(biggestStringInCols[i],table.data[j][0]) == 0 || strcmp(biggestStringInCols[i],table.data[j][0])> 0){
-				continue;
-			} else{
-				biggestStringInCols[i] = table.data[i][0];
-			}
-		}
-	}
-
-	for (int i=0; i < table.numRows; i++){
+		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
 
 		for(int j=0; j < table.numCols; j++){
-			printf ("||%s", table.data[i][j]);
-			for(int k=0; k < (int)strlen(biggestStringInCols[i]) - (int)strlen(table.data[i][j]);k++){
-				printf(" ");
+
+			for (int k=0; k < table.numRows; k++){
+
+				if ((int)strlen(table.data[k][j]) < biggestStringOfCols[j]){
+					continue;
+				} else{
+					biggestStringOfCols[j] = (int)strlen(table.data[k][j]);
+				}
 			}
-			printf("||");
 		}
 		
-		if (i == 0){
-			for(int j=0; j < table.numCols; j++){
-			printf ("||");
-			for(int k=0; k < (int)strlen(biggestStringInCols[i]) - (int)strlen("");k++){
-				printf("-");
+		if(i==0){
+			for(int j=0; j <= table.numCols; j++){
+				printf("|");
+				int z = biggestStringOfCols[j];
+				for (int k=0; k < z;k++){
+					printf("=");
+				}
 			}
-			printf("||");
+			printf("\n");
+			for(int j=0; j < table.numCols; j++){
+				resetColor();
+				printf("|");
+				magenta();
+				printf("%s", table.data[i][j]);
+				int z = biggestStringOfCols[j];
+				for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
+					printf(" ");
+				}
+			}
+		}else{
+			for(int j=0; j < table.numCols; j++){
+				resetColor();
+				printf("|");
+				yellow();
+				printf("%s", table.data[i][j]);
+				int z = biggestStringOfCols[j];
+				for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
+					printf(" ");
+				}
 			}
 		}
+		if(i==0){
+			resetColor();
+		}
+		printf("\n");
 	}
 }
 
@@ -186,7 +199,7 @@ int execute(char* command){
 		printf("executará csvToTable.\n");
 		Table t = csvToTable("dbs/escola/planilha.csv");
 		printf("executará printTable.\n");
-		tstPrnt(t);
+		printTable(t);
 
 	}else{
 		boldRed();
