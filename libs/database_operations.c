@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "database_types.h"
 
 //Bibliotecas de arquivos
 #include <sys/types.h>
@@ -44,3 +45,37 @@ void alterTableModify();
 void alterTableDrop();
 void insertIntoTable();
 void selectFromTable();
+
+Table csvToTable(char* pathToFile){
+	FILE *file;
+	file = fopen( pathToFile, "r" );
+	//FILE *file = fopen( pathToFile, "r" );
+	if( file == NULL ) {
+		printf( "Erro na abertura do arquivo!\n" );
+	}else{
+
+	}
+	fclose(file);
+}
+
+
+	// int questao, resposta, acertos, i;
+	// char letra;
+	// int gabarito[10] = {3, 4, 2, 1, 3, 1, 1, 2, 4, 4};
+	// FILE *arquivo = fopen( "respostas.txt", "r" );
+	// if( arquivo == NULL ){
+	// 	printf( "Erro na abertura do arquivo" );
+	// }
+	// else{
+	// 	acertos = 0;
+	// 	fscanf(arquivo, "Aluno: %c\n", &letra);
+	// 	for(i=0; i<10; i++){
+	// 		fscanf(arquivo, "Resposta %d: %d\n", &questao, &resposta);
+	// 		if(gabarito[questao-1] == resposta)
+	// 			acertos++;
+	// 		printf("Nota de %c\n", letra);
+	// 		printf("%.2f\n", (float)acertos/10.0);
+	// 		fclose( arquivo );
+	// 	}
+	// } 
+ 
