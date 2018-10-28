@@ -106,6 +106,23 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 }
 
 
+int numberOfWords(char* string, char* caracteres){
+	char m[100][strlen(string)];
+	char *token;
+	int nWords;
+	token = strtok(string, caracteres);
+	
+	for(int i=0; token != NULL; i++) {
+		for(int j=0; j < (int)strlen(token); j++){
+			m[i][j] = token[j];
+		}
+		token = strtok(NULL, caracteres);
+		nWords = i + 1;
+	}
+	return nWords;
+}
+
+
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
@@ -152,7 +169,12 @@ Database commandToDatabase(char* command){
 
 
 void PrintTable(Table table){
-	
+	for(int i=0; i < numberOfWords(table.collums, ","); i++){
+		int bigOne[numberOfWords(table.collums,",")];
+		int bigOneDatas[numberOfWords(table.collums,",")];
+		bigOneDatas[0] = wordInPositionAfterSeparations(table.collums, ",", 0);
+		if(strcmp( bigOneDatas[i],wordInPositionAfterSeparations(table.data, ",", i) ) )
+	}
 }
 
 /*Table usuarios;
