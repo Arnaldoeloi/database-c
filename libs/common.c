@@ -16,13 +16,16 @@ void commandVersion(){
 	printf("man ");
 	resetColor();
 	printf("para ver os comandos.\n");
-
 }
 
 void printHelp(){
 	printf("-----------------\\-------//----------------------------------\\-------//-----------------\n");
 	printf("Criar um *novo* banco de dados (disponivel na pasta 'dbs/'):\n");
-	printf("create database *nome_do_banco*\n");
+	green();
+	printf("create database ");
+	magenta();
+	printf("nome_do_banco\n");
+	resetColor();
 	printf("\n\n");
    	printf("Criar uma *nova* tabela:\n");
 	printf("create *nome_da_banco*\n");
