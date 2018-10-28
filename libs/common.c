@@ -95,11 +95,16 @@ int execute(char* command){
 		yellow();
 		printf("\nCreating database\n");
 		resetColor();
+		
 		command=lowerCase(command);
 		Database db=commandToDatabase(command);
 		createDatabase(db);
 	}else if(findInVector("create ", command)){
+		yellow();
 		printf("Creating table\n");
+		resetColor();
+
+		betweenParenthesis(command);
 	}else if(findInVector("alter table ", command)){
 		printf("Altering table\n");
 	}else if(findInVector("insert into ", command)){
@@ -135,8 +140,10 @@ Database commandToDatabase(char* command){
 }
 
 Table commandCreateTabletoTable(char* command){
-	
+
 }
+
+
 
 void PrintTable(Table table){
 	int size;

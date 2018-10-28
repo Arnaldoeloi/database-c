@@ -60,7 +60,10 @@ char* betweenParenthesis(char* string){
 	int cont=0;
 	while(1){
 		if(string[cont]=='('){
-			for(int i=0; string[i]!=')' && string[i]!='\0' && string[i]!='\0';i++);
+			for(int i=cont+1; string[i]!=')' && string[i]!='\0' && string[i]!='\0';i++){
+				printf("%c", string[i]);
+			}
+			break;
 		}
 		cont++;
 	}
