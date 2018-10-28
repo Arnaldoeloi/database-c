@@ -22,6 +22,26 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 	return word;
 }
 
+char*** splitIntoMatrix(char *string, char separator){
+	char*** data=(char***) calloc(1, sizeof(char***));
+	int col=0;
+	int row=0;
+	data[row]=(char**) calloc(1, sizeof(char**));
+	data[row][col]=strtok(string, ",");
+	printf("data[%i][%i]:%4s\n",row,col,data[row][col]);
+	col++;
+	for(int i=0; i<(int)strlen(string)+1; i++){
+		if(string[i]==separator){
+			data[row][col]=strtok(string, ",");
+			col++;
+		}else if(string[i]=='\n'){
+			row++;
+			data[row]=(char**) calloc(1, sizeof(char**));
+			//printf("%c", string[i]);
+		}
+	}
+	return data;
+}
 
 int numberOfWords(char* string, char* caracteres){
 	char m[100][strlen(string)];

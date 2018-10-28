@@ -92,7 +92,9 @@ int execute(char* command){
 		printHelp();
 	}else if(findInVector("create database ", command)){
 		//char* name = wordInPositionAfterSeparations(command, " ", 2);
+		yellow();
 		printf("Creating database\n");
+		resetColor();
 		Database db=commandToDatabase(command);
 		createDatabase(db);
 	}else if(findInVector("create ", command)){

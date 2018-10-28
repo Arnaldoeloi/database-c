@@ -3,6 +3,7 @@
 #include <string.h>
 #include "database_types.h"
 #include "strings.h"
+#include "colors.h"
 
 //Bibliotecas de arquivos
 #include <sys/types.h>
@@ -21,26 +22,33 @@ void createDatabase(Database db){
 	struct stat st = {0};
 	char* path= NULL;
 	path = concat("dbs/", db.name); //concatena o nome do banco com a pasta onde ele será armazenado
-	printf("Caminho do banco: %s\n", path);
+	printf("Caminho do banco: ");
+	yellow();
+	printf("%s/", path);
+	resetColor();
+	printf("\n");
 	if (stat(path, &st) == -1) { //verifica a existência do arquivo
-		printf("O arquivo não existe, criando...\n");
 	    if(mkdir(path, 0777)==-1){ //cria o arquivo com permissão 0777
+			boldRed();
 			printf("Ocorreu um problema, tente criar com outro nome ou execute o programa com privilegios de administrador.");
 			perror("mkdir");
+			resetColor();
 		}else{
-			printf("Banco criado.\n");
+			boldGreen();
+			printf("Banco criado.\n\n");
+			resetColor();
 		}
 		free(path);
 	}else{
-		printf("A pasta já existe. Não será criada uma nova.\n");
+		boldRed();
+		printf("Um banco com este nome já existe. Não será criada uma nova.\n\n");
+		resetColor();
 	}
 
 }
 
 void selectFromTable();
 void createTable(Table table);
-
-
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
@@ -90,15 +98,13 @@ Table csvToTable(char* pathToFile){
 	char ch;
 	char* wholeFile=NULL;	
 
-	int rows=countRowsInCsv(pathToFile);
-	int cols=countColsInCsv(pathToFile);
-	//FILE *file = fopen( pathToFile, "r" );
 	if( file == NULL ) {
+		boldRed();
 		printf( "Erro na abertura do arquivo!\n" );
+		resetColor();
 	}else{
 		int count=0;
-		while((ch=fgetc(file))!=EOF){
-			//printf("%c",ch);
+		while((ch=fgetc(file))!=EOF){ //igualar ch ao fgetc(file) até atingir EOF (fim do arquivo)
 			wholeFile=realloc(wholeFile, count*sizeof(char) + sizeof(char));
 			wholeFile[count]=ch;
 			count++;
@@ -107,39 +113,40 @@ Table csvToTable(char* pathToFile){
 		wholeFile[count]='\0';
 	}
 	fclose(file);
+
 	
-	char *token;
-   	token = strtok(wholeFile, "\n");
-	char* m[rows];
-
+	Table table;
+	table.name = "TODO";
+	table.database = "TODO";
+	table.numRows=countRowsInCsv(pathToFile);
+	table.numCols=countColsInCsv(pathToFile);
+	
 	int count=0;
-	while( token != NULL ) {
-		printf("LINHA INTEIRA: %s\n\n\n", token);
-    	token = strtok(NULL, "\n");
-		m[count]=token;
-		count++;
-	}
+	table.data=(char***) calloc(1, sizeof(char***));
 
-	for(int i=0; i<rows; i++){
+	char *end_str=NULL;
+    char *token = strtok_r(wholeFile, "\n", &end_str); //separa os dados para cada \n
 
-		for(int j=0; j< cols; j++){
-			char* t;
-			t=strtok(m[i], ",");
-			while(t!=NULL){
-				t=strtok(NULL, ",");
-				printf("%s\n",t);
-			}
-		}
-	}
-   
-
-	   Table usuarios;
-	   usuarios.name = "usuarios";
-	   usuarios.database = "escola";
-	// //usuarios.collums = "id,nome,senha,e-mail";
-	// usuarios.data = (char***) calloc(1, sizeof(char***));
-	// usuarios.data[0][0] = "0,pedro,corinthinas,pedro@gmail.com";
-	return usuarios;
+	int row=0;
+	int col=0;
+    while (token != NULL){
+		table.data[row]=(char**) calloc(1, sizeof(char**));
+        char *end_token=NULL;
+        printf("NOVOS DADOS = %s\n", token);
+        char *token2 = strtok_r(token, ",", &end_token); //separa os dados a cada ,
+        while (token2 != NULL){
+			table.data[row][col]=(char*)malloc(strlen(token2)*sizeof(char));
+			table.data[row][col]=token2;
+            printf("table.data[%i][%i] = %s\n",row,col, table.data[row][col]);
+            token2 = strtok_r(NULL, ",", &end_token);
+			col++;
+        }
+		col=0;
+		row++;
+        token = strtok_r(NULL, "\n", &end_str);
+		
+    }
+	return table;
 }
 
 
