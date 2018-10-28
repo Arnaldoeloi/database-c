@@ -6,9 +6,11 @@
 
 void commandVersion(){
 	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
+	printf("Digite 'help' ou 'man' para ver os comandos.");
 }
 
 void printHelp(){
+	printf("-----------------\\-------//-----------------\n");
 	printf("Aqui digitaremos todos os comandos\n");
 }
 
@@ -63,7 +65,7 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 
 
 int execute(char* command){
-	if((strcmp("help", command)==0) || (strcmp("man", command)==0)){
+	if((strcmp("help", command)==0) || (strcmp("man", command)==0 || (strcmp("manual", command)==0) || (strcmp("commands", command)==0){
 		printHelp();
 	}else if(findInVector("create database ", command)){
 		char* name = wordInPositionAfterSeparations(command, " ", 2);
