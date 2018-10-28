@@ -103,9 +103,6 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 		word=realloc(word, i*sizeof(char)+sizeof(char));
 		word[i]=m[pos][i];
 	}
-
-
-	printf("word: %s\n\n", word);
 	return word;
 }
 
