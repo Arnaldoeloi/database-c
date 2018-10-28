@@ -8,22 +8,36 @@
 #include <unistd.h>
 //fim bibliotecas de tratamento de arquivos
 
-
-void selectFromTable();
-void createTable();
+char* concat(char *string1, char *string2){
+    char *result = malloc(strlen(string1) + strlen(string2) + sizeof(char)); 
+    strcpy(result, string1);
+    strcat(result, string2);
+    return result;
+}
 
 void createDatabase(char* name){
 	struct stat st = {0};
-	char* path=name;
-	strcat("dbs/", path);
-	if (stat(name, &st) == -1) {
-		printf("Deu certo\n");
-	    mkdir(name, 0777);
+	char* path= NULL;
+	path = concat("dbs/", name);
+	printf("PATH: %s\n", path);
+	if (stat(path, &st) == -1) {
+		printf("O arquivo não existe, tentando criar...\n");
+	    if(mkdir(path, 0777)==-1){
+			printf("Ocorreu um problema");
+			perror("mkdir");
+		}else{
+			printf("Banco criado.");
+		}
+		free(path);
 	}else{
 		printf("A pasta já existe.\n");
 	}
 
 }
+
+void selectFromTable();
+void createTable();
+
 
 void deleteFromTable();
 void alterTableModify();
