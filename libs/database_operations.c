@@ -44,8 +44,9 @@ void createDatabase(Database db){
 		printf("Um banco com este nome já existe. Não será criada um novo.\n\n");
 		resetColor();
 	}
-
 }
+
+
 
 void selectFromTable();
 void createTable(Table table);
@@ -145,8 +146,7 @@ Table csvToTable(char* pathToFile){
         }
 		col=0;
 		row++;
-        token = strtok_r(NULL, "\n", &end_str);
-		
+        token = strtok_r(NULL, "\n", &end_str);	
     }
 	return table;
 }

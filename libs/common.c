@@ -157,35 +157,46 @@ void tstPrnt(Table table){
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
+
+
 	}else if(findInVector("create database ", command) || findInVector("CREATE DATABASE ", command)){
 		//char* name = wordInPositionAfterSeparations(command, " ", 2);
 		yellow();
 		printf("\nCreating database\n");
 		resetColor();
-		
 		command=lowerCase(command);
 		Database db=commandToDatabase(command);
 		createDatabase(db);
+
+
 	}else if(findInVector("create ", command)){
 		yellow();
 		printf("Creating table\n");
 		resetColor();
 		betweenParenthesis(command);
+
+
 	}else if(findInVector("alter table ", command)){
 		printf("Altering table\n");
+
+		
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
+
+
 	}else if(findInVector("delete from ", command)){
 		printf("Deleting table\n");
+
+
 	}else if(findInVector("drop database ", command)){
 		printf("Drop table\n");
-	}else if(findInVector("select ", command)){
-		printf("Selecting data from table\n");
-		//printf("Rows: %f",rows);
 
-		printf("executará csvToTable.\n");
+
+	}else if(findInVector("select ", command)){
+
+
+		printf("Selecting data from table\n");
 		Table t = csvToTable("dbs/escola/planilha.csv");
-		printf("executará printTable.\n");
 		tstPrnt(t);
 
 	}else{
@@ -209,7 +220,34 @@ Database commandToDatabase(char* command){
 }
 
 Table commandCreateTabletoTable(char* command){
+	
+	char *end_str=NULL;
+    char *token = strtok_r(command, ",", &end_str); //separa os dados para cada \n
 
+	Table table;
+	table.name = "TODO";
+	table.database = "TODO";
+	table.numRows=countRowsInCsv(pathToFile);
+	table.numCols=countColsInCsv(pathToFile);
+
+	int row=0;
+	int col=0;
+    while (token != NULL){
+		table.data[row]=(char**) calloc(1, sizeof(char**));
+        char *end_token=NULL;
+        //printf("NOVOS DADOS = %s\n", token);
+        char *token2 = strtok_r(token, ",", &end_token); //separa os dados a cada ,
+        while (token2 != NULL){
+			table.data[row][col]=(char*)malloc(strlen(token2)*sizeof(char));
+			table.data[row][col]=token2;
+            //printf("table.data[%i][%i] = %s\n",row,col, table.data[row][col]);
+            token2 = strtok_r(NULL, ",", &end_token);
+			col++;
+        }
+		col=0;
+		row++;
+        token = strtok_r(NULL, "\n", &end_str);	
+    }
 }
 
 
