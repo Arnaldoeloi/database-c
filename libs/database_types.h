@@ -2,7 +2,7 @@ typedef struct{
 	char* name;
 	char* database;
 	char* collums;
-	char* data;
+	char*** data;
 }Table;
 
 typedef struct{

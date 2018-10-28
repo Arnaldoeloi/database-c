@@ -82,28 +82,41 @@ Table csvToTable(char* pathToFile){
 	usuarios.name = "usuarios";
 	usuarios.database = "escola";
 	usuarios.collums = "id,nome,senha,e-mail";
-	usuarios.data = "0,pedro,corinthinas,pedro@gmail.com";
+	usuarios.data = (char***) calloc(1, sizeof(char***));
+	usuarios.data[0][0] = "0,pedro,corinthinas,pedro@gmail.com";
 	return usuarios;
 }
 
 
-	// int questao, resposta, acertos, i;
-	// char letra;
-	// int gabarito[10] = {3, 4, 2, 1, 3, 1, 1, 2, 4, 4};
-	// FILE *arquivo = fopen( "respostas.txt", "r" );
-	// if( arquivo == NULL ){
-	// 	printf( "Erro na abertura do arquivo" );
-	// }
-	// else{
-	// 	acertos = 0;
-	// 	fscanf(arquivo, "Aluno: %c\n", &letra);
-	// 	for(i=0; i<10; i++){
-	// 		fscanf(arquivo, "Resposta %d: %d\n", &questao, &resposta);
-	// 		if(gabarito[questao-1] == resposta)
-	// 			acertos++;
-	// 		printf("Nota de %c\n", letra);
-	// 		printf("%.2f\n", (float)acertos/10.0);
-	// 		fclose( arquivo );
-	// 	}
-	// } 
- 
+/*
+	Table usuarios;
+	usuarios.name = "usuarios";
+	usuarios.database = "escola";
+	usuarios.collums = "id,nome,senha,e-mail";
+	usuarios.data = (char***) calloc(1, sizeof(char***));
+
+	usuarios.data[0]=(char**) calloc(1, sizeof(char**));
+	usuarios.data[0][0] = "Arnaldo";
+	usuarios.data[0][1] = "(84) 9 9381-8314";
+	
+	usuarios.data[1]=(char**) calloc(1, sizeof(char**));
+	usuarios.data[1][0] = "Claudinho batata";
+	usuarios.data[1][1] = "(42) 9 8474-0238";
+
+	// usuarios.data[2][0] = "Nathanael DeRico";
+	// usuarios.data[2][1] = "(42) 9 9374-1637";
+
+	// usuarios.data[3][0] = "Pedro boca de batata";
+	// usuarios.data[3][1] = "(42) 9 3223-4707";
+
+	// usuarios.data[4][0] = "Marjory Marjority";
+	// usuarios.data[4][1] = "(22) 8 3441-2101";
+
+	for(int i=0; i<2; i++){
+		for(int j=0; j<2; j++){
+			printf("%3s",usuarios.data[i][j]);
+		}	
+		printf("\n");
+	}
+	return 0;
+*/

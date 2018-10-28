@@ -169,12 +169,12 @@ Database commandToDatabase(char* command){
 
 
 void PrintTable(Table table){
-	for(int i=0; i < numberOfWords(table.collums, ","); i++){
-		int bigOne[numberOfWords(table.collums,",")];
-		int bigOneDatas[numberOfWords(table.collums,",")];
-		bigOneDatas[0] = wordInPositionAfterSeparations(table.collums, ",", 0);
-		if(strcmp( bigOneDatas[i],wordInPositionAfterSeparations(table.data, ",", i) ) )
-	}
+	// for(int i=0; i < numberOfWords(table.collums, ","); i++){
+	// 	int bigOne[numberOfWords(table.collums,",")];
+	// 	int bigOneDatas[numberOfWords(table.collums,",")];
+	// 	bigOneDatas[0] = wordInPositionAfterSeparations(table.collums, ",", 0);
+	// 	if(strcmp( bigOneDatas[i],wordInPositionAfterSeparations(table.data, ",", i) ) )
+	// }
 }
 
 /*Table usuarios;

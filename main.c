@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "libs/common.h" //Biblioteca com comandos padrões (leitura do comando)
+#include "libs/database_types.h"
 
 int main(){
-/*	commandVersion();
+	commandVersion();
 	while(1){
 		char*v=input();
 		if(strcmp("exit",v)==0){
@@ -13,10 +14,4 @@ int main(){
 		execute(v);
 	}
 	return 0;
-*/
-	int x;
-	char* p = input();
-	x = numberOfWords(p, " ");
-	printf("%d", x);
-
 }	
