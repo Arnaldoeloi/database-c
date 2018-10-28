@@ -87,30 +87,34 @@ int execute(char* command){
 
 
 Database commandToDatabase(char* command){
-
+	Database db;
+	db.name = wordInPositionAfterSeparations(command, " ", 2);
+	return db;
 }
 
 
+void PrintTable(Table table){
+/*Passo 1 - Comparar todos os valores de uma table e printa-los
+*\
 
-/*
-int main () {
-	
-   char str[80] = "This is www.tutorialspoint.com website";
-   char robalo[80][80];
-   const char s[2] = " ";
-   char *token;
-   token = strtok(str, s);
-
-   for(int x=0; token != NULL; x++) {
-      printf( " %s\n", token );
-
-      for(int i=0; i < strlen(token); i++){
-        robalo[x][i] = token[i];
-      }
-      token = strtok(NULL, s);
-
-   }
-   printf("%s", robalo[0]);
-   return(0);
 }
+
+/*Table usuarios;
+	usuarios.name = "usuarios";
+	usuarios.database = "escola";
+	usuarios.collums = "id,nome,senha,e-mail";
+	usuarios.data = "0,pedro,corinthinas,pedro@gmail.com";
+
+	Database minecraft;
+	minecraft.name = "minecraft";
+	minecraft.tables = (Table*)calloc(1,sizeof(Table));
+
+	minecraft.tables[0] = usuarios;
+
+	printf("nome: %s\n",minecraft.tables[0].name);
+	printf("database: %s\n",minecraft.tables[0].database);
+	printf("colunas: %s\n",minecraft.tables[0].collums);
+	printf("data: %s\n",minecraft.tables[0].data);
+
+	return 0;
 */
