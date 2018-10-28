@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "database_operations.h"
-#include "database_types.h"
 #include "colors.h"
 
 void commandVersion(){
@@ -92,7 +91,7 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 	token = strtok(string, caracteres);
 	
 	for(int i=0; token != NULL; i++) {
-		for(int j=0; j < (int)strlen(token); j++){
+		for(int j=0; j < (int)strlen(token)+1; j++){
 			m[i][j] = token[j];
 		}
 		token = strtok(NULL, caracteres);
@@ -128,9 +127,10 @@ int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
 	}else if(findInVector("create database ", command)){
-		char* name = wordInPositionAfterSeparations(command, " ", 2);
+		//char* name = wordInPositionAfterSeparations(command, " ", 2);
 		printf("Creating database\n");
-		createDatabase(name);
+		Database db=commandToDatabase(command);
+		createDatabase(db);
 	}else if(findInVector("create ", command)){
 		printf("Creating table\n");
 	}else if(findInVector("alter table ", command)){

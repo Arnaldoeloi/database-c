@@ -16,10 +16,10 @@ char* concat(char *string1, char *string2){
     return result;
 }
 
-void createDatabase(char* name){
+void createDatabase(Database db){
 	struct stat st = {0};
 	char* path= NULL;
-	path = concat("dbs/", name); //concatena o nome do banco com a pasta onde ele será armazenado
+	path = concat("dbs/", db.name); //concatena o nome do banco com a pasta onde ele será armazenado
 	printf("Caminho do banco: %s\n", path);
 	if (stat(path, &st) == -1) { //verifica a existência do arquivo
 		printf("O arquivo não existe, criando...\n");
