@@ -58,6 +58,50 @@ void printHelp(){
 	printf("para sair do programa.\n");
 }
 
+
+Table commandCreateTabletoTable(char* command){
+	Table table;
+	table.name;
+	table.database = "TODO";
+	table.numRows=1;
+	table.numCols=0;
+	int count=0;
+
+	char *end_str=NULL;
+    char *token = strtok_r(command, " ", &end_str); //separa os dados para cada \n
+	while (count < 1){
+		char *end_token=NULL;
+        token = strtok_r(NULL, " ", &end_str);
+		count++;
+	}
+	table.name=token;
+	char* row = betweenParenthesis(command);
+	
+	end_str=NULL;
+    token = strtok_r(row, ",", &end_str); //separa os dados para cada \n
+	
+	
+	table.data=(char***) calloc(1, sizeof(char***));
+	table.data[0]=(char**) calloc(1, sizeof(char**));
+
+    count=0;
+	while (token != NULL){
+		table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
+		char *end_token=NULL;
+		table.data[0][count]=token;
+        printf("NOVOS DADOS = %s\n", token);
+		table.numCols++;
+        token = strtok_r(NULL, ",\n", &end_str);
+		count++;
+	}
+
+	//print com os dados
+	for(int i=0; i < table.numCols; i++){
+		printf("%s\n",table.data[0][i]);
+	}
+}
+
+
 char* input(){
 	char*string = malloc(sizeof(char));
 
@@ -170,36 +214,48 @@ void tstPrnt(Table table){
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
+
+
 	}else if(findInVector("create database ", command) || findInVector("CREATE DATABASE ", command)){
 		//char* name = wordInPositionAfterSeparations(command, " ", 2);
 		yellow();
 		printf("\nCreating database\n");
 		resetColor();
-		
 		command=lowerCase(command);
 		Database db=commandToDatabase(command);
 		createDatabase(db);
+
+
 	}else if(findInVector("create ", command)){
 		yellow();
 		printf("Creating table\n");
 		resetColor();
-		betweenParenthesis(command);
+		//betweenParenthesis(command);
+		commandCreateTabletoTable(command);
+
+
 	}else if(findInVector("alter table ", command)){
 		printf("Altering table\n");
+
+		
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
+
+
 	}else if(findInVector("delete from ", command)){
 		printf("Deleting table\n");
+
+
 	}else if(findInVector("drop database ", command)){
 		printf("Drop table\n");
-	}else if(findInVector("select ", command)){
-		printf("Selecting data from table\n");
-		//printf("Rows: %f",rows);
 
-		printf("executará csvToTable.\n");
+
+	}else if(findInVector("select ", command)){
+
+
+		printf("Selecting data from table\n");
 		Table t = csvToTable("dbs/escola/planilha.csv");
-		printf("executará printTable.\n");
-		printTable(t);
+		tstPrnt(t);
 
 	}else{
 		boldRed();
@@ -219,10 +275,6 @@ Database commandToDatabase(char* command){
 	Database db;
 	db.name = wordInPositionAfterSeparations(command, " ", 2);
 	return db;
-}
-
-Table commandCreateTabletoTable(char* command){
-
 }
 
 
