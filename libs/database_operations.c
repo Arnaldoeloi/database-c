@@ -41,7 +41,7 @@ void createDatabase(Database db){
 		free(path);
 	}else{
 		boldRed();
-		printf("Um banco com este nome já existe. Não será criada uma nova.\n\n");
+		printf("Um banco com este nome já existe. Não será criada um novo.\n\n");
 		resetColor();
 	}
 

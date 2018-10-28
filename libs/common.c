@@ -90,11 +90,12 @@ int findInVector(char* subvector, char* vector){
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
-	}else if(findInVector("create database ", command)){
+	}else if(findInVector("create database ", command) || findInVector("CREATE DATABASE ", command)){
 		//char* name = wordInPositionAfterSeparations(command, " ", 2);
 		yellow();
-		printf("Creating database\n");
+		printf("\nCreating database\n");
 		resetColor();
+		command=lowerCase(command);
 		Database db=commandToDatabase(command);
 		createDatabase(db);
 	}else if(findInVector("create ", command)){
@@ -133,6 +134,9 @@ Database commandToDatabase(char* command){
 	return db;
 }
 
+Table commandCreateTabletoTable(char* command){
+	
+}
 
 void PrintTable(Table table){
 	int size;
