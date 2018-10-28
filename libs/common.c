@@ -128,7 +128,17 @@ int execute(char* command){
 	}else if(findInVector("drop database ", command)){
 		printf("Drop table\n");
 	}else if(findInVector("select ", command)){
-		printf("Select table\n");
+		printf("Selecting data from table\n");
+		countRowsInCsv("dbs/escola/planilha.csv");
+	}else{
+		boldRed();
+		printf("Comando não encontrado.\n");
+		resetColor();
+		printf("Você não quis dizer ");
+		boldGreen();
+		printf("help ");
+		printf("?\n");
+		resetColor();
 	}
 }
 

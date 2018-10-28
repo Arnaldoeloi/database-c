@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+int countRowsInCsv(char* pathToFile);
 void selectFromTable();
 void createTable();
 void createDatabase(char* name);

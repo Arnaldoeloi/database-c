@@ -46,6 +46,25 @@ void alterTableDrop();
 void insertIntoTable();
 void selectFromTable();
 
+int countRowsInCsv(char* pathToFile){
+	int rows=0;
+	char ch;
+	FILE *arq;
+	arq = fopen(pathToFile, "r");
+	if(arq == NULL)
+		return -1;
+	else{
+		while( (ch=fgetc(arq))!= EOF ){
+			if(ch == '\n'){
+				rows++;
+			}
+		}
+	}
+	fclose(arq);
+	return rows;
+}
+
+
 Table csvToTable(char* pathToFile){
 	FILE *file;
 	file = fopen( pathToFile, "r" );
