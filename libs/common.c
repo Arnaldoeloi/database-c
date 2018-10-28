@@ -90,25 +90,23 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 	char m[100][100];
 	char *token;
 	token = strtok(string, caracteres);
-	countWords=0;
+	
 	for(int i=0; token != NULL; i++) {
 		for(int j=0; j < (int)strlen(token); j++){
 			m[i][j] = token[j];
 		}
-		countWords++;
 		token = strtok(NULL, caracteres);
 	}
-	if(pos+1<countWords){
-		char* word=NULL;
-		for (int i = 0; i < (int)strlen(m[pos]); i++){
-			word=realloc(word, i*sizeof(char)+sizeof(char));
-			word[i]=m[pos][i];
-		}
-		return word;
-	}else{
-		char* emptyStr="";
-		return emptyStr;
+
+	char* word=NULL;
+	for (int i = 0; i < (int)strlen(m[pos])+1; i++){
+		word=realloc(word, i*sizeof(char)+sizeof(char));
+		word[i]=m[pos][i];
 	}
+
+
+	printf("word: %s\n\n", word);
+	return word;
 }
 
 
