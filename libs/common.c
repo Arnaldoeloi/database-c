@@ -87,7 +87,7 @@ int findInVector(char* subvector, char* vector){
 
 
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[100][100];
+	char m[100][strlen(string)];
 	char *token;
 	token = strtok(string, caracteres);
 	
@@ -103,9 +103,6 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 		word=realloc(word, i*sizeof(char)+sizeof(char));
 		word[i]=m[pos][i];
 	}
-
-
-	printf("word: %s\n\n", word);
 	return word;
 }
 
