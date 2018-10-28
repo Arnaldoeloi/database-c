@@ -58,13 +58,16 @@ char* lowerCase(char* string){
 
 char* betweenParenthesis(char* string){
 	int cont=0;
+	char* str=(char*) calloc(1, sizeof(char));
 	while(1){
 		if(string[cont]=='('){
 			for(int i=cont+1; string[i]!=')' && string[i]!='\0' && string[i]!='\0';i++){
-				printf("%c", string[i]);
+				str=(char*) realloc(str, i*sizeof(char)+sizeof(char));
+				str[i]=string[i];
 			}
 			break;
 		}
 		cont++;
 	}
+	return str;
 }

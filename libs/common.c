@@ -58,6 +58,32 @@ void printHelp(){
 	printf("para sair do programa.\n");
 }
 
+
+Table commandCreateTabletoTable(char* command){
+	
+
+	Table table;
+	table.name = "TODO";
+	table.database = "TODO";
+	table.numRows=1;
+	table.numCols=4;
+	
+	char* row = betweenParenthesis(command);
+	printf("row=   %s\n", row);
+	
+	char *end_str=NULL;
+    char *token = strtok_r(row, ",", &end_str); //separa os dados para cada \n
+	
+	
+	table.data=(char***) calloc(1, sizeof(char***));
+    while (token != NULL){
+		char *end_token=NULL;
+        printf("NOVOS DADOS = %s\n", token);
+        token = strtok_r(NULL, "\n", &end_str);	
+    }
+}
+
+
 char* input(){
 	char*string = malloc(sizeof(char));
 
@@ -174,6 +200,7 @@ int execute(char* command){
 		printf("Creating table\n");
 		resetColor();
 		betweenParenthesis(command);
+		//commandCreateTabletoTable(command);
 
 
 	}else if(findInVector("alter table ", command)){
@@ -217,37 +244,6 @@ Database commandToDatabase(char* command){
 	Database db;
 	db.name = wordInPositionAfterSeparations(command, " ", 2);
 	return db;
-}
-
-Table commandCreateTabletoTable(char* command){
-	
-	char *end_str=NULL;
-    char *token = strtok_r(command, ",", &end_str); //separa os dados para cada \n
-
-	Table table;
-	table.name = "TODO";
-	table.database = "TODO";
-	table.numRows=countRowsInCsv(pathToFile);
-	table.numCols=countColsInCsv(pathToFile);
-
-	int row=0;
-	int col=0;
-    while (token != NULL){
-		table.data[row]=(char**) calloc(1, sizeof(char**));
-        char *end_token=NULL;
-        //printf("NOVOS DADOS = %s\n", token);
-        char *token2 = strtok_r(token, ",", &end_token); //separa os dados a cada ,
-        while (token2 != NULL){
-			table.data[row][col]=(char*)malloc(strlen(token2)*sizeof(char));
-			table.data[row][col]=token2;
-            //printf("table.data[%i][%i] = %s\n",row,col, table.data[row][col]);
-            token2 = strtok_r(NULL, ",", &end_token);
-			col++;
-        }
-		col=0;
-		row++;
-        token = strtok_r(NULL, "\n", &end_str);	
-    }
 }
 
 
