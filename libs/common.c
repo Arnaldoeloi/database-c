@@ -87,7 +87,7 @@ int findInVector(char* subvector, char* vector){
 
 
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[100][100];
+	char m[100][strlen(string)];
 	char *token;
 	token = strtok(string, caracteres);
 	
