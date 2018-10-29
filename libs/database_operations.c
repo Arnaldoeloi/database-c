@@ -125,24 +125,30 @@ Table csvToTable(char* pathToFile){
 	table.numCols=countColsInCsv(pathToFile);
 	
 	int count=0;
-	table.data=(char***) calloc(1, sizeof(char***));
+	table.data=(char***) calloc(table.numRows, sizeof(char***));
 
 	char *end_str=NULL;
     char *token = strtok_r(wholeFile, "\n", &end_str); //separa os dados para cada \n
 
 	int row=0;
 	int col=0;
+
     while (token != NULL){
-		table.data[row]=(char**) calloc(1, sizeof(char**));
+
+		table.data[row]=(char**) calloc(table.numCols, sizeof(char**));
         char *end_token=NULL;
-        //printf("NOVOS DADOS = %s\n", token);
         char *token2 = strtok_r(token, ",", &end_token); //separa os dados a cada ,
+
         while (token2 != NULL){
-			table.data[row][col]=(char*)malloc(strlen(token2)*sizeof(char));
-			table.data[row][col]=token2;
-            //printf("table.data[%i][%i] = %s\n",row,col, table.data[row][col]);
+
+			table.data[row][col] = token2;
+
             token2 = strtok_r(NULL, ",", &end_token);
+
 			col++;
+			
+        printf("table.data[%i][%i] = %s\n",row,col,table.data[row][col]);
+
         }
 		col=0;
 		row++;
