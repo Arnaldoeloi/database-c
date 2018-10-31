@@ -152,18 +152,20 @@ void printTable(Table table){
 		}
 		
 		if(i==0){
-			for(int j=0; j < table.numCols; j++){
+			for(int j=0; j < table.numCols+1; j++){
+				resetColor();
 				printf("|");
-				magenta();
-				if (j == table.numCols-1){
+				if (j == table.numCols){
 					continue;
 				} else{
+					int z = biggestStringOfCols[j];
 					for (int k=0; k < z ;k++){
 						printf("=");
 					}
 			    }
 
 			}
+			printf("\n");
 			for(int j=0; j < table.numCols; j++){
 				int z = biggestStringOfCols[j];
 				resetColor();
@@ -177,6 +179,20 @@ void printTable(Table table){
 						printf(" ");
 					}
 			    }
+			}
+			printf("\n");
+			for(int j=0; j < table.numCols+1; j++){
+				resetColor();
+				printf("|");
+				if (j == table.numCols){
+					continue;
+				} else{
+					int z = biggestStringOfCols[j];
+					for (int k=0; k < z ;k++){
+						printf("=");
+					}
+			    }
+
 			}
 		}else{
 			for(int j=0; j < table.numCols; j++){
