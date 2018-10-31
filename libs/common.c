@@ -152,23 +152,19 @@ void printTable(Table table){
 		}
 		
 		if(i==0){
-			for(int j=0; j <= table.numCols; j++){
-				printf("|");
-				int z = biggestStringOfCols[j];
-				for (int k=0; k < z;k++){
-					printf("=");
-				}
-			}
-			printf("\n");
 			for(int j=0; j < table.numCols; j++){
+				int z = biggestStringOfCols[j];
 				resetColor();
 				printf("|");
 				magenta();
-				printf("%s", table.data[i][j]);
-				int z = biggestStringOfCols[j];
-				for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
-					printf(" ");
-				}
+				printf("%s", table.data[0][j]);
+				if (j == table.numCols-1){
+					continue;
+				} else{
+					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
+						printf(" ");
+					}
+			    }
 			}
 		}else{
 			for(int j=0; j < table.numCols; j++){
@@ -177,9 +173,14 @@ void printTable(Table table){
 				yellow();
 				printf("%s", table.data[i][j]);
 				int z = biggestStringOfCols[j];
-				for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
-					printf(" ");
-				}
+				if (j == table.numCols-1){
+					continue;
+				} else{
+					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
+						printf(" ");
+					}
+			    }
+			
 			}
 		}
 		if(i==0){
@@ -255,7 +256,7 @@ int execute(char* command){
 
 		printf("Selecting data from table\n");
 		Table t = csvToTable("dbs/escola/planilha.csv");
-		tstPrnt(t);
+		printTable(t);
 
 	}else{
 		boldRed();

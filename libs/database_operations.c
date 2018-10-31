@@ -147,7 +147,7 @@ Table csvToTable(char* pathToFile){
 
 			col++;
 			
-        printf("table.data[%i][%i] = %s\n",row,col,table.data[row][col]);
+        // printf("table.data[%i][%i] = %s\n",row,col,table.data[row][col]);
 
         }
 		col=0;
