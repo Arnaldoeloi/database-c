@@ -78,7 +78,7 @@ Table commandCreateTabletoTable(char* command){
 	char* row = betweenParenthesis(command);
 	
 	end_str=NULL;
-    token = strtok_r(row, ",", &end_str); //separa os dados para cada \n
+    token = strtok_r(row, "|", &end_str); //separa os dados para cada \n
 	
 	
 	table.data=(char***) calloc(1, sizeof(char***));
@@ -91,7 +91,7 @@ Table commandCreateTabletoTable(char* command){
 		table.data[0][count]=token;
         printf("NOVOS DADOS = %s\n", token);
 		table.numCols++;
-        token = strtok_r(NULL, ",\n", &end_str);
+        token = strtok_r(NULL, "|\n", &end_str);
 		count++;
 	}
 

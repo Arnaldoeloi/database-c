@@ -83,7 +83,7 @@ int countColsInCsv(char* pathToFile){
 		return -1;
 	else{
 		while( (ch=fgetc(arq))!= EOF ){
-			if(ch == ','){
+			if(ch == '|'){
 				cols++;
 			}else if(ch == '\n'){
 				break;
@@ -137,13 +137,13 @@ Table csvToTable(char* pathToFile){
 
 		table.data[row]=(char**) calloc(table.numCols, sizeof(char**));
         char *end_token=NULL;
-        char *token2 = strtok_r(token, ",", &end_token); //separa os dados a cada ,
+        char *token2 = strtok_r(token, "|", &end_token); //separa os dados a cada ,
 
         while (token2 != NULL){
 
 			table.data[row][col] = token2;
 
-            token2 = strtok_r(NULL, ",", &end_token);
+            token2 = strtok_r(NULL, "|", &end_token);
 
 			col++;
 			
