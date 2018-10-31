@@ -153,6 +153,18 @@ void printTable(Table table){
 		
 		if(i==0){
 			for(int j=0; j < table.numCols; j++){
+				printf("|");
+				magenta();
+				if (j == table.numCols-1){
+					continue;
+				} else{
+					for (int k=0; k < z ;k++){
+						printf("=");
+					}
+			    }
+
+			}
+			for(int j=0; j < table.numCols; j++){
 				int z = biggestStringOfCols[j];
 				resetColor();
 				printf("|");
