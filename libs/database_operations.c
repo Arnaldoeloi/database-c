@@ -81,6 +81,21 @@ void createTable(Table table){
 		printf("filename:  %s\n", fileName);
 		FILE *fptr;
 		fptr = fopen(fileName, "rb+");
+		if (stat(fileName, &st) == -1){
+			printf("Uma tabela com o nome ");
+			boldGreen();
+			printf("%s", table.name);
+			resetColor();
+			printf(" será criada.\n");
+		}else{
+			boldRed();
+			printf("Uma tabela com o nome ");
+			yellow();
+			printf("%s", table.name);
+			boldRed();
+			printf(" já existe.\n Não será criada uma nova.");
+			resetColor();
+		}
 		if(fptr == NULL){ //if file does not exist, create it
 			fptr = fopen(fileName, "wb");
 		}
