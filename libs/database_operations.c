@@ -59,16 +59,9 @@ void createTable(Table table){
 	resetColor();
 	printf("\n");
 	if (stat(path, &st) == -1) { //verifica a existência do arquivo
-	    if(mkdir(path, 0777)==-1){ //cria o arquivo com permissão 0777
-			boldRed();
-			printf("Ocorreu um problema, tente criar com outro nome ou execute o programa com privilegios de administrador.");
-			perror("mkdir");
-			resetColor();
-		}else{
-			boldGreen();
-			printf("Banco criado.\n\n");
-			resetColor();
-		}
+	    boldRed();
+		printf("Não há um banco com esse nome. A tabela não será criada!\n");
+		resetColor();
 		free(path);
 	}else{
 		yellow();
@@ -93,11 +86,19 @@ void createTable(Table table){
 			yellow();
 			printf("%s", table.name);
 			boldRed();
-			printf(" já existe.\n Não será criada uma nova.");
+			printf(" já existe.\nNão será criada uma nova.\n");
 			resetColor();
 		}
 		if(fptr == NULL){ //if file does not exist, create it
-			fptr = fopen(fileName, "wb");
+			fptr = fopen(fileName, "w+");
+			for(int i=0; i<table.numCols; i++){
+				fprintf(fptr, "%s", table.data[0][i]);
+				if(i<table.numCols-1){
+					fprintf(fptr, "|");
+				}
+			}
+			fprintf(fptr,"\n");
+			fclose( fptr );
 		}
 
 	}

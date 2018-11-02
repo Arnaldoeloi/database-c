@@ -59,7 +59,7 @@ void printHelp(){
 }
 
 //create table gamers(int id pk, string name, string address)
-Table validateCreateTable(char* command){
+void validateCreateTable(char* command){
 	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
 	strcpy(nameTable, command);
 	
@@ -155,8 +155,9 @@ Table validateCreateTable(char* command){
 		printf("Numero de Colunas: %i\n", table.numCols);
 		resetColor();
 
+
+		//Criará o arquivo
 		createTable(table);
-	
 	}else{
 		boldRed();
 		printf("Não foi possível criar a tabela.\n");
