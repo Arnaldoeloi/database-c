@@ -58,6 +58,113 @@ void printHelp(){
 	printf("para sair do programa.\n");
 }
 
+//create table gamers(int id pk, string name, string address)
+Table validateCreateTable(char* command){
+	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
+	strcpy(nameTable, command);
+	
+	Table table;
+	table.name=NULL;
+	table.database = NULL;
+	table.numRows=1;
+	table.numCols=0;
+	
+	int count=0;
+	char *end_str=NULL;
+    char *token = strtok_r(nameTable, " .(", &end_str); 
+
+	/*
+	*	DEFINE O NOME DO BANCO E DA TABELA
+	*/
+	while (count < 3){
+		char *end_token=NULL;
+        token = strtok_r(NULL, " .(", &end_str);
+		//printf("Token: %s\n", token);
+		if(count==1){
+			table.database=(char*) realloc(table.database, (sizeof(char)*strlen(token)+sizeof(char)));
+			table.database=token;	
+			//printf("Database: %s\n", table.database);	
+		}
+		count++;
+	}
+
+
+
+	/*
+	*	REMOVE OS ESPAÇOS DOS DADOS ENTRE PARENTESES
+	*/
+	table.name=(char*) realloc(table.name, (sizeof(char)*strlen(token)+sizeof(char)));
+	table.name=token;
+
+
+	//valida o que há entre os parênteses
+	char* string=betweenParenthesis(command);
+	char* data=NULL;
+	int cont=0;
+
+	int lastWasComma=0; //false
+	for(int i=0; i<(int)strlen(string)+1; i++){
+		if(string[i]==',' && lastWasComma==0){
+			lastWasComma=1; //true
+			data=(char*) realloc(data, (sizeof(char)*cont)+sizeof(char));
+			data[cont]=string[i];
+			cont++;
+			continue;
+		}else if(lastWasComma && string[i]==' '){
+			continue;
+		}else{
+			lastWasComma=0;
+			data=(char*) realloc(data, (sizeof(char)*cont)+sizeof(char));
+			data[cont]=string[i];
+			cont++;
+		}
+	}
+	
+	//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
+	char *pk = " pk";
+	char *pch = strstr(data, pk);
+	if(pch){
+		/*
+		*	DEFINE TODOS OS DADOS DA PRIMEIRA LINHA
+		*/
+		table.data=(char***) calloc(1, sizeof(char***));
+		table.data[0]=(char**) calloc(1, sizeof(char**));
+
+		end_str=NULL;
+		token = strtok_r(data, ",", &end_str); //separa os dados para cada \n
+		
+		
+		table.data=(char***) calloc(1, sizeof(char***));
+		table.data[0]=(char**) calloc(1, sizeof(char**));
+
+		count=0;
+		while (token != NULL){
+			table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
+			char *end_token=NULL;
+			table.data[0][count]=token;
+			table.numCols++;
+			token = strtok_r(NULL, ",\n", &end_str);
+			count++;
+		}
+
+		//print com os dados
+		yellow();
+		printf("Nome: %s\n", table.name);
+		printf("Database: %s\n", table.database);
+		printf("Numero de linhas: %i\n", table.numRows);
+		printf("Numero de Colunas: %i\n", table.numCols);
+		resetColor();
+
+		createTable(table);
+	
+	}else{
+		boldRed();
+		printf("Não foi possível criar a tabela.\n");
+		printf("Não há nenhuma chave primária.\n");
+		resetColor();
+	}
+
+}
 
 Table commandCreateTabletoTable(char* command){
 	Table table;
@@ -68,13 +175,14 @@ Table commandCreateTabletoTable(char* command){
 	int count=0;
 
 	char *end_str=NULL;
-    char *token = strtok_r(command, " ", &end_str); //separa os dados para cada \n
-	while (count < 1){
+    char *token = strtok_r(command, " ", &end_str); 
+	while (count < 2){
 		char *end_token=NULL;
         token = strtok_r(NULL, " ", &end_str);
 		count++;
 	}
 	table.name=token;
+	
 	char* row = betweenParenthesis(command);
 	
 	end_str=NULL;
@@ -89,7 +197,7 @@ Table commandCreateTabletoTable(char* command){
 		table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
 		char *end_token=NULL;
 		table.data[0][count]=token;
-        printf("NOVOS DADOS = %s\n", token);
+        //printf("NOVOS DADOS = %s\n", token);
 		table.numCols++;
         token = strtok_r(NULL, "|\n", &end_str);
 		count++;
@@ -255,12 +363,12 @@ int execute(char* command){
 		createDatabase(db);
 
 
-	}else if(findInVector("create ", command)){
+	}else if(findInVector("create table", command)){
 		yellow();
 		printf("Creating table\n");
 		resetColor();
-		//betweenParenthesis(command);
-		commandCreateTabletoTable(command);
+		validateCreateTable(command);
+		//commandCreateTabletoTable(command);
 
 
 	}else if(findInVector("alter table ", command)){
