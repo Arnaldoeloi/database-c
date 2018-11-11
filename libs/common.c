@@ -227,8 +227,15 @@ void validateCreateTable(char* command){
 	}
 
 }
-void filterTable(Table table, char* filters){
 
+/*
+*	Irá receber só as colunas que irá printar,
+*	a tabela filtrada e
+*	os filtros
+*/
+void filterTable(char* collumns, Table table, char* filters){
+	printf("collums: %s\n", collumns);
+	printf("filter: %s\n", filters);
 }
 void validateSelect(char* command){
 
@@ -249,28 +256,50 @@ void validateSelect(char* command){
 		token = strtok_r(NULL, " ", &end_str);
 		cont++;
 	}
-	if(strcmp(commands[0], "*")){
-		printf("SELECT ALL");
+	printf("commands[1]=%s\n", commands[1]);
+	if(strcmp(commands[1], "*")==0){
+		printf("SELECT ALL\n");
+		char* pathToFile="dbs/";
+		char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(commandTemp, " ", 3));
+		for(int i=0; i<(int)strlen(stringTemp);i++){
+			if(stringTemp[i]=='.'){
+				stringTemp[i]='/';
+			}
+		}
+
+		pathToFile=concat(stringTemp, ".csv");
+		printf("PathToFile:%s\n", pathToFile);
+		Table t=csvToTable(pathToFile);
+
+		if(t.database!=NULL){
+			printf("PathToFile:%s\n", pathToFile);
+			printTable(t);
+		}
+	}else{
+		//esse for eliminará a primeira ocorrência de parenteseses.
+		//caso o comando tenha where
+		if(isSubstringInString(commandTemp, "where")){
+			int findOpenningP=0;
+			int findClosingP=0;
+			for(int i=0; i<(int)strlen(commandTemp); i++){
+				if(commandTemp[i]=='('){
+					commandTemp[i]='-';
+					findOpenningP=1;
+				}else if(commandTemp[i]==')'){
+					commandTemp[i]='-';
+					findClosingP=1;
+				}
+			}
+		}else{
+			char* collumns = betweenParenthesis(commandTemp);
+			collumns=removeSpacesAfterCommas(collumns);
+			char* filters=NULL;
+			printf("collumns: %s\n", collumns);
+		}
 	}
 	printf("CommandTemp: %s\n", commandTemp);
 	printf("Command: %s\n", command);
 	
-	char* pathToFile="dbs/";
-	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(commandTemp, " ", 3));
-	for(int i=0; i<(int)strlen(stringTemp);i++){
-		if(stringTemp[i]=='.'){
-			stringTemp[i]='/';
-		}
-	}
-
-	pathToFile=concat(stringTemp, ".csv");
-	printf("PathToFile:%s\n", pathToFile);
-	Table t=csvToTable(pathToFile);
-
-	if(t.database!=NULL){
-		printf("PathToFile:%s\n", pathToFile);
-		printTable(t);
-	}
 	
 }
 
@@ -424,7 +453,7 @@ int execute(char* command){
 
 
 		printf("Selecting data from table\n");
-		// validateSelect(command);
+		validateSelect(command);
 		//Table t = csvToTable("dbs/minecraft/asd.csv");
 		//printTable(t);
 		
