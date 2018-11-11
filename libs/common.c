@@ -57,6 +57,92 @@ void printHelp(){
 	resetColor();
 	printf("para sair do programa.\n");
 }
+void printTable(Table table){
+	// printf("table.numRows=%i\n", table.numRows);
+	// printf("table.numCols=%i\n", table.numCols);
+	for(int i=0; i < table.numRows; i++){
+
+		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
+
+		for(int j=0; j < table.numCols; j++){
+
+			for (int k=0; k < table.numRows; k++){
+
+				if ((int)strlen(table.data[k][j]) < biggestStringOfCols[j]){
+					continue;
+				} else{
+					biggestStringOfCols[j] = (int)strlen(table.data[k][j]);
+				}
+			}
+		}
+		
+		if(i==0){
+			for(int j=0; j < table.numCols+1; j++){
+				resetColor();
+				printf("|");
+				if (j == table.numCols){
+					continue;
+				} else{
+					int z = biggestStringOfCols[j];
+					for (int k=0; k < z ;k++){
+						printf("=");
+					}
+			    }
+
+			}
+			printf("\n");
+			for(int j=0; j < table.numCols; j++){
+				int z = biggestStringOfCols[j];
+				resetColor();
+				printf("|");
+				magenta();
+				printf("%s", table.data[0][j]);
+				if (j == table.numCols-1){
+					continue;
+				} else{
+					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
+						printf(" ");
+					}
+			    }
+			}
+			printf("\n");
+			for(int j=0; j < table.numCols+1; j++){
+				resetColor();
+				printf("|");
+				if (j == table.numCols){
+					continue;
+				} else{
+					int z = biggestStringOfCols[j];
+					for (int k=0; k < z ;k++){
+						printf("=");
+					}
+			    }
+
+			}
+		}else{
+			for(int j=0; j < table.numCols; j++){
+				resetColor();
+				printf("|");
+				yellow();
+				printf("%s", table.data[i][j]);
+				int z = biggestStringOfCols[j];
+				if (j == table.numCols-1){
+					continue;
+				} else{
+					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
+						printf(" ");
+					}
+			    }
+			
+			}
+		}
+		if(i==0){
+			resetColor();
+		}
+		printf("\n");
+	}
+	resetColor();
+}
 
 //create table gamers(int id pk, string name, string address)
 void validateCreateTable(char* command){
@@ -148,6 +234,22 @@ void validateCreateTable(char* command){
 
 }
 
+void validateSelect(char* command){
+	char* pathToFile="dbs/";
+	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(command, " ", 3));
+	for(int i=0; i<(int)strlen(stringTemp);i++){
+		if(stringTemp[i]=='.'){
+			stringTemp[i]='/';
+		}
+	}
+	pathToFile=concat(stringTemp, ".csv");
+	Table t=csvToTable(pathToFile);
+	if(t.database!=NULL){
+		printf("PathToFile:%s\n", pathToFile);
+		printTable(t);
+	}
+}
+
 Table commandCreateTabletoTable(char* command){
 	Table table;
 	table.name;
@@ -221,91 +323,6 @@ int findInVector(char* subvector, char* vector){
 }
 
 
-void printTable(Table table){
-	printf("table.numRows=%i\n", table.numRows);
-	printf("table.numCols=%i\n", table.numCols);
-	for(int i=0; i < table.numRows; i++){
-
-		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
-
-		for(int j=0; j < table.numCols; j++){
-
-			for (int k=0; k < table.numRows; k++){
-
-				if ((int)strlen(table.data[k][j]) < biggestStringOfCols[j]){
-					continue;
-				} else{
-					biggestStringOfCols[j] = (int)strlen(table.data[k][j]);
-				}
-			}
-		}
-		
-		if(i==0){
-			for(int j=0; j < table.numCols+1; j++){
-				resetColor();
-				printf("|");
-				if (j == table.numCols){
-					continue;
-				} else{
-					int z = biggestStringOfCols[j];
-					for (int k=0; k < z ;k++){
-						printf("=");
-					}
-			    }
-
-			}
-			printf("\n");
-			for(int j=0; j < table.numCols; j++){
-				int z = biggestStringOfCols[j];
-				resetColor();
-				printf("|");
-				magenta();
-				printf("%s", table.data[0][j]);
-				if (j == table.numCols-1){
-					continue;
-				} else{
-					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
-						printf(" ");
-					}
-			    }
-			}
-			printf("\n");
-			for(int j=0; j < table.numCols+1; j++){
-				resetColor();
-				printf("|");
-				if (j == table.numCols){
-					continue;
-				} else{
-					int z = biggestStringOfCols[j];
-					for (int k=0; k < z ;k++){
-						printf("=");
-					}
-			    }
-
-			}
-		}else{
-			for(int j=0; j < table.numCols; j++){
-				resetColor();
-				printf("|");
-				yellow();
-				printf("%s", table.data[i][j]);
-				int z = biggestStringOfCols[j];
-				if (j == table.numCols-1){
-					continue;
-				} else{
-					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
-						printf(" ");
-					}
-			    }
-			
-			}
-		}
-		if(i==0){
-			resetColor();
-		}
-		printf("\n");
-	}
-}
 
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
@@ -351,8 +368,9 @@ int execute(char* command){
 
 
 		printf("Selecting data from table\n");
-		Table t = csvToTable("dbs/minecraft/asd.csv");
-		printTable(t);
+		validateSelect(command);
+		//Table t = csvToTable("dbs/minecraft/asd.csv");
+		//printTable(t);
 		
 
 	}else if(findInVector("list tables", command)){
