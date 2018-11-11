@@ -110,11 +110,15 @@ char* removeSpacesAfterCommas(char* string){
 
 int isInString(char* string, char caracter){
 	for (int i=0; i < (int)strlen(string); i++){
+		if (string[i] != caracter){
+			if(i == (int)strlen(string)-1){
+				return 0;
+			}
+			continue;
+		}
 		if (string[i] == caracter){
 			return 1;
 			break;
-		} else if(i == (int)strlen(string)){
-			return 0;
 		}
 	}
 }
@@ -168,15 +172,13 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 
 int isSubstringInString(char* string, char* subString){
 	char* validatedString = (char*)calloc((int)strlen(subString),sizeof(char));
-	for(int i=0; i < (int)strlen(string); i++){
-		int j=0;
+	for(int i=0, j=0; i < (int)strlen(string); i++){
 		if (string[i] == subString[j]){
 			validatedString[j] = string[i];
 			j++;
-			continue;
 		}
 	}
-	if (validatedString == subString){
+	if (strcmp(validatedString,subString) == 0){
 		return 1;
 		free(validatedString);
 	} else {
@@ -184,6 +186,7 @@ int isSubstringInString(char* string, char* subString){
 		free(validatedString);
 	}
 }
+
 char* getSubstringAfterSubstringInString(char* string, char* subString){
 	// Serve para chegar se há a substring dentro da string
 	char* validatedString = (char*)calloc((int)strlen(subString),sizeof(char));

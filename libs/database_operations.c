@@ -288,17 +288,22 @@ void insertIntoTable(Table table){
 	file = fopen(path, "r");
 	if( file == NULL ) {
 		boldRed();
-		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
+		printf( "Erro: biblioteca não existente\n" );
 		resetColor();
 	} else{
+		fclose(file);
 		concat(path, "/");
 		concat(path, table.name);
+		concat(path, ".csv");
+		file = fopen(path, "wr");
+		printf("ABRIU O ARQUIVO EM: %s", path);
 		if(file == NULL){
 			boldRed();
 			printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
 			resetColor();
 		} else{
 			Table csvTable = csvToTable(path);
+
 		}
 	}
 

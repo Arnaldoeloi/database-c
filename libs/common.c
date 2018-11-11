@@ -303,6 +303,7 @@ void validateInsertIntoTable(char* command){
 
 			if (isInString(command,'|') == 0){
 				char* string = NULL;
+				printf("\nRAPAZ!!\n");
 				if (isInString(command, '\"') == 1){
 					//TEMPORÁRIO//
 					char* string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
@@ -439,9 +440,10 @@ int execute(char* command){
 		printf("Altering table\n");
 
 		
-	}else if(findInVector("insert into ", command)){
+	}else if(findInVector("insert ", command)){
 		printf("Inserting into table\n");
-		printf("\n StringFunction : |%s|\n", getSubstringAfterSubstringInString("insert (asdsadadsa) into db.table" , "into"));
+		validateInsertIntoTable(command);
+		// printf("\n  1 = %d  \n", isSubstringInString("cavalo manso de fogo", "de"));
 
 
 	}else if(findInVector("delete from ", command)){
