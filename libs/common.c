@@ -336,7 +336,7 @@ int execute(char* command){
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
 		char* string = "3,Derick,Vento@gmail.com,\"Batatas, Doce\",Queijinho com qualho";
-		insertIntoTable()
+		insertIntoTable();
 
 
 	}else if(findInVector("delete from ", command)){

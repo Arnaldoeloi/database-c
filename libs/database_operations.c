@@ -48,9 +48,8 @@ void createDatabase(Database db){
 	}
 }
 
-
-
 void selectFromTable();
+
 void createTable(Table table){
 	struct stat st = {0};
 	char* path= NULL;
@@ -105,6 +104,7 @@ void createTable(Table table){
 
 	}
 }
+
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
@@ -148,7 +148,6 @@ int countColsInCsv(char* pathToFile){
 	fclose(arq);
 	return cols+1;
 }
-
 
 Table csvToTable(char* pathToFile){
 	FILE *file;
@@ -212,9 +211,6 @@ Table csvToTable(char* pathToFile){
 	return table;
 }
 
-void insertIntoTable(char* string, Table table, char* pathToFile){
-	FILE *file;
-	file = fopen(pathToFile, "wr");
 int isRegularFile(const char *path){
 	struct stat buffer;
    	if (stat(path, &buffer) != 0)
@@ -228,7 +224,6 @@ int isDirectory(const char *path){
     	return 0;
    	return S_ISDIR(buffer.st_mode);
 }
-
 
 void listFilesInFolder(char* pathToFolder){
 	DIR *dir;
@@ -248,8 +243,6 @@ void listFilesInFolder(char* pathToFolder){
     }
     closedir(dir);
 }
-
-
 
 void listAllTables(){
 	cyan();
@@ -279,6 +272,10 @@ void listAllTables(){
     closedir(dir);
 }
 
+void insertIntoTable(char* string, Table table, char* pathToFile){
+	FILE *file;
+	file = fopen(pathToFile, "wr");
+
     if (isInString(string,'|') == 0){
 	    char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
 		int stringNewCols = 0;
@@ -306,8 +303,7 @@ void listAllTables(){
 			resetColor();
 		}
 		free(stringNew);
-	}
-	else {
+	}else {
 		boldRed();
 		printf("Erro: Caractere especial '|' nao suportado\n");
 		resetColor();
