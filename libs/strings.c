@@ -84,6 +84,30 @@ char* betweenParenthesis(char* string){
 	return str;
 }
 
+char* removeSpacesAfterCommas(char* string){
+	char* data=NULL;
+	int cont=0;
+
+	int lastWasComma=0; //false
+	for(int i=0; i<(int)strlen(string)+1; i++){
+		if(string[i]==',' && lastWasComma==0){
+			lastWasComma=1; //true
+			data=(char*) realloc(data, (sizeof(char)*cont)+sizeof(char));
+			data[cont]=string[i];
+			cont++;
+			continue;
+		}else if(lastWasComma && string[i]==' '){
+			continue;
+		}else{
+			lastWasComma=0;
+			data=(char*) realloc(data, (sizeof(char)*cont)+sizeof(char));
+			data[cont]=string[i];
+			cont++;
+		}
+	}
+	return data;
+}
+
 int isInString(char* string, char caracter){
 	for (int i=0; i < (int)strlen(string); i++){
 		if (string[i] == caracter){
