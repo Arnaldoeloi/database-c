@@ -392,10 +392,13 @@ int execute(char* command){
 
 
 		printf("Selecting data from table\n");
-		Table t = csvToTable("dbs/escola/planilha.csv");
+		Table t = csvToTable("dbs/minecraft/asd.csv");
 		printTable(t);
 
-	}else{
+	}else if(findInVector("list databases", command)){
+		listAllTables();
+	}
+	else{
 		boldRed();
 		printf("Comando não encontrado.\n");
 		resetColor();

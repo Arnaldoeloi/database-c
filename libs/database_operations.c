@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <dirent.h>
+
 //fim bibliotecas de tratamento de arquivos
 
 char* concat(char *string1, char *string2){
@@ -210,4 +212,20 @@ Table csvToTable(char* pathToFile){
 	return table;
 }
 
-
+void listAllTables(){
+    DIR *dir;
+    struct dirent *dp;
+    char * file_name;
+    dir = opendir("dbs");
+    while ((dp=readdir(dir)) != NULL) {
+        //printf("debug: %s\n", dp->d_name);
+        if ( !strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..") )
+        {
+            // do nothing (straight logic)
+        } else {
+            file_name = dp->d_name; // use it
+            printf("file_name: \"%s\"\n",file_name);
+        }
+    }
+    closedir(dir);
+}

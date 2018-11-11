@@ -12,3 +12,4 @@ void alterTableModify();
 void alterTableDrop();
 void insertIntoTable();
 void selectFromTable();
+void listAllTables();
