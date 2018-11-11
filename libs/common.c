@@ -99,27 +99,8 @@ void validateCreateTable(char* command){
 
 	//valida o que há entre os parênteses
 	char* string=betweenParenthesis(command);
-	char* data=NULL;
-	int cont=0;
+	char* data = removeSpacesAfterCommas(string);
 
-	int lastWasComma=0; //false
-	for(int i=0; i<(int)strlen(string)+1; i++){
-		if(string[i]==',' && lastWasComma==0){
-			lastWasComma=1; //true
-			data=(char*) realloc(data, (sizeof(char)*cont)+sizeof(char));
-			data[cont]=string[i];
-			cont++;
-			continue;
-		}else if(lastWasComma && string[i]==' '){
-			continue;
-		}else{
-			lastWasComma=0;
-			data=(char*) realloc(data, (sizeof(char)*cont)+sizeof(char));
-			data[cont]=string[i];
-			cont++;
-		}
-	}
-	
 	//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
 	char *pk = " pk";
 	char *pch = strstr(data, pk);
