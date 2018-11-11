@@ -395,7 +395,7 @@ int execute(char* command){
 		Table t = csvToTable("dbs/minecraft/asd.csv");
 		printTable(t);
 
-	}else if(findInVector("list databases", command)){
+	}else if(findInVector("list tables", command)){
 		listAllTables();
 	}
 	else{

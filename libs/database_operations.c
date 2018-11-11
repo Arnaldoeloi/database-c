@@ -212,19 +212,65 @@ Table csvToTable(char* pathToFile){
 	return table;
 }
 
-void listAllTables(){
-    DIR *dir;
+int isRegularFile(const char *path){
+	struct stat buffer;
+   	if (stat(path, &buffer) != 0)
+    	return 0;
+   	return S_ISREG(buffer.st_mode);
+}
+
+int isDirectory(const char *path){
+	struct stat buffer;
+   	if (stat(path, &buffer) != 0)
+    	return 0;
+   	return S_ISDIR(buffer.st_mode);
+}
+
+
+void listFilesInFolder(char* pathToFolder){
+	DIR *dir;
     struct dirent *dp;
     char * file_name;
+    dir = opendir(pathToFolder);
+    while ((dp=readdir(dir)) != NULL) {
+        //printf("debug: %s\n", dp->d_name);
+        if ( !strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..") ){
+            // do nothing (straight logic)
+        } else {
+			green();
+            file_name = dp->d_name; 
+            printf("├──%s\n",file_name);
+			resetColor();
+        }
+    }
+    closedir(dir);
+}
+
+
+
+void listAllTables(){
+	cyan();
+	printf("\n======|Bancos e suas tabelas|======\n\n");
+    resetColor();
+	DIR *dir;
+    struct dirent *dp;
+    char * file_name;
+	char* pathToFile;
     dir = opendir("dbs");
     while ((dp=readdir(dir)) != NULL) {
         //printf("debug: %s\n", dp->d_name);
-        if ( !strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..") )
-        {
-            // do nothing (straight logic)
-        } else {
-            file_name = dp->d_name; // use it
-            printf("file_name: \"%s\"\n",file_name);
+        if ( !(!strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..")) ){
+            file_name = dp->d_name; 
+			pathToFile = "dbs/";
+			pathToFile = concat(pathToFile, file_name);
+			magenta();
+			printf("%s\n", dp->d_name );
+			resetColor();
+			if(isDirectory(pathToFile)){
+				listFilesInFolder(pathToFile);
+			}
+			printf("\n");
+			resetColor();
         }
     }
     closedir(dir);
