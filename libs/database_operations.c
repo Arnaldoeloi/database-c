@@ -210,4 +210,41 @@ Table csvToTable(char* pathToFile){
 	return table;
 }
 
+void insertIntoTable(char* string, Table table, char* pathToFile){
+	FILE *file;
+	file = fopen(pathToFile, "wr");
 
+    if (isInString(string,'|') == 0){
+	    char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
+		int stringNewCols = 0;
+		if (isInString(string,'"') == 1){
+			stringNew = switchCommaToVerticalBarWithQMarks(string);
+			for(int i=0; i <= (int)strlen(stringNew); i++){
+				if(stringNew[i] == '|'){
+				stringNewCols++;
+				}
+		    }
+		} else{
+			stringNew = switchCommaToVerticalBar(string);
+			for(int i=0; i <= (int)strlen(stringNew); i++){
+				if(stringNew[i] == '|'){
+				stringNewCols++;
+				}
+		    }
+		}
+		if(stringNewCols == (int)countColsInCsv(pathToFile)){
+			fwrite (stringNew, 1, sizeof(stringNew), file);
+			fclose(file);
+		} else{
+			boldRed();
+			printf("Erro: O numero de itens esperado era: %d, voce digitou: %d\n", (int)countColsInCsv(pathToFile), stringNewCols);
+			resetColor();
+		}
+		free(stringNew);
+	}
+	else {
+		boldRed();
+		printf("Erro: Caractere especial '|' nao suportado\n");
+		resetColor();
+	}
+}

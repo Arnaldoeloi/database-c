@@ -241,7 +241,6 @@ int findInVector(char* subvector, char* vector){
 
 
 void printTable(Table table){
-	//printf("table.senha[0][3]=%s", table.data[0][3]);
 	printf("table.numRows=%i\n", table.numRows);
 	printf("table.numCols=%i\n", table.numCols);
 	for(int i=0; i < table.numRows; i++){
@@ -327,35 +326,12 @@ void printTable(Table table){
 	}
 }
 
-void tstPrnt(Table table){
-	//printf("table.senha[0][3]=%s", table.data[0][3]);
-	printf("table.numRows=%i\n", table.numRows);
-	printf("table.numCols=%i\n", table.numCols);
-	for(int i=0; i < table.numRows; i++){
-		//printf("\t\n|i:%i|\n-------||------\n", i);
-		if(i==0){
-			magenta();
-		}else{
-			yellow();
-		}
-		for(int j=0; j < table.numCols; j++){
-			//printf("\t|j:%i|", j);
-			printf("|%s\t\t\t\t|", table.data[i][j]);
-		}
-		if(i==0){
-			resetColor();
-		}
-		printf("\n");
-	}
-}
-
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
 
 
 	}else if(findInVector("create database ", command) || findInVector("CREATE DATABASE ", command)){
-		//char* name = wordInPositionAfterSeparations(command, " ", 2);
 		yellow();
 		printf("\nCreating database\n");
 		resetColor();
@@ -378,6 +354,8 @@ int execute(char* command){
 		
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
+		char* string = "3,Derick,Vento@gmail.com,\"Batatas, Doce\",Queijinho com qualho";
+		insertIntoTable()
 
 
 	}else if(findInVector("delete from ", command)){
@@ -394,6 +372,7 @@ int execute(char* command){
 		printf("Selecting data from table\n");
 		Table t = csvToTable("dbs/escola/planilha.csv");
 		printTable(t);
+		
 
 	}else{
 		boldRed();
@@ -407,34 +386,8 @@ int execute(char* command){
 	}
 }
 
-
-
 Database commandToDatabase(char* command){
 	Database db;
 	db.name = wordInPositionAfterSeparations(command, " ", 2);
 	return db;
 }
-
-
-
-
-
-/*Table usuarios;
-	usuarios.name = "usuarios";
-	usuarios.database = "escola";
-	usuarios.collums = "id,nome,senha,e-mail";
-	usuarios.data = "0,pedro,corinthinas,pedro@gmail.com";
-
-	Database minecraft;
-	minecraft.name = "minecraft";
-	minecraft.tables = (Table*)calloc(1,sizeof(Table));
-
-	minecraft.tables[0] = usuarios;
-
-	printf("nome: %s\n",minecraft.tables[0].name);
-	printf("database: %s\n",minecraft.tables[0].database);
-	printf("colunas: %s\n",minecraft.tables[0].collums);
-	printf("data: %s\n",minecraft.tables[0].data);
-
-	return 0;
-*/

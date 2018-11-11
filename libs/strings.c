@@ -4,7 +4,7 @@
 #include<ctype.h>
 
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[100][strlen(string)];
+	char m[100][strlen(string)]; // Necessário Editar o Código onde tem [100]
 	char *token;
 	token = strtok(string, caracteres);
 	
@@ -82,4 +82,62 @@ char* betweenParenthesis(char* string){
 		cont++;
 	}
 	return str;
+}
+
+int isInString(char* string, char caracter){
+	for (int i=0; i < (int)strlen(string); i++){
+		if (string[i] == caracter){
+			return 1;
+			break;
+		} else if(i == (int)strlen(string)){
+			return 0;
+		}
+	}
+}
+
+char* switchCommaToVerticalBar(char* string){
+	char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
+	strcpy(stringNew, string); //Copia "string" e atribui o valor a "stringNew"
+	
+	for(int i=0; i < (int)strlen(string) ; i++){
+		if(string[i] == ','){
+			stringNew[i] = '|';
+		}
+	}
+	return stringNew;
+	free(stringNew);
+}
+
+char* switchCommaToVerticalBarWithQMarks(char* string){
+	char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
+	strcpy(stringNew, string); //Copia "string" e atribui o valor a "stringNew"
+
+	//"hasQMark" é uma boleana que é 0 quando o laço a seguir não está rodando dentro de aspas e é 1 quando está.
+	int hasQMark = 0; 
+
+	for(int i=0; i < (int)strlen(string) ; i++){
+		//Ativo se o laço não está contido em aspas e vai até a primeira aspa.
+		if(hasQMark == 0){
+			printf("%c",string[i]);
+		    if(string[i] != '"'){
+				if(string[i] == ','){
+					stringNew[i] = '|';
+				}
+			} else{
+				printf("[A]");
+				hasQMark = 1;
+			}
+		}
+		//Ativo se o laço está rodando dentro de aspas e vai até a última aspa.
+		if(hasQMark == 1){
+			printf("%c",string[i]);
+			if(string[i] == '"'){
+				printf("[B]");
+				hasQMark = 0;
+			}
+		}
+	}
+	printf("\n\n");
+	return stringNew;
+	free(stringNew);
 }

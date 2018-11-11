@@ -52,19 +52,6 @@ int execute(char* command);
 */
 int findInVector(char* subvector, char* vector);
 
-/*
-*	Responsável por quebrar um string
-*	em um vetor a cada caractere encontrado
-*
-*	Recebe
-*	@char* string
-*	@char* caracteres
-*	@int   pos	
-*	
-*	Retorna
-*	@char*
-*	
-*/
-char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos);
+
 
 int numberOfWords(char* string, char* caracteres);

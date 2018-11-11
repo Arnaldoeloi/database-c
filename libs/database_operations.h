@@ -12,3 +12,4 @@ void alterTableModify();
 void alterTableDrop();
 void insertIntoTable();
 void selectFromTable();
+char* concat(char *string1, char *string2);
