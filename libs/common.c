@@ -174,11 +174,6 @@ void validateCreateTable(char* command){
 		count++;
 	}
 
-
-
-	/*
-	*	REMOVE OS ESPAÇOS DOS DADOS ENTRE PARENTESES
-	*/
 	table.name=(char*) realloc(table.name, (sizeof(char)*strlen(token)+sizeof(char)));
 	table.name=token;
 
@@ -233,21 +228,51 @@ void validateCreateTable(char* command){
 	}
 
 }
+void filterTable(Table table, char* filters){
 
+}
 void validateSelect(char* command){
+
+	char* commandTemp=(char*)calloc(strlen(command)+1, sizeof(char)); 
+	strcpy(commandTemp, command);
+	printf("CommandTemp: %s\n", commandTemp);
+	printf("Command: %s\n", command);
+	
+	char *end_str=NULL;
+    char *token = strtok_r(command, " ", &end_str);
+
+	char** commands=(char**) calloc(10, sizeof(char**));
+	int cont=0;
+	while (token != NULL){
+		char *end_token=NULL;
+		printf("token: %s\n", token);
+		commands[cont]=token;
+		token = strtok_r(NULL, " ", &end_str);
+		cont++;
+	}
+	if(strcmp(commands[0], "*")){
+		printf("SELECT ALL");
+	}
+	printf("CommandTemp: %s\n", commandTemp);
+	printf("Command: %s\n", command);
+	
 	char* pathToFile="dbs/";
-	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(command, " ", 3));
+	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(commandTemp, " ", 3));
 	for(int i=0; i<(int)strlen(stringTemp);i++){
 		if(stringTemp[i]=='.'){
 			stringTemp[i]='/';
 		}
 	}
+
 	pathToFile=concat(stringTemp, ".csv");
+	printf("PathToFile:%s\n", pathToFile);
 	Table t=csvToTable(pathToFile);
+
 	if(t.database!=NULL){
 		printf("PathToFile:%s\n", pathToFile);
 		printTable(t);
 	}
+	
 }
 
 void validateInsertIntoTable(char* command){
