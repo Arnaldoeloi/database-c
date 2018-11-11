@@ -155,10 +155,15 @@ Table csvToTable(char* pathToFile){
 	char ch;
 	char* wholeFile=NULL;	
 
+	int fileOpen=0;
+
 	if( file == NULL ) {
 		boldRed();
-		printf( "Erro na abertura do arquivo!\n" );
+		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
+		Table table;
+		table.database=NULL;
 		resetColor();
+		return table;
 	}else{
 		int count=0;
 		while((ch=fgetc(file))!=EOF){ //igualar ch ao fgetc(file) até atingir EOF (fim do arquivo)
@@ -168,47 +173,51 @@ Table csvToTable(char* pathToFile){
 		}
 		wholeFile=realloc(wholeFile, count*sizeof(char) + sizeof(char));
 		wholeFile[count]='\0';
+		fileOpen=1;
 	}
-	fclose(file);
+	if(fileOpen==1){
+		fclose(file);
+	}
 
-	
-	Table table;
-	table.name = "TODO";
-	table.database = "TODO";
-	table.numRows=countRowsInCsv(pathToFile);
-	table.numCols=countColsInCsv(pathToFile);
-	
-	int count=0;
-	table.data=(char***) calloc(table.numRows, sizeof(char***));
+	if(fileOpen){
+		Table table;
+		table.name = "TODO";
+		table.database = "TODO";
+		table.numRows=countRowsInCsv(pathToFile);
+		table.numCols=countColsInCsv(pathToFile);
+		
+		int count=0;
+		table.data=(char***) calloc(table.numRows, sizeof(char***));
 
-	char *end_str=NULL;
-    char *token = strtok_r(wholeFile, "\n", &end_str); //separa os dados para cada \n
+		char *end_str=NULL;
+		char *token = strtok_r(wholeFile, "\n", &end_str); //separa os dados para cada \n
 
-	int row=0;
-	int col=0;
+		int row=0;
+		int col=0;
 
-    while (token != NULL){
+		while (token != NULL){
 
-		table.data[row]=(char**) calloc(table.numCols, sizeof(char**));
-        char *end_token=NULL;
-        char *token2 = strtok_r(token, "|", &end_token); //separa os dados a cada ,
+			table.data[row]=(char**) calloc(table.numCols, sizeof(char**));
+			char *end_token=NULL;
+			char *token2 = strtok_r(token, "|", &end_token); //separa os dados a cada ,
 
-        while (token2 != NULL){
+			while (token2 != NULL){
 
-			table.data[row][col] = token2;
+				table.data[row][col] = token2;
 
-            token2 = strtok_r(NULL, "|", &end_token);
+				token2 = strtok_r(NULL, "|", &end_token);
 
-			col++;
-			
-        // printf("table.data[%i][%i] = %s\n",row,col,table.data[row][col]);
+				col++;
+				
+			// printf("table.data[%i][%i] = %s\n",row,col,table.data[row][col]);
 
-        }
-		col=0;
-		row++;
-        token = strtok_r(NULL, "\n", &end_str);	
-    }
-	return table;
+			}
+			col=0;
+			row++;
+			token = strtok_r(NULL, "\n", &end_str);	
+		}
+		return table;
+	}
 }
 
 int isRegularFile(const char *path){
