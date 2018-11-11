@@ -165,3 +165,18 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 	return stringNew;
 	free(stringNew);
 }
+
+int isSubstringInString(char* string, char* subString){
+	char* validatedString = (char*)calloc((int)strlen(subString),sizeof(char));
+	for(int i=o, int j=0; i < (int)strlen(string); i++){
+		if (string[i] == subString[j]){
+			j++
+			validatedString[j] = string[i];
+		}
+	}
+	if (validatedString == subString){
+		return 1;
+	} else {
+		return 0;
+	}
+}

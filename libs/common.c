@@ -58,7 +58,6 @@ void printHelp(){
 	printf("para sair do programa.\n");
 }
 
-//create table gamers(int id pk, string name, string address)
 void validateCreateTable(char* command){
 	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
 	strcpy(nameTable, command);
@@ -148,6 +147,21 @@ void validateCreateTable(char* command){
 
 }
 
+void validateInsertIntoTable(char* command){
+	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
+	strcpy(nameTable, command);
+	
+	Table table;
+	table.name=NULL;
+	table.database = NULL;
+	table.numRows=1;
+	table.numCols=0;
+	
+	int count=0;
+	char *end_str=NULL;
+    char *token = strtok_r(nameTable, " .(", &end_str); 
+}
+
 Table commandCreateTabletoTable(char* command){
 	Table table;
 	table.name;
@@ -191,7 +205,6 @@ Table commandCreateTabletoTable(char* command){
 	}
 }
 
-
 char* input(){
 	char*string = malloc(sizeof(char));
 
@@ -204,7 +217,6 @@ char* input(){
 	string[i-1]='\0';
 	return string;
 }
-
 
 int findInVector(char* subvector, char* vector){
 	if (strlen(subvector) > strlen(vector)){
@@ -219,7 +231,6 @@ int findInVector(char* subvector, char* vector){
 		}
 	}
 }
-
 
 void printTable(Table table){
 	printf("table.numRows=%i\n", table.numRows);
@@ -336,7 +347,6 @@ int execute(char* command){
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
 		char* string = "3,Derick,Vento@gmail.com,\"Batatas, Doce\",Queijinho com qualho";
-		insertIntoTable();
 
 
 	}else if(findInVector("delete from ", command)){
