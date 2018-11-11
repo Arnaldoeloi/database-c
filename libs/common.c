@@ -248,7 +248,7 @@ void validateInsertIntoTable(char* command){
 
 			char* nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
 
-			for(int i=0; i < (int)strlen(nameAndDatabase)){
+			for(int i=0; i < (int)strlen(nameAndDatabase);i++){
 				if (nameAndDatabase[i] == '.'){
 
 				}
@@ -368,7 +368,7 @@ int execute(char* command){
 		
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
-		printf("\n StringFunction : %s\n", getSubstringAfterSubstringInString("insert (asdsadadsa) into db.table" , "into"));
+		printf("\n StringFunction : |%s|\n", getSubstringAfterSubstringInString("insert (asdsadadsa) into db.table" , "into"));
 
 
 	}else if(findInVector("delete from ", command)){

@@ -216,6 +216,7 @@ char* getSubstringAfterSubstringInString(char* string, char* subString){
 				subStringAfter[k] = string[i];
 				k++;
 				if(i == (int)strlen(string)-1){
+					subStringAfter = (char*)realloc(subStringAfter, k);
 					return subStringAfter;
 					break;
 				} continue;
