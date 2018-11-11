@@ -168,9 +168,10 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 
 int isSubstringInString(char* string, char* subString){
 	char* validatedString = (char*)calloc((int)strlen(subString),sizeof(char));
-	for(int i=o, int j=0; i < (int)strlen(string); i++){
+	for(int i=0; i < (int)strlen(string); i++){
+		int j=0;
 		if (string[i] == subString[j]){
-			j++
+			j++;
 			validatedString[j] = string[i];
 		}
 	}
