@@ -242,7 +242,7 @@ void validateInsertIntoTable(char* command){
 			table.name=NULL;
 			table.database = NULL;
 			table.numRows=1;
-			table.numCols=0;
+			table.numCols=1;
 
 			// Põe valor igual ao do comando na table.name
 			char* nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
@@ -252,34 +252,39 @@ void validateInsertIntoTable(char* command){
 			free(nameAndDatabase);
 
 			// põe valor igual ao do comando na table.data
-			char* nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
+			nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
 			wordInPositionAfterSeparations(nameAndDatabase,".", 2);
 			table.database = realloc(table.name, (int)strlen(nameAndDatabase));
 			table.database = nameAndDatabase;
 			free(nameAndDatabase);
 
 			// Escreve os itens digitados entre parênteses no vetor de caracteres "string"
-			char* string = betweenParenthesis(command);
 
-			if (isInString(string,'|') == 0){
-	    		char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
-				int stringNewCols = 0;
-				if (isInString(string,'"') == 1){
-					stringNew = switchCommaToVerticalBarWithQMarks(string);
-					for(int i=0; i <= (int)strlen(stringNew); i++){
-						if(stringNew[i] == '|'){
-						stringNewCols++;
-						}
-				    }
+			if (isInString(command,'|') == 0){
+				char* string = NULL;
+				if (isInString(command, '\"') == 1){
+					//TEMPORÁRIO//
+					char* string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				} else{
-					stringNew = switchCommaToVerticalBar(string);
-					for(int i=0; i <= (int)strlen(stringNew); i++){
-						if(stringNew[i] == '|'){
-						stringNewCols++;
-						}
-				    }
+					char* string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				}
-				free(stringNew);
+				for(int i=0;i < (int)strlen(string);i++){
+					if (string[i] == '|'){
+						table.numCols++;
+					}
+				}
+				table.data  = (char***)calloc(1,sizeof(char**));
+				table.data[0] = (char**)calloc(table.numCols,sizeof(char*));
+
+				char *end_token=NULL;
+				char *token2 = strtok_r(string, "|", &end_token); //separa os dados a cada ,
+
+				for (int i; i < table.numCols; i++){
+					table.data[1][i] = token2;
+					token2 = strtok_r(NULL, "|", &end_token);
+				}
+				insertIntoTable(table);
+
 			}else {
 				boldRed();
 				printf("Erro: Caractere especial '|' nao suportado\n");

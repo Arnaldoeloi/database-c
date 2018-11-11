@@ -143,7 +143,7 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 		//Ativo se o laço não está contido em aspas e vai até a primeira aspa
 		if(hasQMark == 0){
 			printf("%c",string[i]);
-		    if(string[i] != '"'){
+		    if(string[i] != '\"'){
 				if(string[i] == ','){
 					stringNew[i] = '|';
 				}
