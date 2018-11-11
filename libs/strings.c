@@ -136,11 +136,11 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 	char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
 	strcpy(stringNew, string); //Copia "string" e atribui o valor a "stringNew"
 
-	//"hasQMark" é uma boleana que é 0 quando o laço a seguir não está rodando dentro de aspas e é 1 quando está.
+	//"hasQMark" é uma boleana que é 0 quando o laço a seguir não está rodando dentro de aspas e é 1 quando está
 	int hasQMark = 0; 
 
 	for(int i=0; i < (int)strlen(string) ; i++){
-		//Ativo se o laço não está contido em aspas e vai até a primeira aspa.
+		//Ativo se o laço não está contido em aspas e vai até a primeira aspa
 		if(hasQMark == 0){
 			printf("%c",string[i]);
 		    if(string[i] != '"'){
@@ -152,7 +152,7 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 				hasQMark = 1;
 			}
 		}
-		//Ativo se o laço está rodando dentro de aspas e vai até a última aspa.
+		//Ativo se o laço está rodando dentro de aspas e vai até a última aspa
 		if(hasQMark == 1){
 			printf("%c",string[i]);
 			if(string[i] == '"'){
@@ -171,13 +171,57 @@ int isSubstringInString(char* string, char* subString){
 	for(int i=0; i < (int)strlen(string); i++){
 		int j=0;
 		if (string[i] == subString[j]){
-			j++;
 			validatedString[j] = string[i];
+			j++;
+			continue;
 		}
 	}
 	if (validatedString == subString){
 		return 1;
+		free(validatedString);
 	} else {
 		return 0;
+		free(validatedString);
 	}
+}
+char* getSubstringAfterSubstringInString(char* string, char* subString){
+	// Serve para chegar se há a substring dentro da string
+	char* validatedString = (char*)calloc((int)strlen(subString),sizeof(char));
+	// É a subString nova que fica logo após a subString dentro da string
+	char* subStringAfter = (char*)calloc((int)strlen(string),sizeof(char));
+	// Verifica que a subString é igual a validatedString
+	int alreadyValidated=0;
+	for(int i=0, j=0, k=0, fSpace=0; i <= (int)strlen(string); i++){
+		// Condição bool para ver se o primeiro espaço já foi usado
+		//Checa se a posição i da string e a posição j da subString são iguais e se forem, salva em validatedString[j]
+		if (string[i] == subString[j]){
+			if(alreadyValidated == 0){
+				validatedString[j] = string[i];
+				j = j+1;
+				continue;
+			}
+		}
+		// Após a string validatedString se tornar igual a subString o laço de repetição agora vai salvar e retornar subStringAfter 
+		if (strcmp(validatedString, subString) == 0){
+			alreadyValidated = 1;
+			int firstSpace = 0;
+			if(string[i] == ' ' || string[i] == '\n'){
+				if(fSpace == 0){
+					continue;
+				} else{
+					return subStringAfter;
+					break;
+				}
+			} else{
+				subStringAfter[k] = string[i];
+				k++;
+				if(i == (int)strlen(string)-1){
+					return subStringAfter;
+					break;
+				} continue;
+			}	
+		}
+	}
+	free(validatedString);
+	free(subStringAfter);
 }

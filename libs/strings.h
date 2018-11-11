@@ -19,6 +19,7 @@ char* lowerCase(char* string);
 char* betweenParenthesis(char* string);
 char* removeSpacesAfterCommas(char* string);
 int isInString(char* string, char caracter);
-int isSubstringInString(char* string, char* substring);
+int isSubstringInString(char* string, char* subString);
+char* getSubstringAfterSubstringInString(char* string, char* subString);
 char* switchCommaToVerticalBar(char* string);
 char* switchCommaToVerticalBarWithQMarks(char* string);

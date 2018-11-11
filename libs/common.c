@@ -144,7 +144,6 @@ void printTable(Table table){
 	resetColor();
 }
 
-//create table gamers(int id pk, string name, string address)
 void validateCreateTable(char* command){
 	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
 	strcpy(nameTable, command);
@@ -234,35 +233,41 @@ void validateCreateTable(char* command){
 
 }
 
-void validateSelect(char* command){
-	char* pathToFile="dbs/";
-	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(command, " ", 3));
-	for(int i=0; i<(int)strlen(stringTemp);i++){
-		if(stringTemp[i]=='.'){
-			stringTemp[i]='/';
-		}
-	}
-	pathToFile=concat(stringTemp, ".csv");
-	Table t=csvToTable(pathToFile);
-	if(t.database!=NULL){
-		printf("PathToFile:%s\n", pathToFile);
-		printTable(t);
-	}
-}
-
 void validateInsertIntoTable(char* command){
 	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
 	strcpy(nameTable, command);
-	
-	Table table;
-	table.name=NULL;
-	table.database = NULL;
-	table.numRows=1;
-	table.numCols=0;
-	
-	int count=0;
-	char *end_str=NULL;
-    char *token = strtok_r(nameTable, " .(", &end_str); 
+
+	if(isSubstringInString(command, "into") == 1){
+		if(isInString(command, '(') == 1 && isInString(command, ')') == 1){
+
+			Table table;
+			table.name=NULL;
+			table.database = NULL;
+			table.numRows=1;
+			table.numCols=0;
+
+			char* nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
+
+			for(int i=0; i < (int)strlen(nameAndDatabase)){
+				if (nameAndDatabase[i] == '.'){
+
+				}
+			}
+			
+			int count=0;
+			char *end_str=NULL;
+  	  		char *token = strtok_r(nameTable, " .(", &end_str); 
+			
+		} else{
+			boldRed();
+			printf("Erro: Nao ha parenteses separando os itens inseridos no comando digitado\n");
+			resetColor();
+		}
+	} else{
+		boldRed();
+		printf("Erro: Nao ha \"Into\" no comando digitado\n");
+		resetColor();
+	}
 }
 
 Table commandCreateTabletoTable(char* command){
@@ -335,8 +340,6 @@ int findInVector(char* subvector, char* vector){
 	}
 }
 
-
-
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
@@ -365,7 +368,7 @@ int execute(char* command){
 		
 	}else if(findInVector("insert into ", command)){
 		printf("Inserting into table\n");
-		char* string = "3,Derick,Vento@gmail.com,\"Batatas, Doce\",Queijinho com qualho";
+		printf("\n StringFunction : %s\n", getSubstringAfterSubstringInString("insert (asdsadadsa) into db.table" , "into"));
 
 
 	}else if(findInVector("delete from ", command)){
@@ -380,7 +383,7 @@ int execute(char* command){
 
 
 		printf("Selecting data from table\n");
-		validateSelect(command);
+		// validateSelect(command);
 		//Table t = csvToTable("dbs/minecraft/asd.csv");
 		//printTable(t);
 		
