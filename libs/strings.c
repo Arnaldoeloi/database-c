@@ -65,13 +65,10 @@ char* betweenParenthesis(char* string){
 	while(1){
 		str= (char*) realloc(str, sizeof(char));
 		if(string[cont]=='('){
-			//printf("\nFOR: \n");
 			for(int i=cont+1; string[i]!=')' && string[i]!='\0' && string[i]!='\0';i++){
 				str=(char*) realloc(str, (sizeof(char)*size+sizeof(char)));
 				str[size]=string[i];
-				//printf("i:%i %c|\n", i, str[i]);
 				pos=i;
-				// printf("str[%i]: %c\n", size, str[size]);
 				size++;
 			}
 			str=(char*) realloc(str, size*sizeof(char)+sizeof(char));
@@ -146,26 +143,23 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 	for(int i=0; i < (int)strlen(string) ; i++){
 		//Ativo se o laço não está contido em aspas e vai até a primeira aspa
 		if(hasQMark == 0){
-			printf("%c",string[i]);
 		    if(string[i] != '\"'){
 				if(string[i] == ','){
 					stringNew[i] = '|';
+					continue;
 				}
 			} else{
-				printf("[A]");
 				hasQMark = 1;
+				continue;
 			}
 		}
 		//Ativo se o laço está rodando dentro de aspas e vai até a última aspa
 		if(hasQMark == 1){
-			printf("%c",string[i]);
 			if(string[i] == '"'){
-				printf("[B]");
 				hasQMark = 0;
 			}
 		}
 	}
-	printf("\n\n");
 	return stringNew;
 	free(stringNew);
 }

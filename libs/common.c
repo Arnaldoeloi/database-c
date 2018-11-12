@@ -57,6 +57,7 @@ void printHelp(){
 	resetColor();
 	printf("para sair do programa.\n");
 }
+
 void printTable(Table table){
 	// printf("table.numRows=%i\n", table.numRows);
 	// printf("table.numCols=%i\n", table.numCols);
@@ -316,11 +317,17 @@ void validateInsertIntoTable(char* command){
 
 			// Põe valor igual ao do comando na table.name
 			char* nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
-			wordInPositionAfterSeparations(nameAndDatabase,".", 1);
-			table.name = realloc(table.name, (int)strlen(nameAndDatabase));
-			table.name = nameAndDatabase;
-			free(nameAndDatabase);
 
+			printf("nameAndDatabase = %s\n",nameAndDatabase);
+			wordInPositionAfterSeparations(nameAndDatabase,".", 1);
+			table.name = realloc(table.name, (int)strlen(nameAndDatabase)*sizeof(char)+sizeof(char));
+			table.name = nameAndDatabase;
+			//usar ctrcpy
+			printf("nameAndDatabase = %s\n",nameAndDatabase);
+			printf("table.name = %s\n",table.name);
+			free(nameAndDatabase);
+			printf("\nnameAndDatabase = %s\n",nameAndDatabase);
+			printf("table.name = %s\n",table.name);
 			// põe valor igual ao do comando na table.data
 			nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
 			wordInPositionAfterSeparations(nameAndDatabase,".", 2);
@@ -332,14 +339,13 @@ void validateInsertIntoTable(char* command){
 
 			if (isInString(command,'|') == 0){
 				char* string = NULL;
-				printf("\nRAPAZ!!\n");
 				if (isInString(command, '\"') == 1){
 					//TEMPORÁRIO//
-					char* string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
+					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				} else{
-					char* string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
+					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				}
-				for(int i=0;i < (int)strlen(string);i++){
+				for(int i=0;i < (int)strlen(string) ;i++){
 					if (string[i] == '|'){
 						table.numCols++;
 					}
@@ -354,6 +360,7 @@ void validateInsertIntoTable(char* command){
 					table.data[1][i] = token2;
 					token2 = strtok_r(NULL, "|", &end_token);
 				}
+				printf("!!table.name!! = |%s|\n",table.name);
 				insertIntoTable(table);
 
 			}else {

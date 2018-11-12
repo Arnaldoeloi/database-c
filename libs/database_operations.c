@@ -283,26 +283,29 @@ void listAllTables(){
 
 void insertIntoTable(Table table){
 	FILE *file;
-	char* path = "/";
-	concat(path, table.database);
+	char* path = "dbs/";
+	path = concat(path, table.database);
+	// printf("\nABRIU O ARQUIVO EM: %s\n", path);
+	printf("table.database = |%s|\ntable.name = |%s|",table.database, table.name);
 	file = fopen(path, "r");
 	if( file == NULL ) {
 		boldRed();
-		printf( "Erro: biblioteca não existente\n" );
+		// printf( "Erro: biblioteca não existente\n" );
 		resetColor();
 	} else{
 		fclose(file);
-		concat(path, "/");
-		concat(path, table.name);
-		concat(path, ".csv");
+		path = concat(path, "/");
+		path = concat(path, table.name);
+		path = concat(path, ".csv");
 		file = fopen(path, "wr");
-		printf("ABRIU O ARQUIVO EM: %s", path);
+		// printf("ABRIU O ARQUIVO EM: %s\n", path);
 		if(file == NULL){
 			boldRed();
-			printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
+			printf( "\n\nErro na abertura do arquivo! Você digitou corretamente?\n" );
 			resetColor();
 		} else{
-			Table csvTable = csvToTable(path);
+			printf("\nInserindo na tabela...\n");
+			// Table csvTable = csvToTable(path);
 
 		}
 	}
