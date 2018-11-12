@@ -22,3 +22,4 @@ int isSubstringInString(char* string, char* subString);
 char* getSubstringAfterSubstringInString(char* string, char* subString);
 char* switchCommaToVerticalBar(char* string);
 char* switchCommaToVerticalBarWithQMarks(char* string);
+char* invertString(char* string);
