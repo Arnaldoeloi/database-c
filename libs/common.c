@@ -228,6 +228,54 @@ void validateCreateTable(char* command){
 
 }
 
+
+Table findTableInCommand(char* command){
+	Table t;
+	char* database=NULL;
+	char* table=NULL;
+	printf("command=%s\n", command);
+	for(int i=0; i<(int)strlen(command); i++){
+		if(command[i]=='.'){
+			//for regressivo até achar o espaço, irá printar ao contrário
+			int cont=0;
+			for(int j=i-1; command[j]!=' '; j--){
+				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
+				database[cont]=command[j];
+				printf("database[%i]=%c\n", cont, database[cont]);
+				cont++;
+			}
+			database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
+			database[cont]='\0';
+			cont=0;
+
+
+			//for progressivo até achar o espaço
+			for(int j=i+1; (command[j]!=' ' && command[j]!='\0'); j++){
+				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
+				table[cont]=command[j];
+				printf("table[%i]=%c\n", cont, table[cont]);
+				cont++;
+			}
+			table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
+			table[cont]='\0';
+			printf("FORdatabase: %s\n", database);
+			printf("FORtable: %s\n", table);
+			break;
+		}
+	}
+	int cont=0;
+	database=invertString(database);
+	printf("database: %s\n", database);
+	printf("table: %s\n", table);
+
+	t.name=(char*) malloc((int)strlen(table)*sizeof(char)+sizeof(char));
+	t.database=(char*) malloc((int)strlen(database)*sizeof(char)+sizeof(char));
+	t.name=table;
+	t.database=database;
+	printf("t.name=%s\n", t.name);
+	printf("t.database=%s\n", t.database);
+	return t;
+}	
 /*
 *	Irá receber só as colunas que irá printar,
 *	a tabela filtrada e
@@ -257,27 +305,17 @@ void validateSelect(char* command){
 		cont++;
 	}
 	printf("commands[1]=%s\n", commands[1]);
+
+	char* collumns;
 	if(strcmp(commands[1], "*")==0){
-		printf("SELECT ALL\n");
-		char* pathToFile="dbs/";
-		char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(commandTemp, " ", 3));
-		for(int i=0; i<(int)strlen(stringTemp);i++){
-			if(stringTemp[i]=='.'){
-				stringTemp[i]='/';
-			}
-		}
-
-		pathToFile=concat(stringTemp, ".csv");
-		printf("PathToFile:%s\n", pathToFile);
-		Table t=csvToTable(pathToFile);
-
-		if(t.database!=NULL){
-			printf("PathToFile:%s\n", pathToFile);
-			printTable(t);
-		}
+		collumns=(char*) calloc (2, sizeof(char));
+		collumns="*";
 	}else{
 		//esse for eliminará a primeira ocorrência de parenteseses.
 		//caso o comando tenha where
+		collumns = betweenParenthesis(commandTemp);
+		collumns =  removeSpacesAfterCommas(collumns);
+
 		if(isSubstringInString(commandTemp, "where")){
 			int findOpenningP=0;
 			int findClosingP=0;
@@ -291,11 +329,30 @@ void validateSelect(char* command){
 				}
 			}
 		}else{
-			char* collumns = betweenParenthesis(commandTemp);
-			collumns=removeSpacesAfterCommas(collumns);
 			char* filters=NULL;
 			printf("collumns: %s\n", collumns);
 		}
+	}
+
+
+
+	printf("SELECT ALL\n");
+	findTableInCommand(commandTemp);
+	char* pathToFile="dbs/";
+	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(commandTemp, " ", 3));
+	for(int i=0; i<(int)strlen(stringTemp);i++){
+		if(stringTemp[i]=='.'){
+			stringTemp[i]='/';
+		}
+	}
+
+	pathToFile=concat(stringTemp, ".csv");
+	printf("PathToFile:%s\n", pathToFile);
+	Table t=csvToTable(pathToFile);
+
+	if(t.database!=NULL){
+		printf("PathToFile:%s\n", pathToFile);
+		printTable(t);
 	}
 	printf("CommandTemp: %s\n", commandTemp);
 	printf("Command: %s\n", command);

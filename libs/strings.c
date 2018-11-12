@@ -229,3 +229,13 @@ char* getSubstringAfterSubstringInString(char* string, char* subString){
 	free(validatedString);
 	free(subStringAfter);
 }
+
+char* invertString(char* string){
+	char c;
+	for (int i = 0, j = strlen(string)-1; i < j; i++, j--) {
+        c = string[i];
+        string[i] = string[j];
+        string[j] = c;
+    }
+	return string;
+}
