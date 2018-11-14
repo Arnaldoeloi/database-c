@@ -229,7 +229,6 @@ void validateCreateTable(char* command){
 
 }
 
-
 Table findTableInCommand(char* command){
 	
 	Table t;
@@ -313,6 +312,7 @@ void filterTable(char* collumns, Table table, char* filters){
 	printf("filter: %s\n", filters);
 	printTable(table);
 }
+
 void validateSelect(char* command){
 	boldCyan();
 	printf("318\n");
@@ -420,37 +420,17 @@ void validateInsertIntoTable(char* command){
 		if(isInString(command, '(') == 1 && isInString(command, ')') == 1){
 			//assina o valor da Table a ser criada;
 			Table table;
-			table.name=NULL;
-			table.database = NULL;
-			table.numRows=1;
-			table.numCols=1;
-
-			// Põe valor igual ao do comando na table.name
-			char* nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
-
-			printf("nameAndDatabase = %s\n",nameAndDatabase);
-			wordInPositionAfterSeparations(nameAndDatabase,".", 1);
-			table.name = realloc(table.name, (int)strlen(nameAndDatabase)*sizeof(char)+sizeof(char));
-			table.name = nameAndDatabase;
-			//usar ctrcpy
-			printf("nameAndDatabase = %s\n",nameAndDatabase);
-			printf("table.name = %s\n",table.name);
-			free(nameAndDatabase);
-			printf("\nnameAndDatabase = %s\n",nameAndDatabase);
-			printf("table.name = %s\n",table.name);
-			// põe valor igual ao do comando na table.data
-			nameAndDatabase = getSubstringAfterSubstringInString(command, "into");
-			wordInPositionAfterSeparations(nameAndDatabase,".", 2);
-			table.database = realloc(table.name, (int)strlen(nameAndDatabase));
-			table.database = nameAndDatabase;
-			free(nameAndDatabase);
-
-			// Escreve os itens digitados entre parênteses no vetor de caracteres "string"
+			table = findTableInCommand(command);
+			table.numCols = 0;
+			table.numRows = 1;
+			
+			printf("table.database : %s\n", table.database);
+			printf("table.name: %s\n", table.name);
 
 			if (isInString(command,'|') == 0){
 				char* string = NULL;
+				//
 				if (isInString(command, '\"') == 1){
-					//TEMPORÁRIO//
 					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				} else{
 					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
@@ -470,7 +450,6 @@ void validateInsertIntoTable(char* command){
 					table.data[1][i] = token2;
 					token2 = strtok_r(NULL, "|", &end_token);
 				}
-				printf("!!table.name!! = |%s|\n",table.name);
 				insertIntoTable(table);
 
 			}else {
