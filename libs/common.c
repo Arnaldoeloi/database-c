@@ -314,12 +314,22 @@ void filterTable(char* collumns, Table table, char* filters){
 	printTable(table);
 }
 void validateSelect(char* command){
-
+	boldCyan();
+	printf("318\n");
+	resetColor();
 	char* commandTemp=(char*)calloc(strlen(command)+1, sizeof(char)); 
 	strcpy(commandTemp, command);
+
+	boldCyan();
+	printf("324\n");
+	resetColor();
 	
 	char *end_str=NULL;
     char *token = strtok_r(command, " ", &end_str);
+
+	boldCyan();
+	printf("331\n");
+	resetColor();
 
 	char** commands=(char**) calloc(10, sizeof(char**));
 	int cont=0;
@@ -329,22 +339,46 @@ void validateSelect(char* command){
 		token = strtok_r(NULL, " ", &end_str);
 		cont++;
 	}
-
-	char* collumns;
+	boldCyan();
+	printf("343\n");
+	resetColor();
+	char* collumns=NULL;
 	char* filters=NULL;
 	if(strcmp(commands[1], "*")==0){
 		collumns=(char*) calloc (2, sizeof(char));
 		collumns="*";
 		if(isSubstringInString(commandTemp, "where")){
+			filters = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
 			filters = betweenParenthesis(commandTemp);
-			filters =  removeSpacesAfterCommas(filters);
+			filters = removeSpacesAfterCommas(filters);
 		}
 	}else{
+		boldCyan();
+		printf("357\n");
+		resetColor();
+
 		//esse for eliminará a primeira ocorrência de parenteseses.
 		//caso o comando tenha where
+		collumns = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
+		
+		boldCyan();
+		printf("365\n");
+		resetColor();
+		
+		/*
+		*	A LINHA 371 ESTÁ LANÇANDO ERRO FATAL, TODO: ENTENDER O MOTIVO E CORRIGIR
+		*/
 		collumns = betweenParenthesis(commandTemp);
+
+		boldCyan();
+		printf("371\n");
+		resetColor();
+
 		collumns =  removeSpacesAfterCommas(collumns);
 
+		printf("365: %s\n", commandTemp);
+
+		//limpa os primeiros parenteses para que haja apenas os parenteses dos filtros (após o where)
 		if(isSubstringInString(commandTemp, "where")){
 			int findOpenningP=0;
 			int findClosingP=0;
@@ -361,7 +395,6 @@ void validateSelect(char* command){
 			char* filters=NULL;
 		}
 	}
-
 	Table t = findTableInCommand(commandTemp);
 	char* pathToFile="dbs/";
 	if(t.database!=NULL){

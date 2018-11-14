@@ -57,6 +57,9 @@ char* lowerCase(char* string){
 }
 
 char* betweenParenthesis(char* string){
+	yellow();
+	printf("60");
+	resetColor();
 	int cont=0;
 	int pos=0;
 	char*str = NULL;
