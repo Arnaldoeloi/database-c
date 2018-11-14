@@ -231,17 +231,29 @@ void validateCreateTable(char* command){
 
 
 Table findTableInCommand(char* command){
+	
 	Table t;
 	char* database=NULL;
 	char* table=NULL;
-	printf("command=%s\n", command);
-	for(int i=0; i<(int)strlen(command); i++){
-		if(command[i]=='.'){
+	char* commandCpy=malloc(sizeof(char)*strlen(command)+sizeof(char));
+
+	memcpy(commandCpy, command, strlen(command) + 1);
+	commandCpy[strlen(command)+1]='\0';
+	printf("strlen(commandCpy): %i\n", (int) strlen(commandCpy));
+	int pointFound=0;
+	printf("Logo antes de entrar no for\n");
+	printf("command[20]=%c\n", command[20]);
+	for(int i=0; i < (int)strlen(commandCpy); i++){
+		printf("i:%i | ", i);
+		printf("commandCpy[i]=%c\n", commandCpy[i]);
+		if(commandCpy[i]=='.'){
+			printf("ENTROU NO IF, i=%i\n", i);
+			pointFound=1;
 			//for regressivo até achar o espaço, irá printar ao contrário
 			int cont=0;
-			for(int j=i-1; command[j]!=' '; j--){
+			for(int j=i-1; commandCpy[j]!=' '; j--){
 				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
-				database[cont]=command[j];
+				database[cont]=commandCpy[j];
 				printf("database[%i]=%c\n", cont, database[cont]);
 				cont++;
 			}
@@ -251,9 +263,9 @@ Table findTableInCommand(char* command){
 
 
 			//for progressivo até achar o espaço
-			for(int j=i+1; (command[j]!=' ' && command[j]!='\0'); j++){
+			for(int j=i+1; (commandCpy[j]!=' ' && commandCpy[j]!='\0'); j++){
 				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
-				table[cont]=command[j];
+				table[cont]=commandCpy[j];
 				printf("table[%i]=%c\n", cont, table[cont]);
 				cont++;
 			}
@@ -263,6 +275,20 @@ Table findTableInCommand(char* command){
 			printf("FORtable: %s\n", table);
 			break;
 		}
+	}
+	boldRed();
+	printf("Saiu do for\n");
+	resetColor();
+	//Se o comando estiver inválido, retornará uma tabela com campos database e table = NULL
+	if(!pointFound){
+		boldGreen();
+		printf("Entrou no if\n");
+		resetColor();
+
+		Table nullable;
+		nullable.name=NULL;
+		nullable.database=NULL;
+		return nullable;
 	}
 	int cont=0;
 	database=invertString(database);
@@ -285,13 +311,12 @@ Table findTableInCommand(char* command){
 void filterTable(char* collumns, Table table, char* filters){
 	printf("collums: %s\n", collumns);
 	printf("filter: %s\n", filters);
+	printTable(table);
 }
 void validateSelect(char* command){
 
 	char* commandTemp=(char*)calloc(strlen(command)+1, sizeof(char)); 
 	strcpy(commandTemp, command);
-	printf("CommandTemp: %s\n", commandTemp);
-	printf("Command: %s\n", command);
 	
 	char *end_str=NULL;
     char *token = strtok_r(command, " ", &end_str);
@@ -300,17 +325,20 @@ void validateSelect(char* command){
 	int cont=0;
 	while (token != NULL){
 		char *end_token=NULL;
-		printf("token: %s\n", token);
 		commands[cont]=token;
 		token = strtok_r(NULL, " ", &end_str);
 		cont++;
 	}
-	printf("commands[1]=%s\n", commands[1]);
 
 	char* collumns;
+	char* filters=NULL;
 	if(strcmp(commands[1], "*")==0){
 		collumns=(char*) calloc (2, sizeof(char));
 		collumns="*";
+		if(isSubstringInString(commandTemp, "where")){
+			filters = betweenParenthesis(commandTemp);
+			filters =  removeSpacesAfterCommas(filters);
+		}
 	}else{
 		//esse for eliminará a primeira ocorrência de parenteseses.
 		//caso o comando tenha where
@@ -331,33 +359,25 @@ void validateSelect(char* command){
 			}
 		}else{
 			char* filters=NULL;
-			printf("collumns: %s\n", collumns);
 		}
 	}
 
-
-
-	printf("SELECT ALL\n");
-	findTableInCommand(commandTemp);
+	Table t = findTableInCommand(commandTemp);
 	char* pathToFile="dbs/";
-	char* stringTemp=concat(pathToFile, wordInPositionAfterSeparations(commandTemp, " ", 3));
-	for(int i=0; i<(int)strlen(stringTemp);i++){
-		if(stringTemp[i]=='.'){
-			stringTemp[i]='/';
-		}
+	if(t.database!=NULL){
+		//"dbs/ nomeDoBanco / nomeDaTabela .csv"
+		char* stringTemp=concat(pathToFile, concat(concat(t.database,"/"),t.name));
+		pathToFile=concat(stringTemp, ".csv");
+		t=csvToTable(pathToFile);
 	}
 
-	pathToFile=concat(stringTemp, ".csv");
-	printf("PathToFile:%s\n", pathToFile);
-	Table t=csvToTable(pathToFile);
 
 	if(t.database!=NULL){
 		printf("PathToFile:%s\n", pathToFile);
-		printTable(t);
+		filterTable(collumns, t, filters);
+	}else{
+		printf("Você não selecionou nenhum banco de dados válido. Reescreva o comando. \n");
 	}
-	printf("CommandTemp: %s\n", commandTemp);
-	printf("Command: %s\n", command);
-	
 	
 }
 
