@@ -238,22 +238,22 @@ Table findTableInCommand(char* command){
 
 	memcpy(commandCpy, command, strlen(command) + 1);
 	commandCpy[strlen(command)+1]='\0';
-	printf("strlen(commandCpy): %i\n", (int) strlen(commandCpy));
+	//printf("strlen(commandCpy): %i\n", (int) strlen(commandCpy));
 	int pointFound=0;
-	printf("Logo antes de entrar no for\n");
-	printf("command[20]=%c\n", command[20]);
+	//printf("Logo antes de entrar no for\n");
+	//printf("command[20]=%c\n", command[20]);
 	for(int i=0; i < (int)strlen(commandCpy); i++){
-		printf("i:%i | ", i);
-		printf("commandCpy[i]=%c\n", commandCpy[i]);
+		//printf("i:%i | ", i);
+		//printf("commandCpy[i]=%c\n", commandCpy[i]);
 		if(commandCpy[i]=='.'){
-			printf("ENTROU NO IF, i=%i\n", i);
+			//printf("ENTROU NO IF, i=%i\n", i);
 			pointFound=1;
 			//for regressivo até achar o espaço, irá printar ao contrário
 			int cont=0;
 			for(int j=i-1; commandCpy[j]!=' '; j--){
 				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
 				database[cont]=commandCpy[j];
-				printf("database[%i]=%c\n", cont, database[cont]);
+				//printf("database[%i]=%c\n", cont, database[cont]);
 				cont++;
 			}
 			database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
@@ -265,23 +265,23 @@ Table findTableInCommand(char* command){
 			for(int j=i+1; (commandCpy[j]!=' ' && commandCpy[j]!='\0'); j++){
 				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
 				table[cont]=commandCpy[j];
-				printf("table[%i]=%c\n", cont, table[cont]);
+				//printf("table[%i]=%c\n", cont, table[cont]);
 				cont++;
 			}
 			table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
 			table[cont]='\0';
-			printf("FORdatabase: %s\n", database);
-			printf("FORtable: %s\n", table);
+			//printf("FORdatabase: %s\n", database);
+			//printf("FORtable: %s\n", table);
 			break;
 		}
 	}
 	boldRed();
-	printf("Saiu do for\n");
+	//printf("Saiu do for\n");
 	resetColor();
 	//Se o comando estiver inválido, retornará uma tabela com campos database e table = NULL
 	if(!pointFound){
 		boldGreen();
-		printf("Entrou no if\n");
+		//printf("Entrou no if\n");
 		resetColor();
 
 		Table nullable;
@@ -291,15 +291,15 @@ Table findTableInCommand(char* command){
 	}
 	int cont=0;
 	database=invertString(database);
-	printf("database: %s\n", database);
-	printf("table: %s\n", table);
+	//printf("database: %s\n", database);
+	//printf("table: %s\n", table);
 
 	t.name=(char*) malloc((int)strlen(table)*sizeof(char)+sizeof(char));
 	t.database=(char*) malloc((int)strlen(database)*sizeof(char)+sizeof(char));
 	t.name=table;
 	t.database=database;
-	printf("t.name=%s\n", t.name);
-	printf("t.database=%s\n", t.database);
+	//printf("t.name=%s\n", t.name);
+	//printf("t.database=%s\n", t.database);
 	return t;
 }	
 /*
