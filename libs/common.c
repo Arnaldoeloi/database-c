@@ -421,9 +421,9 @@ void validateInsertIntoTable(char* command){
 			//assina o valor da Table a ser criada;
 			Table table;
 			table = findTableInCommand(command);
-			table.numCols = 0;
+			table.numCols = 1; // numCols=1 pois o número de colunas iniciais é sempre igual a 1;
 			table.numRows = 1;
-			
+
 			printf("table.database : %s\n", table.database);
 			printf("table.name: %s\n", table.name);
 

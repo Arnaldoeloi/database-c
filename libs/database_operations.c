@@ -282,65 +282,41 @@ void listAllTables(){
 }
 
 void insertIntoTable(Table table){
-	FILE *file;
-	char* path = "dbs/";
+	printf("285\n");
+	char* path = (char*)calloc(5,sizeof(char));
+	path = "dbs/";
+	printf("\ncaminho : %s\n", path);
 	path = concat(path, table.database);
-	// printf("\nABRIU O ARQUIVO EM: %s\n", path);
-	printf("table.database = |%s|\ntable.name = |%s|",table.database, table.name);
-	file = fopen(path, "r");
-	if( file == NULL ) {
+	path = concat(path, "/");
+	path = concat(path, table.name);
+	path = concat(path, ".csv");
+	FILE *file = fopen(path, "w");
+	// printf("ABRIU O ARQUIVO EM: %s\n", path);
+	if(file == NULL){
 		boldRed();
-		// printf( "Erro: biblioteca não existente\n" );
+		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
 		resetColor();
 	} else{
-		fclose(file);
-		path = concat(path, "/");
-		path = concat(path, table.name);
-		path = concat(path, ".csv");
-		file = fopen(path, "wr");
-		// printf("ABRIU O ARQUIVO EM: %s\n", path);
-		if(file == NULL){
-			boldRed();
-			printf( "\n\nErro na abertura do arquivo! Você digitou corretamente?\n" );
-			resetColor();
-		} else{
+		Table csvTable;
+		csvTable = csvToTable(path);
+		if(table.numCols == csvTable.numCols){
 			printf("\nInserindo na tabela...\n");
-			// Table csvTable = csvToTable(path);
+			for(int i=0; i <= table.numCols; i++){
+				if(i  = table.numCols){
+					fwrite(table.data[0][1], 1, sizeof(table.data[0][i]), file);
+				} else{
+					concat(table.data[0][i], "|");
+					fwrite(table.data[0][1], 1, sizeof(table.data[0][i]), file);
+				}
+			}
+			printf("\nItens inseridos com sucesso\n");
 
+		} else{
+			boldRed();
+			printf( "Erro: numero de colunas digitado difere das colunas do arquivo\n" );
+			resetColor();
 		}
+
 	}
 
 }
-    // if (isInString(string,'|') == 0){
-	//     char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
-	// 	int stringNewCols = 0;
-	// 	if (isInString(string,'"') == 1){
-	// 		stringNew = switchCommaToVerticalBarWithQMarks(string);
-	// 		for(int i=0; i <= (int)strlen(stringNew); i++){
-	// 			if(stringNew[i] == '|'){
-	// 			stringNewCols++;
-	// 			}
-	// 	    }
-	// 	} else{
-	// 		stringNew = switchCommaToVerticalBar(string);
-	// 		for(int i=0; i <= (int)strlen(stringNew); i++){
-	// 			if(stringNew[i] == '|'){
-	// 			stringNewCols++;
-	// 			}
-	// 	    }
-
-	// 	}
-	// 	if(stringNewCols == (int)countColsInCsv(pathToFile)){
-	// 		fwrite (stringNew, 1, sizeof(stringNew), file);
-	// 		fclose(file);
-	// 	} else{
-	// 		boldRed();
-	// 		printf("Erro: O numero de itens esperado era: %d, voce digitou: %d\n", (int)countColsInCsv(pathToFile), stringNewCols);
-	// 		resetColor();
-	// 	}
-	// 	free(stringNew);
-	// }else {
-	// 	boldRed();
-	// 	printf("Erro: Caractere especial '|' nao suportado\n");
-	// 	resetColor();
-	// }
