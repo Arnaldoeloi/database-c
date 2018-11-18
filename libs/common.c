@@ -300,9 +300,9 @@ void validateCreateTable(char* command){
 			//print com os dados
 			yellow();
 			printf("Nome: %s\n", table.name);
-			printf("Database: %s\n", table.database);
-			printf("Numero de linhas: %i\n", table.numRows);
-			printf("Numero de Colunas: %i\n", table.numCols);
+			printf("Banco: %s\n", table.database);
+			// printf("Numero de linhas: %i\n", table.numRows);
+			// printf("Numero de Colunas: %i\n", table.numCols);
 			resetColor();
 
 
