@@ -7,7 +7,7 @@
 
 
 void commandVersion(){
-	printf("0.0.3 All rights reserved to Go Horse interprise LTDA.\n");
+	printf("Alpha 1.0.0 All rights reserved to Go Horse enterprise LTDA (The Original One).\n");
 	printf("Digite ");
 	yellow();
 	printf("help ");
@@ -44,13 +44,40 @@ void printHelp(){
 	resetColor();
 	printf("'):\n\n");
 	green();
-	printf("\tcreate ");
+	printf("\tcreate table ");
 	magenta();
-	printf("nome_da_tabela\n");
+	printf("nome_do_banco.nome_da_tabela");
+	boldGreen();
+	printf(" (");
+	blue();
+	printf("int ");
+	yellow();
+	printf("nome_Primary_Key ");
+	red();
+	printf("pk");
+	boldGreen();
+	printf(", ");
+
+	blue();
+	printf("tipo2 ");
+	yellow();
+	printf("nome_da_coluna ");
+	red();	
+	printf("...");
+	boldGreen();
+	printf(")");
 	resetColor();
 
 	printf("\n\n");
 
+	yellow();
+	printf("Listar ");
+	resetColor();
+	printf("todas as tabelas:\n\n ");
+	green();
+	printf("\tlist tables\n\n");
+
+	resetColor();
 	printf("Digite ");
 	boldRed();
 	printf("exit ");
@@ -171,7 +198,12 @@ int hasValidType(char* data){
 	
 	return 0;
 }
+
 void validateCreateTable(char* command){
+	/*
+	verifica se o comando possui .(), garantindo que segue o padrão de escrita correto para evitar erros
+	de segmentação causados por problemas na sintaxe
+	*/
 	if(!(strstr(command, ".") && strstr(command, "(") && strstr(command,")"))){
 		boldRed();
 		printf("O comando foi digitado incorretamente. Digite help para ver a sintaxe dos comandos.\n");
@@ -181,44 +213,55 @@ void validateCreateTable(char* command){
 		strcpy(nameTable, command);
 		
 		Table table;
-		table.name=NULL;
-		table.database = NULL;
-		table.numRows=1;
-		table.numCols=0;
+		table.name=NULL; 		//será definido no escopo da função
+		table.database = NULL; 	//será definido no escopo da função
+		table.numRows=1;		//como a tabela está sendo criada, será criada com apenas uma linha (a de definição das colunas)
+		table.numCols=0;		//será definido no escopo da função, começa com zero pois será acrescida para cada dado
 		
 		int count=0;
-		char *end_str=NULL;
-		char *token = strtok_r(nameTable, " .(", &end_str); 
+		char *end_str=NULL; //até que posição da memória será quebrada
+		char *token = strtok_r(nameTable, " .(", &end_str); //quebra a string e retorna a primeira ocorrência de quebra para espaços, pontos ou abertura de parênteses 
 
 		/*
 		*	DEFINE O NOME DO BANCO E DA TABELA
 		*/
-		while (count < 3){
+		while (count < 3){ //quebrará 3 vezes (count<3, com count começando em 0) pois o nome do banco é o primeiro e o tabela o imediatamente próximo
+			/*
+			cont==0:
+				table
+			cont==1:
+				nome_do_banco
+			cont==2:
+				nome_da_tabela
+			*/
+			
 			char *end_token=NULL;
-			token = strtok_r(NULL, " .(", &end_str);
-			//printf("Token: %s\n", token);
+			token = strtok_r(NULL, " .(", &end_str); //continuará quebrando a string. NULL é passado por parâmetro para que seja a próxima ocorrência válida
 			if(count==1){
+				//caso seja a segunda vez no laço (count==1), a string quebrada é justamente o nome do banco
 				table.database=(char*) realloc(table.database, (sizeof(char)*strlen(token)+sizeof(char)));
 				table.database=token;	
-				//printf("Database: %s\n", table.database);	
 			}
 			count++;
 		}
-
 		table.name=(char*) realloc(table.name, (sizeof(char)*strlen(token)+sizeof(char)));
 		table.name=token;
+		/*
+		*/
 
+		//valida o que há entre os parênteses e remove as vírgulas entre os dados
 
-		//valida o que há entre os parênteses e remove as vírgulas entre os dadoss
-		char* string=betweenParenthesis(command);
-		char* data = removeSpacesAfterCommas(string);
+		char* string=betweenParenthesis(command); 		//retorna as colunas entre os parênteses
+		char* data = removeSpacesAfterCommas(string);	//retorna a string sem os espaços após as vírgulas
 
 		//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
 		char *pk = " pk";
 		char *pch = strstr(data, pk);
-		int pksCount=0; //conta quantas pks há, evitando que ocorra mais de uma ocorrência. A chave primária deve ser única
-		int pkNotInt=0; //variavel de erro para Pk não inteira
-		int hasInvalidType=0;
+		int pksCount=0; 		//conta quantas pks há, evitando que ocorra mais de uma ocorrência. A chave primária deve ser única
+		int pkNotInt=0; 		//variavel de erro para Pk não inteira
+		int hasInvalidType=0; 	//caso ocorra de algum dado não possuir tipo válido
+
+		//Se não encontrar a palavra pk nas colunas, já é sabido que não há primary key
 		if(pch){
 			/*
 			*	DEFINE TODOS OS DADOS DA PRIMEIRA LINHA
@@ -227,7 +270,7 @@ void validateCreateTable(char* command){
 			table.data[0]=(char**) calloc(1, sizeof(char**));
 
 			end_str=NULL;
-			token = strtok_r(data, ",", &end_str); //separa os dados para cada \n
+			token = strtok_r(data, ",", &end_str); //separa os dados para cada vírgula, pois cada coluna está entre as vírgulas
 			
 			
 			table.data=(char***) calloc(1, sizeof(char***));
@@ -249,7 +292,7 @@ void validateCreateTable(char* command){
 					hasInvalidType=1;
 					break;
 				}
-				table.numCols++;
+				table.numCols++; //para cada dado armazenado, uma nova coluna é contada
 				token = strtok_r(NULL, ",\n", &end_str);
 				count++;
 			}
@@ -290,7 +333,6 @@ void validateCreateTable(char* command){
 		}
 
 	}
-
 }
 
 Table findTableInCommand(char* command){
@@ -302,22 +344,15 @@ Table findTableInCommand(char* command){
 
 	memcpy(commandCpy, command, strlen(command) + 1);
 	commandCpy[strlen(command)+1]='\0';
-	//printf("strlen(commandCpy): %i\n", (int) strlen(commandCpy));
 	int pointFound=0;
-	//printf("Logo antes de entrar no for\n");
-	//printf("command[20]=%c\n", command[20]);
 	for(int i=0; i < (int)strlen(commandCpy); i++){
-		//printf("i:%i | ", i);
-		//printf("commandCpy[i]=%c\n", commandCpy[i]);
 		if(commandCpy[i]=='.'){
-			//printf("ENTROU NO IF, i=%i\n", i);
 			pointFound=1;
 			//for regressivo até achar o espaço, irá printar ao contrário
 			int cont=0;
 			for(int j=i-1; commandCpy[j]!=' '; j--){
 				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
 				database[cont]=commandCpy[j];
-				//printf("database[%i]=%c\n", cont, database[cont]);
 				cont++;
 			}
 			database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
@@ -329,23 +364,18 @@ Table findTableInCommand(char* command){
 			for(int j=i+1; (commandCpy[j]!=' ' && commandCpy[j]!='\0'); j++){
 				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
 				table[cont]=commandCpy[j];
-				//printf("table[%i]=%c\n", cont, table[cont]);
 				cont++;
 			}
 			table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
 			table[cont]='\0';
-			//printf("FORdatabase: %s\n", database);
-			//printf("FORtable: %s\n", table);
 			break;
 		}
 	}
 	boldRed();
-	//printf("Saiu do for\n");
 	resetColor();
 	//Se o comando estiver inválido, retornará uma tabela com campos database e table = NULL
 	if(!pointFound){
 		boldGreen();
-		//printf("Entrou no if\n");
 		resetColor();
 
 		Table nullable;
@@ -355,15 +385,11 @@ Table findTableInCommand(char* command){
 	}
 	int cont=0;
 	database=invertString(database);
-	//printf("database: %s\n", database);
-	//printf("table: %s\n", table);
 
 	t.name=(char*) malloc((int)strlen(table)*sizeof(char)+sizeof(char));
 	t.database=(char*) malloc((int)strlen(database)*sizeof(char)+sizeof(char));
 	t.name=table;
 	t.database=database;
-	//printf("t.name=%s\n", t.name);
-	//printf("t.database=%s\n", t.database);
 	return t;
 }	
 /*
@@ -564,7 +590,6 @@ Table commandCreateTabletoTable(char* command){
 		table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
 		char *end_token=NULL;
 		table.data[0][count]=token;
-        //printf("NOVOS DADOS = %s\n", token);
 		table.numCols++;
         token = strtok_r(NULL, "|\n", &end_str);
 		count++;
@@ -606,12 +631,10 @@ int execute(char* command){
 
 	}else if(findInVector("create table", command)){
 		yellow();
-		//printf("%s", betweenSymbols(command, ' ', '\0'));
 		printf("Creating table\n");
 		resetColor();
-		validateCreateTable(command);
-		//commandCreateTabletoTable(command);
 
+		validateCreateTable(command);
 
 	}else if(findInVector("alter table ", command)){
 		printf("Altering table\n");
@@ -620,8 +643,6 @@ int execute(char* command){
 	}else if(findInVector("insert ", command)){
 		printf("Inserting into table\n");
 		validateInsertIntoTable(command);
-		// printf("\n  1 = %d  \n", isSubstringInString("cavalo manso de fogo", "de"));
-
 
 	}else if(findInVector("delete from ", command)){
 		printf("Deleting table\n");

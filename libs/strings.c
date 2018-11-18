@@ -80,31 +80,19 @@ char* lowerCase(char* string){
 }
 
 char* betweenParenthesis(char* string){
-	// yellow();
-	printf("60\n");
-	// resetColor();
 	int cont=0;
-	int pos=0;
 	char*str = NULL;
 	int size=0;
 
 	while(1){
-		printf("69\n");
 		str= (char*) realloc(str, sizeof(char));
-		printf("71\n");
 		if(string[cont]=='('){
-			printf("73\n");
 			for(int i=cont+1; string[i]!=')' && string[i]!='\0' && string[i]!='\0';i++){
-				printf("75: i=%i\n", i);
 				str=(char*) realloc(str, ((sizeof(char)*size)+sizeof(char)));
-				printf("77: size=%i\n\n", size);
 				str[size]=string[i];
-				pos=i;
 				size++;
 			}
-			printf("80\n");
 			str=(char*) realloc(str, size*sizeof(char)+sizeof(char));
-			printf("82\n");
 			str[size]='\0';
 			return str;
 			break;

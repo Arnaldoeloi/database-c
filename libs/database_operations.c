@@ -51,7 +51,7 @@ void createDatabase(Database db){
 void selectFromTable();
 
 void createTable(Table table){
-	struct stat st = {0};
+	struct stat st = {0}; //buffer do stat
 	char* path= NULL;
 	path = concat("dbs/", table.database); //concatena o nome do banco com a pasta onde ele será armazenado
 	printf("Caminho do banco: ");
@@ -59,7 +59,7 @@ void createTable(Table table){
 	printf("%s/", path);
 	resetColor();
 	printf("\n");
-	if (stat(path, &st) == -1) { //verifica a existência do arquivo
+	if (stat(path, &st) == -1) { //verifica a existência da pasta com o nome do banco
 	    boldRed();
 		printf("Não há um banco com esse nome. A tabela não será criada!\n");
 		resetColor();
@@ -72,10 +72,10 @@ void createTable(Table table){
 		resetColor();
 
 		char* fileName= concat(concat(path,"/"),concat(table.name, ".csv"));
-		printf("filename:  %s\n", fileName);
+		printf("Nome do arquivo da tabela:  %s\n", fileName);
 		FILE *fptr;
-		fptr = fopen(fileName, "rb+");
-		if (stat(fileName, &st) == -1){
+		fptr = fopen(fileName, "rw"); //abrirá o arquivo com permissão de leitura e escrita
+		if (stat(fileName, &st) == -1){ //stat(caminho_do_arquivo, buffer) retorna -1 se o arquivo não existir no diretório, é o que queremos
 			printf("Uma tabela com o nome ");
 			boldGreen();
 			printf("%s", table.name);
@@ -90,16 +90,16 @@ void createTable(Table table){
 			printf(" já existe.\nNão será criada uma nova.\n");
 			resetColor();
 		}
-		if(fptr == NULL){ //if file does not exist, create it
+		if(fptr == NULL){ //fptr será nulo se não existir nenhum arquivo com esse nome no diretório
 			fptr = fopen(fileName, "w+");
 			for(int i=0; i<table.numCols; i++){
-				fprintf(fptr, "%s", table.data[0][i]);
+				fprintf(fptr, "%s", table.data[0][i]); //para cada dado da matrix de strings, printa o dado no arquivo
 				if(i<table.numCols-1){
-					fprintf(fptr, "|");
+					fprintf(fptr, "|"); //adicionado o separador
 				}
 			}
-			fprintf(fptr,"\n");
-			fclose( fptr );
+			fprintf(fptr,"\n"); //adiciona o \n, indicando que a linha acabou
+			fclose( fptr );	//fecha o arquivo
 		}
 
 	}
@@ -220,33 +220,39 @@ Table csvToTable(char* pathToFile){
 	}
 }
 
-int isRegularFile(const char *path){
+int isRegularFile(char *path){
 	struct stat buffer;
-   	if (stat(path, &buffer) != 0)
+   	if (stat(path, &buffer) != 0) //caso dê erro de leitura, retornará que não se trata de um arquivo 
     	return 0;
-   	return S_ISREG(buffer.st_mode);
+	//garante que, se não der erro, retornará se é arquivo ou não
+   	return S_ISREG(buffer.st_mode); //st_mode retorna a permissão de acesso ao arquivo
 }
 
-int isDirectory(const char *path){
+int isDirectory(char *path){
 	struct stat buffer;
-   	if (stat(path, &buffer) != 0)
+   	if (stat(path, &buffer) != 0) //caso dê erro de leitura, retornará que não se trata de um diretório 
     	return 0;
-   	return S_ISDIR(buffer.st_mode);
+	//garante que, se não der erro, retornará se é diretório ou não
+   	return S_ISDIR(buffer.st_mode); 
 }
 
 void listFilesInFolder(char* pathToFolder){
-	DIR *dir;
-    struct dirent *dp;
+	DIR *dir; //ponteiro do to tipo DIR (diretório)
+    struct dirent *dp; //struct do tipo dirent (diretório), traz a possibilidade de verificar alguns dados do arquivo, como nome e extensão
     char * file_name;
     dir = opendir(pathToFolder);
-    while ((dp=readdir(dir)) != NULL) {
-        //printf("debug: %s\n", dp->d_name);
-        if ( !strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..") ){
-            // do nothing (straight logic)
-        } else {
+
+	//enquanto não tentar ler um diretório/arquivo nulo, listará os arquivos
+    while ((dp=readdir(dir)) != NULL) { 
+		/*
+			o if garante que não serão printados os caminhos de volta (.) 
+			e nem de duas voltas (..). Caso não houvesse o IF, seriam printados
+			todos as pastas para cada saída do caminho de um banco 
+		*/
+        if ( !(!strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..")) ){
 			green();
-            file_name = dp->d_name; 
-            printf("├──%s\n",file_name);
+            file_name = dp->d_name;  
+            printf("├──%s\n",file_name); //printa o nome do arquivo em formato de árvore
 			resetColor();
         }
     }
@@ -258,12 +264,16 @@ void listAllTables(){
 	printf("\n======|Bancos e suas tabelas|======\n\n");
     resetColor();
 	DIR *dir;
-    struct dirent *dp;
+    struct dirent *dp; 
     char * file_name;
 	char* pathToFile;
     dir = opendir("dbs");
     while ((dp=readdir(dir)) != NULL) {
-        //printf("debug: %s\n", dp->d_name);
+		/*
+			o if garante que não serão printados os caminhos de volta (.) 
+			e nem de duas voltas (..). Caso não houvesse o IF, seriam printados
+			todos as pastas para cada saída do caminho de um banco 
+		*/ 
         if ( !(!strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..")) ){
             file_name = dp->d_name; 
 			pathToFile = "dbs/";
@@ -271,6 +281,11 @@ void listAllTables(){
 			magenta();
 			printf("%s\n", dp->d_name );
 			resetColor();
+
+			/*
+				caso seja um diretório (aqui tratado como banco), chama a função
+				listFilesInFolder, pois printará os arquivos e pastas deste diretório
+			*/
 			if(isDirectory(pathToFile)){
 				listFilesInFolder(pathToFile);
 			}
