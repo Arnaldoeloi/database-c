@@ -4,7 +4,7 @@ Projeto orientado pela professora Marjory Cristiany da Costa Abreu com o intuito
 
 ## Utilizando o SGBD
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Essas instruções farão possível o uso do SGBD na sua máquina.
 
 ### Pré-requisitos
 
