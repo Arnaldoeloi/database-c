@@ -144,13 +144,32 @@ void printTable(Table table){
 	}
 	resetColor();
 }
+int findInVector(char* subvector, char* vector){
+	if (strlen(subvector) > strlen(vector)){
+		return 0;
+	}else{
+		for (int i=0; subvector[i] != '\0'; i++){
+			if(subvector[i] ==  vector[i]){
+				if (i == (int)strlen(subvector)-1) return 1;
+			}else{
+				return 0;
+			} 
+		}
+	}
+}
 
 //a função receberá uma string e retornará 1 se é um tipo válido ou 0, caso não seja
 int hasValidType(char* data){
 	//os tipos de dados para as colunas poderão ser os tipos primitivos em C
 	//(char, int, float e double) e strings
-	char* allowedTypes[5]={"char","int","float","double","string"};
-
+	//Os espaços da comparação garantem que o tipo sempre venha primeiro e que não faz parte do nome 
+	if(findInVector("char ", data))return 1;
+	if(findInVector("int ", data))return 1;
+	if(findInVector("float ", data))return 1;
+	if(findInVector("double ", data))return 1;
+	if(findInVector("string ", data))return 1;
+	
+	return 0;
 }
 void validateCreateTable(char* command){
 	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
@@ -185,13 +204,16 @@ void validateCreateTable(char* command){
 	table.name=token;
 
 
-	//valida o que há entre os parênteses
+	//valida o que há entre os parênteses e remove as vírgulas entre os dadoss
 	char* string=betweenParenthesis(command);
 	char* data = removeSpacesAfterCommas(string);
 
 	//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
-	char *pk = "int pk";
+	char *pk = " pk";
 	char *pch = strstr(data, pk);
+	int pksCount=0; //conta quantas pks há, evitando que ocorra mais de uma ocorrência. A chave primária deve ser única
+	int pkNotInt=0; //variavel de erro para Pk não inteira
+	int hasInvalidType=0;
 	if(pch){
 		/*
 		*	DEFINE TODOS OS DADOS DA PRIMEIRA LINHA
@@ -211,6 +233,17 @@ void validateCreateTable(char* command){
 			table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
 			char *end_token=NULL;
 			table.data[0][count]=token;
+
+			if(strstr(table.data[0][count]," pk ") || strstr(table.data[0][count]," pk")){
+				pksCount++;
+				if(!findInVector("int ", table.data[0][count])){
+					pkNotInt=1;
+				}
+			}
+			if(!hasValidType(table.data[0][count])){
+				hasInvalidType=1;
+				break;
+			}
 			table.numCols++;
 			token = strtok_r(NULL, ",\n", &end_str);
 			count++;
@@ -225,8 +258,25 @@ void validateCreateTable(char* command){
 		resetColor();
 
 
-		//Criará o arquivo
-		createTable(table);
+		//Criará o arquivo se o comando foi escrito corretamente
+		if(!hasInvalidType && pksCount==1 && !pkNotInt){
+			createTable(table);
+		}else{
+			boldRed();
+			printf("Não foi possível criar a tabela.\n");
+			if(pksCount>0){
+				printf("Há mais de uma chave primária. Apenas uma é permitida.\n");
+			}
+			if(pkNotInt){
+				printf("A chave primária não é inteira.\n");
+			}
+			if(hasInvalidType){
+				printf("Os únicos tipos permitidos são ");
+				boldCyan();
+				printf("int, float, double, char e string.\n");
+			}
+			resetColor();
+		}
 	}else{
 		boldRed();
 		printf("Não foi possível criar a tabela.\n");
@@ -532,19 +582,6 @@ char* input(){
 	return string;
 }
 
-int findInVector(char* subvector, char* vector){
-	if (strlen(subvector) > strlen(vector)){
-		return 0;
-	}else{
-		for (int i=0; subvector[i] != '\0'; i++){
-			if(subvector[i] ==  vector[i]){
-				if (i == (int)strlen(subvector)-1) return 1;
-			}else{
-				return 0;
-			} 
-		}
-	}
-}
 
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
@@ -562,10 +599,10 @@ int execute(char* command){
 
 	}else if(findInVector("create table", command)){
 		yellow();
-		printf("%s", betweenSymbols(command, ' ', '\0'));
-		// printf("Creating table\n");
-		// resetColor();
-		// validateCreateTable(command);
+		//printf("%s", betweenSymbols(command, ' ', '\0'));
+		printf("Creating table\n");
+		resetColor();
+		validateCreateTable(command);
 		//commandCreateTabletoTable(command);
 
 
@@ -588,13 +625,8 @@ int execute(char* command){
 
 
 	}else if(findInVector("select ", command)){
-
-
 		printf("Selecting data from table\n");
 		validateSelect(command);
-		//Table t = csvToTable("dbs/minecraft/asd.csv");
-		//printTable(t);
-		
 
 	}else if(findInVector("list tables", command)){
 		listAllTables();

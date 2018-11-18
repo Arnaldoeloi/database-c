@@ -7,12 +7,13 @@ char* betweenSymbols(char* string, char symbol1, char symbol2){
 	char* newString=NULL;
 	int cont=0;
 	int foundSymbol=0;
+	
 	for(int i=0; i<(int)strlen(string)+1;i++){
-		if(string[i]==symbol1 && !foundSymbol){
+		if(string[i]==symbol1 && foundSymbol==0){
 			foundSymbol=1;
 		}
 		else if(foundSymbol){
-			if(!string[i]==symbol2){
+			if(string[i]!=symbol2){
 				newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
 				newString[cont]=string[i];
 				cont++;
@@ -21,11 +22,12 @@ char* betweenSymbols(char* string, char symbol1, char symbol2){
 			}
 		}
 	}
+	printf("newString:%s\n", newString);
 	return newString;
 }
 
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[100][strlen(string)]; // Necessário Editar o Código onde tem [100]
+	char m[100][strlen(string)]; 
 	char *token;
 	token = strtok(string, caracteres);
 	
