@@ -145,6 +145,13 @@ void printTable(Table table){
 	resetColor();
 }
 
+//a função receberá uma string e retornará 1 se é um tipo válido ou 0, caso não seja
+int hasValidType(char* data){
+	//os tipos de dados para as colunas poderão ser os tipos primitivos em C
+	//(char, int, float e double) e strings
+	char* allowedTypes[5]={"char","int","float","double","string"};
+
+}
 void validateCreateTable(char* command){
 	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
 	strcpy(nameTable, command);
@@ -183,7 +190,7 @@ void validateCreateTable(char* command){
 	char* data = removeSpacesAfterCommas(string);
 
 	//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
-	char *pk = " pk";
+	char *pk = "int pk";
 	char *pch = strstr(data, pk);
 	if(pch){
 		/*
@@ -555,9 +562,10 @@ int execute(char* command){
 
 	}else if(findInVector("create table", command)){
 		yellow();
-		printf("Creating table\n");
-		resetColor();
-		validateCreateTable(command);
+		printf("%s", betweenSymbols(command, ' ', '\0'));
+		// printf("Creating table\n");
+		// resetColor();
+		// validateCreateTable(command);
 		//commandCreateTabletoTable(command);
 
 

@@ -3,6 +3,27 @@
 #include<stdio.h>
 #include<ctype.h>
 
+char* betweenSymbols(char* string, char symbol1, char symbol2){
+	char* newString=NULL;
+	int cont=0;
+	int foundSymbol=0;
+	for(int i=0; i<(int)strlen(string)+1;i++){
+		if(string[i]==symbol1 && !foundSymbol){
+			foundSymbol=1;
+		}
+		else if(foundSymbol){
+			if(!string[i]==symbol2){
+				newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
+				newString[cont]=string[i];
+				cont++;
+			}else{
+				break;
+			}
+		}
+	}
+	return newString;
+}
+
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 	char m[100][strlen(string)]; // Necessário Editar o Código onde tem [100]
 	char *token;
@@ -57,24 +78,31 @@ char* lowerCase(char* string){
 }
 
 char* betweenParenthesis(char* string){
-	yellow();
-	printf("60");
-	resetColor();
+	// yellow();
+	printf("60\n");
+	// resetColor();
 	int cont=0;
 	int pos=0;
 	char*str = NULL;
 	int size=0;
 
 	while(1){
+		printf("69\n");
 		str= (char*) realloc(str, sizeof(char));
+		printf("71\n");
 		if(string[cont]=='('){
+			printf("73\n");
 			for(int i=cont+1; string[i]!=')' && string[i]!='\0' && string[i]!='\0';i++){
-				str=(char*) realloc(str, (sizeof(char)*size+sizeof(char)));
+				printf("75: i=%i\n", i);
+				str=(char*) realloc(str, ((sizeof(char)*size)+sizeof(char)));
+				printf("77: size=%i\n\n", size);
 				str[size]=string[i];
 				pos=i;
 				size++;
 			}
+			printf("80\n");
 			str=(char*) realloc(str, size*sizeof(char)+sizeof(char));
+			printf("82\n");
 			str[size]='\0';
 			return str;
 			break;
