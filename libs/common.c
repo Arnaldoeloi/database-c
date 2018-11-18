@@ -172,116 +172,123 @@ int hasValidType(char* data){
 	return 0;
 }
 void validateCreateTable(char* command){
-	char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
-	strcpy(nameTable, command);
-	
-	Table table;
-	table.name=NULL;
-	table.database = NULL;
-	table.numRows=1;
-	table.numCols=0;
-	
-	int count=0;
-	char *end_str=NULL;
-    char *token = strtok_r(nameTable, " .(", &end_str); 
+	if(!(strstr(command, ".") && strstr(command, "(") && strstr(command,")"))){
+		boldRed();
+		printf("O comando foi digitado incorretamente. Digite help para ver a sintaxe dos comandos.\n");
+		resetColor();
+	}else{
+		char* nameTable=(char*) calloc(strlen(command)+1,sizeof(char));
+		strcpy(nameTable, command);
+		
+		Table table;
+		table.name=NULL;
+		table.database = NULL;
+		table.numRows=1;
+		table.numCols=0;
+		
+		int count=0;
+		char *end_str=NULL;
+		char *token = strtok_r(nameTable, " .(", &end_str); 
 
-	/*
-	*	DEFINE O NOME DO BANCO E DA TABELA
-	*/
-	while (count < 3){
-		char *end_token=NULL;
-        token = strtok_r(NULL, " .(", &end_str);
-		//printf("Token: %s\n", token);
-		if(count==1){
-			table.database=(char*) realloc(table.database, (sizeof(char)*strlen(token)+sizeof(char)));
-			table.database=token;	
-			//printf("Database: %s\n", table.database);	
-		}
-		count++;
-	}
-
-	table.name=(char*) realloc(table.name, (sizeof(char)*strlen(token)+sizeof(char)));
-	table.name=token;
-
-
-	//valida o que há entre os parênteses e remove as vírgulas entre os dadoss
-	char* string=betweenParenthesis(command);
-	char* data = removeSpacesAfterCommas(string);
-
-	//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
-	char *pk = " pk";
-	char *pch = strstr(data, pk);
-	int pksCount=0; //conta quantas pks há, evitando que ocorra mais de uma ocorrência. A chave primária deve ser única
-	int pkNotInt=0; //variavel de erro para Pk não inteira
-	int hasInvalidType=0;
-	if(pch){
 		/*
-		*	DEFINE TODOS OS DADOS DA PRIMEIRA LINHA
+		*	DEFINE O NOME DO BANCO E DA TABELA
 		*/
-		table.data=(char***) calloc(1, sizeof(char***));
-		table.data[0]=(char**) calloc(1, sizeof(char**));
-
-		end_str=NULL;
-		token = strtok_r(data, ",", &end_str); //separa os dados para cada \n
-		
-		
-		table.data=(char***) calloc(1, sizeof(char***));
-		table.data[0]=(char**) calloc(1, sizeof(char**));
-
-		count=0;
-		while (token != NULL){
-			table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
+		while (count < 3){
 			char *end_token=NULL;
-			table.data[0][count]=token;
-
-			if(strstr(table.data[0][count]," pk ") || strstr(table.data[0][count]," pk")){
-				pksCount++;
-				if(!findInVector("int ", table.data[0][count])){
-					pkNotInt=1;
-				}
+			token = strtok_r(NULL, " .(", &end_str);
+			//printf("Token: %s\n", token);
+			if(count==1){
+				table.database=(char*) realloc(table.database, (sizeof(char)*strlen(token)+sizeof(char)));
+				table.database=token;	
+				//printf("Database: %s\n", table.database);	
 			}
-			if(!hasValidType(table.data[0][count])){
-				hasInvalidType=1;
-				break;
-			}
-			table.numCols++;
-			token = strtok_r(NULL, ",\n", &end_str);
 			count++;
 		}
 
-		//print com os dados
-		yellow();
-		printf("Nome: %s\n", table.name);
-		printf("Database: %s\n", table.database);
-		printf("Numero de linhas: %i\n", table.numRows);
-		printf("Numero de Colunas: %i\n", table.numCols);
-		resetColor();
+		table.name=(char*) realloc(table.name, (sizeof(char)*strlen(token)+sizeof(char)));
+		table.name=token;
 
 
-		//Criará o arquivo se o comando foi escrito corretamente
-		if(!hasInvalidType && pksCount==1 && !pkNotInt){
-			createTable(table);
+		//valida o que há entre os parênteses e remove as vírgulas entre os dadoss
+		char* string=betweenParenthesis(command);
+		char* data = removeSpacesAfterCommas(string);
+
+		//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
+		char *pk = " pk";
+		char *pch = strstr(data, pk);
+		int pksCount=0; //conta quantas pks há, evitando que ocorra mais de uma ocorrência. A chave primária deve ser única
+		int pkNotInt=0; //variavel de erro para Pk não inteira
+		int hasInvalidType=0;
+		if(pch){
+			/*
+			*	DEFINE TODOS OS DADOS DA PRIMEIRA LINHA
+			*/
+			table.data=(char***) calloc(1, sizeof(char***));
+			table.data[0]=(char**) calloc(1, sizeof(char**));
+
+			end_str=NULL;
+			token = strtok_r(data, ",", &end_str); //separa os dados para cada \n
+			
+			
+			table.data=(char***) calloc(1, sizeof(char***));
+			table.data[0]=(char**) calloc(1, sizeof(char**));
+
+			count=0;
+			while (token != NULL){
+				table.data[0][count]=(char*)malloc(strlen(token)*sizeof(char));
+				char *end_token=NULL;
+				table.data[0][count]=token;
+
+				if(strstr(table.data[0][count]," pk ") || strstr(table.data[0][count]," pk")){
+					pksCount++;
+					if(!findInVector("int ", table.data[0][count])){
+						pkNotInt=1;
+					}
+				}
+				if(!hasValidType(table.data[0][count])){
+					hasInvalidType=1;
+					break;
+				}
+				table.numCols++;
+				token = strtok_r(NULL, ",\n", &end_str);
+				count++;
+			}
+
+			//print com os dados
+			yellow();
+			printf("Nome: %s\n", table.name);
+			printf("Database: %s\n", table.database);
+			printf("Numero de linhas: %i\n", table.numRows);
+			printf("Numero de Colunas: %i\n", table.numCols);
+			resetColor();
+
+
+			//Criará o arquivo se o comando foi escrito corretamente
+			if(!hasInvalidType && pksCount==1 && !pkNotInt){
+				createTable(table);
+			}else{
+				boldRed();
+				printf("Não foi possível criar a tabela.\n");
+				if(pksCount>0){
+					printf("Há mais de uma chave primária. Apenas uma é permitida.\n");
+				}
+				if(pkNotInt){
+					printf("A chave primária não é inteira.\n");
+				}
+				if(hasInvalidType){
+					printf("Os únicos tipos permitidos são ");
+					boldCyan();
+					printf("int, float, double, char e string.\n");
+				}
+				resetColor();
+			}
 		}else{
 			boldRed();
 			printf("Não foi possível criar a tabela.\n");
-			if(pksCount>0){
-				printf("Há mais de uma chave primária. Apenas uma é permitida.\n");
-			}
-			if(pkNotInt){
-				printf("A chave primária não é inteira.\n");
-			}
-			if(hasInvalidType){
-				printf("Os únicos tipos permitidos são ");
-				boldCyan();
-				printf("int, float, double, char e string.\n");
-			}
+			printf("Não há nenhuma chave primária.\n");
 			resetColor();
 		}
-	}else{
-		boldRed();
-		printf("Não foi possível criar a tabela.\n");
-		printf("Não há nenhuma chave primária.\n");
-		resetColor();
+
 	}
 
 }
