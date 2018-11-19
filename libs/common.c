@@ -257,7 +257,7 @@ void validateCreateTable(char* command){
 
 		//Aqui, a função strstr() verifica se há uma chave primária na tabela, caso não haja, não será criada.
 		char *pk = " pk";
-		char *pch = strstr(data, pk);
+		char *pch = strstr(data, pk); //se há presença de chave primária (equivalente a um booleano)
 		int pksCount=0; 		//conta quantas pks há, evitando que ocorra mais de uma ocorrência. A chave primária deve ser única
 		int pkNotInt=0; 		//variavel de erro para Pk não inteira
 		int hasInvalidType=0; 	//caso ocorra de algum dado não possuir tipo válido
