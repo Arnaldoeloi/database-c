@@ -108,7 +108,6 @@ void createTable(Table table){
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
-void insertIntoTable();
 void selectFromTable();
 
 int countRowsInCsv(char* pathToFile){
@@ -315,7 +314,6 @@ void insertIntoTable(Table table){
 		csvTable = csvToTable(path);
 		//Chega se o número de colunas digitado corresponde ao número de colunas da table
 		if(table.numCols == csvTable.numCols){
-			fprintf(file,"\n"); // Adici
 			for(int i=0; i < table.numCols; i++){
 				if(i == table.numCols-1){
 					fprintf(file,"%s",table.data[0][i]);
@@ -324,6 +322,7 @@ void insertIntoTable(Table table){
 					fprintf(file,"%s",table.data[0][i]);
 				}
 			}
+			fprintf(file,"\n"); // Adici
 			fclose(file);
 			cyan();
 			printf("\nItens inseridos com sucesso\n");
