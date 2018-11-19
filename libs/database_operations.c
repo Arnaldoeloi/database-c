@@ -297,35 +297,37 @@ void listAllTables(){
 }
 
 void insertIntoTable(Table table){
-	printf("285\n");
 	char* path = (char*)calloc(5,sizeof(char));
 	path = "dbs/";
-	printf("\ncaminho : %s\n", path);
 	path = concat(path, table.database);
 	path = concat(path, "/");
 	path = concat(path, table.name);
 	path = concat(path, ".csv");
-	FILE *file = fopen(path, "w");
-	// printf("ABRIU O ARQUIVO EM: %s\n", path);
+	FILE *file = fopen(path, "a");
+	//Checa se o caminho especificado do arquivo existe
 	if(file == NULL){
 		boldRed();
 		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
 		resetColor();
-	} else{
+	} 
+	else{
 		Table csvTable;
 		csvTable = csvToTable(path);
+		//Chega se o número de colunas digitado corresponde ao número de colunas da table
 		if(table.numCols == csvTable.numCols){
-			printf("\nInserindo na tabela...\n");
-			for(int i=0; i <= table.numCols; i++){
-				if(i  = table.numCols){
-					fwrite(table.data[0][1], 1, sizeof(table.data[0][i]), file);
+			fprintf(file,"\n"); // Adici
+			for(int i=0; i < table.numCols; i++){
+				if(i == table.numCols-1){
+					fprintf(file,"%s",table.data[0][i]);
 				} else{
-					concat(table.data[0][i], "|");
-					fwrite(table.data[0][1], 1, sizeof(table.data[0][i]), file);
+					table.data[0][i] = concat(table.data[0][i], "|");
+					fprintf(file,"%s",table.data[0][i]);
 				}
 			}
+			fclose(file);
+			cyan();
 			printf("\nItens inseridos com sucesso\n");
-
+			resetColor();
 		} else{
 			boldRed();
 			printf( "Erro: numero de colunas digitado difere das colunas do arquivo\n" );

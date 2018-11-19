@@ -171,6 +171,7 @@ void printTable(Table table){
 	}
 	resetColor();
 }
+
 int findInVector(char* subvector, char* vector){
 	if (strlen(subvector) > strlen(vector)){
 		return 0;
@@ -510,36 +511,44 @@ void validateInsertIntoTable(char* command){
 		if(isInString(command, '(') == 1 && isInString(command, ')') == 1){
 			//assina o valor da Table a ser criada;
 			Table table;
-			table = findTableInCommand(command);
+			table = findTableInCommand(command); //Retorna o nome da table e a database que essa está inserida;
 			table.numCols = 1; // numCols=1 pois o número de colunas iniciais é sempre igual a 1;
 			table.numRows = 1;
 
-			printf("table.database : %s\n", table.database);
-			printf("table.name: %s\n", table.name);
-
 			if (isInString(command,'|') == 0){
 				char* string = NULL;
-				//
+				/* 
+				Define a string com a série de passos a seguir:
+				1-Remove todos os espaços depois das vírgulas
+				2-Pega somente o que está entre dos parénteses
+				3-Troca as vírgulas por barras verticais;
+				*/
 				if (isInString(command, '\"') == 1){
 					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				} else{
 					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				}
+				//Conta o número de colunas que há na string
 				for(int i=0;i < (int)strlen(string) ;i++){
 					if (string[i] == '|'){
 						table.numCols++;
 					}
 				}
+				//Define o valor para table.data[0][x], onde x é a posição na coluna;
 				table.data  = (char***)calloc(1,sizeof(char**));
 				table.data[0] = (char**)calloc(table.numCols,sizeof(char*));
 
+				//Define o valor do token e a sua quebra que será usado pela função strok_r;
 				char *end_token=NULL;
-				char *token2 = strtok_r(string, "|", &end_token); //separa os dados a cada ,
-
-				for (int i; i < table.numCols; i++){
-					table.data[1][i] = token2;
-					token2 = strtok_r(NULL, "|", &end_token);
+				char *token = strtok_r(string, "|", &end_token);
+				
+				//Transforma o valor de table.data[0][i] no valor do token
+				for (int i=0; i < table.numCols; i++){;
+					table.data[0][i] = token;
+					token = strtok_r(NULL, "|", &end_token); // Define token como o valor após '|'
 				}
+				free(token);
+				//Chama a função void insertIntoTable mandando a table criada.
 				insertIntoTable(table);
 
 			}else {
@@ -613,7 +622,6 @@ char* input(){
 	string[i-1]='\0';
 	return string;
 }
-
 
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 

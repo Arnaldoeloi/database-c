@@ -1,1 +1,3 @@
-int id pk|string name|string password
+int id pk|string email|string password
+1|Sueninha|jesus123
+2|Derick|Mortadela04
