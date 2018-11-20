@@ -302,7 +302,7 @@ void insertIntoTable(Table table){
 	path = concat(path, "/");
 	path = concat(path, table.name);
 	path = concat(path, ".csv");
-	FILE *file = fopen(path, "a");
+	FILE *file = fopen(path, "r");
 	//Checa se o caminho especificado do arquivo existe
 	if(file == NULL){
 		boldRed();
