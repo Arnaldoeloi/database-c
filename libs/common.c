@@ -313,7 +313,7 @@ void validateCreateTable(char* command){
 			}else{
 				boldRed();
 				printf("Não foi possível criar a tabela.\n");
-				if(pksCount>0){
+				if(pksCount>1){
 					printf("Há mais de uma chave primária. Apenas uma é permitida.\n");
 				}
 				if(pkNotInt){
