@@ -398,10 +398,78 @@ Table findTableInCommand(char* command){
 *	a tabela filtrada e
 *	os filtros
 */
-void filterTable(char* collumns, Table table, char* filters){
-	printf("collums: %s\n", collumns);
+void filterTable(char* columns, Table table, char* filters){
+	printf("collums: %s\n", columns);
 	printf("filter: %s\n", filters);
-	printTable(table);
+
+	Table filteredTable;
+	filteredTable.database	=	table.database;
+	filteredTable.name		=	table.name;
+	filteredTable.data		=	(char***) calloc(table.numRows, sizeof(char***));
+
+	int columnNotFound=0; //se alguma coluna passado por parâmetro não for encontrada, não deve selecionar a tabela, default=false
+	
+	filteredTable.numCols=0;
+	
+	int printableCollums[99];
+	
+	printf("416\n");
+	if(strcmp(columns, "*")==0){ //==0 significa que são iguais
+		filteredTable.numCols=table.numCols;
+		filteredTable=table;
+	}else{
+		char *end_token=NULL;
+		char *token = strtok_r(columns, ",", &end_token);
+		printf("422\n");
+		
+		while(token!=NULL){
+			int columnFound=0;
+			for (int i=0; i < table.numCols; i++){
+				printf("\ntable.data[0][%i]=%s\n", i, table.data[0][i]);
+				printf("\ntoken=%s\n\n", token);
+				if(strstr(table.data[0][i], token)){
+					boldGreen();
+					printf("429\n");
+					resetColor();
+					columnFound=1;
+					printableCollums[filteredTable.numCols]=i;
+					filteredTable.numCols++;
+				}
+				//table.data[0][i] = token;
+			}
+			if(!columnFound){
+				columnNotFound=1;
+			}
+			token = strtok_r(NULL, ",", &end_token); 
+		}
+		free(token);
+		printf("437\n");
+
+		if(!columnNotFound){
+			for(int i=0; i<table.numRows; i++){
+				int cont=0;
+				filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+				printf("444\n");
+				for(int j=0; j<filteredTable.numCols; j++){
+					printf("446\n");
+					printf("table.data[%i][%i]=%s\n", i, printableCollums[j], table.data[i][printableCollums[j]]);
+					printf("table.data[0][0]=%s\n", table.data[0][0]);
+					filteredTable.data[i][cont]=table.data[i][printableCollums[j]];
+					printf("448: %s\n",filteredTable.data[i][cont]);
+					cont++;
+				}
+			}
+			printf("448\n");
+		}else{
+			boldRed();
+			printf("Não é possível fazer a seleção da tabela. Alguma das colunas passadas por parâmetro não existem.\n");
+			resetColor();
+		}
+	}
+
+	if(!columnNotFound){
+		printTable(filteredTable);
+	}
 }
 
 void validateSelect(char* command){
@@ -518,10 +586,10 @@ void validateInsertIntoTable(char* command){
 			if (isInString(command,'|') == 0){
 				char* string = NULL;
 				/* 
-				Define a string com a série de passos a seguir:
-				1-Remove todos os espaços depois das vírgulas
-				2-Pega somente o que está entre dos parénteses
-				3-Troca as vírgulas por barras verticais;
+					Define a string com a série de passos a seguir:
+					1-Remove todos os espaços depois das vírgulas
+					2-Pega somente o que está entre dos parénteses
+					3-Troca as vírgulas por barras verticais;
 				*/
 				if (isInString(command, '\"') == 1){
 					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
