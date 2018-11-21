@@ -70,6 +70,7 @@ char* capitalize(char* string){
 	}
 	return capitalString;
 }
+
 char* lowerCase(char* string){
 	char* lowerCaseString=string;
 	strcpy(lowerCaseString, string);
@@ -137,6 +138,138 @@ int isInString(char* string, char caracter){
 		if (string[i] == caracter){
 			return 1;
 			break;
+		}
+	}
+}
+
+int stringToInt(char* string){
+	int intValue;
+	for (int i=0; i < (int)strlen(string); i++){
+		int tempValue = string[i] - 47;
+		for(int j=0; j < (int)strlen(string) - i; j++){
+			tempValue = tempValue*10;
+		}
+		intValue = intValue + tempValue;
+	}
+	return intValue;
+}
+
+int howManyOcurrencesInString(char caracter, char* string){
+	int ocurrences = 0;
+	for(int i=0; i < (int)strlen(string); i++){
+		if (string[i] == caracter){
+			ocurrences++;
+			continue;
+		}
+	}
+	return ocurrences;
+}
+// 48 to 57
+int isInFormat(char* type, char* string){
+	if (type == "int"){
+
+		for(int i=0; i <= (int)strlen(string); i++){
+			if(string[i] >= 48 && string[i] <= 57){
+				if(i == (int)strlen(string)-1){
+					return 1;
+				} else{
+					continue;
+				}
+			} else{
+				return 0;
+			} 
+		}
+	} else if(type == "float"){
+
+		if (howManyOcurrencesInString(',', string) <= 1){
+			for(int i=0; i <= (int)strlen(string); i++){
+				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 44 || string[i] == 'f')){
+					if(i == (int)strlen(string)-1){
+						return 1;
+					} else{
+						continue;
+					}
+				} else{
+					return 0;
+				}
+			}
+		} else{
+			return 0;
+		}
+	} else if(type == "double"){
+		
+		if (howManyOcurrencesInString(',', string) <= 1){
+			for(int i=0; i <= (int)strlen(string); i++){
+				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 44 || string[i] == 'd')){
+					if(i == (int)strlen(string)-1){
+						return 1;
+					} else{
+						continue;
+					}
+				} else{
+					return 0;
+				}
+			}
+		} else{
+			return 0;
+		}
+
+	} else if(type == "char"){
+		if ((int)strlen(string) == 1){
+			return 1;
+		} else{
+			return 0;
+		}
+	} else if(type == "string"){
+		return 1;
+	} else if(type == "date"){
+		if((int)strlen(string) == 10){
+			if(howManyOcurrencesInString('/', string) == 2){
+
+				char *tempString = NULL;
+				int tempValue = 0;
+				char *endToken = NULL;
+
+				tempString = strcpy(tempString, string);
+				char *token = strtok_r(tempString, "/", &endToken);
+
+				for(int i=0; i < (int)strlen(string); i++){
+					if (i == 0){
+						if(stringToInt(token) <= 31){
+							char *token = strtok_r(tempString, "/", &endToken);
+							continue;
+						} else{
+							return 0;
+							break;
+						}
+					}
+					if (i == 2 || i == 5){
+						if(string[i] == '/'){
+							continue;
+						} else{
+							break;
+							return 0;
+						}
+					}
+					if (i == 3){
+						if(stringToInt(token) <= 12){
+							char *token = strtok_r(tempString, "/", &endToken);
+							continue;
+						} else{
+							return 0;
+							break;
+						}
+					}
+					if (i == 9){
+						return 1;
+					}
+				}
+				free(token);
+			} else{
+				return 0;
+			}
+		} else{
+			return 0;
 		}
 	}
 }
@@ -254,3 +387,4 @@ char* invertString(char* string){
     }
 	return string;
 }
+
