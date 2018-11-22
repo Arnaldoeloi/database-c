@@ -10,3 +10,9 @@ typedef struct{
 	char* name;
 	Table* tables;
 }Database;
+
+typedef struct{
+	char* typeOfFilter;
+	char* column;
+	char* value;
+}Filter;
