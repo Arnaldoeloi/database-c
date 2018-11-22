@@ -399,8 +399,8 @@ Table findTableInCommand(char* command){
 *	os filtros
 */
 void filterTable(char* columns, Table table, char* filters){
-	printf("collums: %s\n", columns);
-	printf("filter: %s\n", filters);
+	// printf("collums: %s\n", columns);
+	// printf("filter: %s\n", filters);
 
 	Table filteredTable;
 	filteredTable.database	=	table.database;
@@ -493,7 +493,7 @@ void filterTable(char* columns, Table table, char* filters){
 	// 	}
 	// }
 
-	printf("416\n");
+	//printf("416\n");
 	if(strcmp(columns, "*")==0){ //==0 significa que são iguais
 		filteredTable.numCols=table.numCols;
 		filteredTable=table;
@@ -542,7 +542,7 @@ void filterTable(char* columns, Table table, char* filters){
 	}
 
 	boldCyan();
-	printf("545 !columnNotFound=%i | !hasInvalidType=%i,\n",!columnNotFound, !hasInvalidType);
+	// printf("545 !columnNotFound=%i | !hasInvalidType=%i,\n",!columnNotFound, !hasInvalidType);
 
 	if(!columnNotFound && !hasInvalidType){
 		printTable(filteredTable);
@@ -551,20 +551,20 @@ void filterTable(char* columns, Table table, char* filters){
 
 void validateSelect(char* command){
 	boldCyan();
-	printf("318\n");
+	// printf("318\n");
 	resetColor();
 	char* commandTemp=(char*)calloc(strlen(command)+1, sizeof(char)); 
 	strcpy(commandTemp, command);
 
 	boldCyan();
-	printf("324\n");
+	// printf("324\n");
 	resetColor();
 	
 	char *end_str=NULL;
     char *token = strtok_r(command, " ", &end_str);
 
 	boldCyan();
-	printf("331\n");
+	// printf("331\n");
 	resetColor();
 
 	char** commands=(char**) calloc(10, sizeof(char**));
@@ -576,7 +576,7 @@ void validateSelect(char* command){
 		cont++;
 	}
 	boldCyan();
-	printf("343\n");
+	// printf("343\n");
 	resetColor();
 	char* collumns=NULL;
 	char* filters=NULL;
@@ -590,7 +590,7 @@ void validateSelect(char* command){
 		}
 	}else{
 		boldCyan();
-		printf("357\n");
+		// printf("357\n");
 		resetColor();
 
 		//esse for eliminará a primeira ocorrência de parenteseses.
@@ -598,7 +598,7 @@ void validateSelect(char* command){
 		collumns = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
 		
 		boldCyan();
-		printf("365\n");
+		// printf("365\n");
 		resetColor();
 		
 		/*
@@ -607,12 +607,12 @@ void validateSelect(char* command){
 		collumns = betweenParenthesis(commandTemp);
 
 		boldCyan();
-		printf("371\n");
+		// printf("371\n");
 		resetColor();
 
 		collumns =  removeSpacesAfterCommas(collumns);
 
-		printf("365: %s\n", commandTemp);
+		// printf("365: %s\n", commandTemp);
 
 		//limpa os primeiros parenteses para que haja apenas os parenteses dos filtros (após o where)
 		if(isSubstringInString(commandTemp, "where")){
@@ -642,7 +642,7 @@ void validateSelect(char* command){
 
 
 	if(t.database!=NULL){
-		printf("PathToFile:%s\n", pathToFile);
+		// printf("PathToFile:%s\n", pathToFile);
 		filterTable(collumns, t, filters);
 	}else{
 		printf("Você não selecionou nenhum banco de dados válido. Reescreva o comando. \n");
