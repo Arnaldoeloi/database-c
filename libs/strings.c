@@ -22,7 +22,6 @@ char* betweenSymbols(char* string, char symbol1, char symbol2){
 			}
 		}
 	}
-	printf("newString:%s\n", newString);
 	return newString;
 }
 
@@ -166,9 +165,9 @@ int howManyOcurrencesInString(char caracter, char* string){
 }
 // 48 to 57
 int isInFormat(char* type, char* string){
-	if (type == "int"){
+	if (strcmp(type, "int") == 0){
 
-		for(int i=0; i <= (int)strlen(string); i++){
+		for(int i=0; i < (int)strlen(string); i++){
 			if(string[i] >= 48 && string[i] <= 57){
 				if(i == (int)strlen(string)-1){
 					return 1;
@@ -179,7 +178,7 @@ int isInFormat(char* type, char* string){
 				return 0;
 			} 
 		}
-	} else if(type == "float"){
+	} else if(strcmp(type, "float") == 0){
 
 		if (howManyOcurrencesInString(',', string) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
@@ -196,7 +195,7 @@ int isInFormat(char* type, char* string){
 		} else{
 			return 0;
 		}
-	} else if(type == "double"){
+	} else if(strcmp(type, "double") == 0){
 		
 		if (howManyOcurrencesInString(',', string) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
@@ -214,15 +213,15 @@ int isInFormat(char* type, char* string){
 			return 0;
 		}
 
-	} else if(type == "char"){
+	} else if(strcmp(type, "char") == 0){
 		if ((int)strlen(string) == 1){
 			return 1;
 		} else{
 			return 0;
 		}
-	} else if(type == "string"){
+	} else if(strcmp(type, "string") == 0){
 		return 1;
-	} else if(type == "date"){
+	} else if(strcmp(type, "date") == 0){
 		if((int)strlen(string) == 10){
 			if(howManyOcurrencesInString('/', string) == 2){
 

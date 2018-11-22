@@ -1,3 +1,0 @@
-int id pk|string titulo|string created_at|string deadline|string grades
-
-1|Uma atividade muito louca|2014_02_02-10h10|2019_01_01-13h30|8
