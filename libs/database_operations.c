@@ -302,37 +302,70 @@ void insertIntoTable(Table table){
 	path = concat(path, "/");
 	path = concat(path, table.name);
 	path = concat(path, ".csv");
-	FILE *file = fopen(path, "r");
-	//Checa se o caminho especificado do arquivo existe
+	FILE *file = fopen(path, "a+");
 	if(file == NULL){
+		fclose(file);
 		boldRed();
-		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
+		printf( "Erro na abertura do arquivo! Voce digitou corretamente?\n" );
 		resetColor();
-	} 
-	else{
-		Table csvTable;
-		csvTable = csvToTable(path);
-		//Chega se o número de colunas digitado corresponde ao número de colunas da table
-		if(table.numCols == csvTable.numCols){
-			for(int i=0; i < table.numCols; i++){
-				if(i == table.numCols-1){
-					fprintf(file,"%s",table.data[0][i]);
-				} else{
-					table.data[0][i] = concat(table.data[0][i], "|");
-					fprintf(file,"%s",table.data[0][i]);
-				}
+	} else{
+		Table csvTable = csvToTable(path);
+		int isAlreadyAPrimaryKey = 0;
+		for(int i=0; i < csvTable.numRows; i++){
+			if (strcmp(csvTable.data[i][0], table.data[0][0]) == 0){
+				isAlreadyAPrimaryKey = 1;
 			}
-			fprintf(file,"\n"); // Adici
-			fclose(file);
-			cyan();
-			printf("\nItens inseridos com sucesso\n");
-			resetColor();
+		}
+		if(isAlreadyAPrimaryKey == 0){
+			if(table.numCols == csvTable.numCols){
+				int isTypesCorresponding = 0;
+				for(int i=0; i < csvTable.numCols; i++){
+					char* endToken = NULL;
+					char* token = strtok_r(csvTable.data[0][i], " ", &endToken);
+					if (isInFormat(token, table.data[0][i]) == 1){
+						isTypesCorresponding = 1;
+						continue;
+					} else{
+						isTypesCorresponding = 0;
+						break;
+					}
+				}
+				for (int i=0; i < table.numCols;i++){
+				}
+				if (isTypesCorresponding){
+					for(int i=0; i < table.numCols; i++){
+						if(i == table.numCols-1){
+							fprintf(file,"%s",table.data[0][i]);
+							fprintf(file, "%s", "\n");
+						} else{
+							table.data[0][i] = concat(table.data[0][i], "|");
+							fprintf(file,"%s",table.data[0][i]);
+						}
+					}
+					fclose(file);
+					cyan();
+					printf("\nItens inseridos com sucesso\n");
+					resetColor();
+
+				} else{
+					fclose(file);
+					boldRed();
+					printf( "Erro: existem itens digitados que nao corresponde a seus tipos\n" );
+					resetColor();
+				}
+			} else{
+				fclose(file);
+				boldRed();
+				printf( "Erro: numero de colunas digitado difere das colunas do arquivo\n" );
+				resetColor();
+			}
+
 		} else{
+			fclose(file);
 			boldRed();
-			printf( "Erro: numero de colunas digitado difere das colunas do arquivo\n" );
+			printf( "Erro:A Primary Key digitada ja esta sendo usada\n" );
 			resetColor();
 		}
-
 	}
 
 }
