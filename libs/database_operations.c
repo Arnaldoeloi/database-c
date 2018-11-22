@@ -306,7 +306,7 @@ void insertIntoTable(Table table){
 	if(file == NULL){
 		fclose(file);
 		boldRed();
-		printf( "Erro na abertura do arquivo! Voce digitou corretamente?\n" );
+		printf( "Erro na abertura do arquivo! Voce digitou corretamente?\n");
 		resetColor();
 	} else{
 		Table csvTable = csvToTable(path);
@@ -369,3 +369,5 @@ void insertIntoTable(Table table){
 	}
 
 }
+
+void deleteFromTable();
