@@ -2,7 +2,25 @@
 #include<string.h>
 #include<stdio.h>
 #include<ctype.h>
+#include <inttypes.h> //funções para inteiros
 
+
+
+char* stringTillChar(char* string, char c){
+	char* newString=NULL;
+	for(int i=0; i<(int)strlen(string)+1; i++){
+		if(string[i]!=c){
+			newString= (char*) realloc (newString, i*sizeof(char)+sizeof(char));
+			newString[i]=string[i];
+		}else{
+			newString= (char*) realloc (newString, i*sizeof(char)+sizeof(char));
+			newString[i]='\0';
+			break;
+		}
+	}
+	
+	return newString;
+}
 char* betweenSymbols(char* string, char symbol1, char symbol2){
 	char* newString=NULL;
 	int cont=0;
@@ -143,13 +161,17 @@ int isInString(char* string, char caracter){
 
 int stringToInt(char* string){
 	int intValue;
-	for (int i=0; i < (int)strlen(string); i++){
-		int tempValue = string[i] - 47;
-		for(int j=0; j < (int)strlen(string) - i; j++){
-			tempValue = tempValue*10;
-		}
-		intValue = intValue + tempValue;
-	}
+	char* ptr;
+
+	intValue=strtoimax(string,&ptr,10);
+	// for (int i=0; i < (int)strlen(string); i++){
+	// 	int tempValue = string[i] - 47;
+	// 	for(int j=0; j < (int)strlen(string) - i; j++){
+	// 		tempValue = tempValue*10;
+	// 	}
+	// 	intValue = intValue + tempValue;
+	// }
+
 	return intValue;
 }
 
