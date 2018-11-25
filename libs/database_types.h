@@ -15,4 +15,5 @@ typedef struct{
 	char* typeOfFilter;
 	char* column;
 	char* value;
+	int filteredColumn;
 }Filter;

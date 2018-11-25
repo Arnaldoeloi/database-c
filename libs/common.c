@@ -478,7 +478,7 @@ void filterTable(char* columns, Table table, char* filters){
 				// printf("filtersObj[i].column=%s\n",filtersObj[i].column);
 				if(strstr(table.data[0][j],filtersObj[i].column)){
 					// printf("strstr\n%s", table.data[0][j]);
-					filterColumns[contAux]=j;
+					filtersObj[i].filteredColumn=j;
 					hasValidType=1;
 					contAux++;
 				}
@@ -492,22 +492,37 @@ void filterTable(char* columns, Table table, char* filters){
 		if(!hasInvalidType){
 			printf("Sem colunas invalidas!\n");
 			printf("table.numRows=%i\n", table.numRows);
+
 			for(int i=1; i < table.numRows; i++){
 				for(int j=0; j < numberOfFilters; j++){
-					if(strcmp(stringTillChar(table.data[0][filterColumns[j]], ' '), "int")==0){
+					if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "int")==0){
 						// printf("Deve aparecer na linha abaixo: %s\n", table.data[i][j]);
 						// printf("É inteiro: %d\n\n", stringToInt(table.data[i][j]));
 						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
 							printf(">\n");
-							if(stringToInt(table.data[i][j])>stringToInt(filtersObj[j].value)){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) > stringToInt(filtersObj[j].value)){
 								printf("É PARA PRINTAR A LINHA %i\n",i);
 							}
 						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) < stringToInt(filtersObj[j].value)){
+								printf("É PARA PRINTAR A LINHA %i\n",i);
+							}
 							printf("<\n");
 						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) >= stringToInt(filtersObj[j].value)){
+								printf("É PARA PRINTAR A LINHA %i\n",i);
+							}
 							printf(">=\n");
 						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) <= stringToInt(filtersObj[j].value)){
+								printf("É PARA PRINTAR A LINHA %i\n",i);
+							}
 							printf("<=\n");
+						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) == stringToInt(filtersObj[j].value)){
+								printf("É PARA PRINTAR A LINHA %i\n",i);
+							}
+							printf("==\n");
 						}else{
 							continue;
 						}
@@ -591,9 +606,10 @@ void validateSelect(char* command){
 	boldCyan();
 	// printf("318\n");
 	resetColor();
-	char* commandTemp=(char*)calloc(strlen(command)+1, sizeof(char)); 
-	strcpy(commandTemp, command);
-
+	char* commandTemp=(char*) calloc (strlen(command)+1, sizeof(char)); 
+	memcpy(commandTemp, command, strlen(command)+1);
+	printf("Command: %s | ", command);
+	printf("CommandTemp: %s\n\n", commandTemp);
 	boldCyan();
 	// printf("324\n");
 	resetColor();
@@ -605,7 +621,7 @@ void validateSelect(char* command){
 	// printf("331\n");
 	resetColor();
 
-	char** commands=(char**) calloc(10, sizeof(char**));
+	char** commands=(char**) calloc(20, sizeof(char**));
 	int cont=0;
 	while (token != NULL){
 		char *end_token=NULL;
@@ -621,14 +637,16 @@ void validateSelect(char* command){
 	if(strcmp(commands[1], "*")==0){
 		collumns=(char*) calloc (2, sizeof(char));
 		collumns="*";
-		if(isSubstringInString(commandTemp, "where")){
+		printf("639\n");
+		if(strstr(commandTemp, "where")){
+			printf("641\n");
 			filters = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
 			filters = betweenParenthesis(commandTemp);
 			filters = removeSpacesAfterCommas(filters);
 		}
 	}else{
 		boldCyan();
-		// printf("357\n");
+		printf("357\n");
 		resetColor();
 
 		//esse for eliminará a primeira ocorrência de parenteseses.
