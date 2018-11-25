@@ -86,14 +86,6 @@ void printHelp(){
 }
 
 void printTable(Table table){
-	printf("table.numCols=%i\n",table.numCols);
-	printf("table.numRows=%i\n",table.numRows);
-	printf("table.data[0][0]=%s\n", table.data[0][0]);
-	printf("table.data[1][0]=%s\n", table.data[1][0]);
-	printf("table.data[2][0]=%s\n", table.data[2][0]);
-	printf("table.data[3][0]=%s\n", table.data[3][0]);
-	printf("table.data[4][0]=%s\n", table.data[4][0]);
-	// printf("table.data[5][0]=%s\n", table.data[5][0]);
 	for(int i=0; i < table.numRows; i++){
 
 		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
@@ -1094,7 +1086,6 @@ void deleteFromTable(char* columns, Table table, char* filters){
 			int cont=0;
 			contAux=0;
 			filteredTable.numRows=0;
-			// printf("LINES TO VERIFY: %i \n", nLinesToVerify);
 			if(nLinesToVerify!=1){
 				for(int i=1; i < nLinesToVerify + 1; i++){
 					/*
@@ -1105,7 +1096,6 @@ void deleteFromTable(char* columns, Table table, char* filters){
 					if(cont==numberOfFilters-1){
 						printableRows[contAux]=rawRowsToPrint[i-1];
 						cyan();
-						printf("DEVE DELETAR A LINHA %i\n", printableRows[contAux]);
 						resetColor();
 						cont=0;
 						contAux++;
@@ -1135,43 +1125,15 @@ void deleteFromTable(char* columns, Table table, char* filters){
 
 
 	/*Popula uma tabela com quais linhas e colunas serão mostradas*/
-	
-	
-	/*
-	for(int i=0; i<filteredTable.numRows; i++){
-		int cont=0;
-		filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
-		// printf("643: filteredTable.numCols=%i\n", filteredTable.numCols);
-		for(int j=0; j<filteredTable.numCols; j++){
-			filteredTable.data[i][cont] = table.data[i][printableCollums[j]];
-			cont++;
-		}
-	}
-	*/
-
-	// filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
-	// for(int j=0; j < filteredTable.numCols; j++){
-	// 	if(i==0){
-	// 		filteredTable.data[i][j] = table.data[i][j];
-	// 	}else{
-	// 		filteredTable.data[i][j] = table.data[printableRows[i-1]][j];
-	// 	}
-	// }
-
 	filteredTable.numCols = table.numCols;
 	int cont=0;
 	int lastLineChecked=0;
 	if(filteredTable.numRows != table.numRows){
-		printf("1102\n");
-		printf("filteredTable.numRows-1=%i\n", filteredTable.numRows-1);
 		for(int i=0; i < table.numRows; i++){
-			printf("i=%i\n", i);
 			if(i==0){
 				filteredTable.data[cont]=(char**) calloc(filteredTable.numCols, sizeof(char**));
 				for(int j=0; j < filteredTable.numCols; j++){
-					printf("cont=%i\n", cont);
 					filteredTable.data[cont][j]=table.data[i][j];
-					printf("filteredTable.data[%i][%i]=%s\n",cont,j,filteredTable.data[cont][j]);
 				}
 				cont++;
 			}else{
@@ -1182,29 +1144,23 @@ void deleteFromTable(char* columns, Table table, char* filters){
 					}
 				}
 				if(shouldPrint){
-					printf("Should print line %i\n", i);
 					filteredTable.data[cont]=(char**) calloc(filteredTable.numCols, sizeof(char**));
 					for(int j=0; j < filteredTable.numCols; j++){
-						printf("cont=%i\n", cont);
 						filteredTable.data[cont][j]=table.data[i][j];
-						printf("filteredTable.data[%i][%i]=%s\n",cont,j,filteredTable.data[cont][j]);
 					}
 					cont++;
 				}
 			}
 		}
 		filteredTable.numRows=table.numRows-(filteredTable.numRows-1);
-		printf("SAIU 1117\n");
 	}else{
 		filteredTable=table;
 	}
 
-	/**/
-
 	boldCyan();
-	// printf("545 !columnNotFound=%i | !hasInvalidType=%i,\n",!columnNotFound, !hasInvalidType);
 
 	if(!columnNotFound && !hasInvalidType){
+		replaceTable(filteredTable);
 		printTable(filteredTable);
 	}
 }
