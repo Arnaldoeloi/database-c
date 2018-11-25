@@ -1594,11 +1594,6 @@ int execute(char* command){
 		validateCreateTable(command);
 
 	}else if(findInVector("test", command)){
-		//AAAAAAAAAAAAAA	
-		printf("TESTE\n");
-		Table table = findTableInCommand("insert penis into (3, minhabunda.com, Arnaldo) penis.rola");
-		printf("banco:  %s.%s\n", table.database, table.name);
-		//AAAAAAAAAAAAAA
 		
 	}else if(findInVector("insert ", command)){
 		printf("Inserting into table\n");
@@ -1608,9 +1603,9 @@ int execute(char* command){
 	}else if(findInVector("drop table ", command)){
 		validateDropTable(command);
 
-
 	}else if(findInVector("drop database ", command)){
-		dropDatabase(command);
+		validateDropDatabase(command);
+
 	}else if(findInVector("delete from ", command)){
 		validateDeleteFrom(command);
 
