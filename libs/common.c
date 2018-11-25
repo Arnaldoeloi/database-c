@@ -528,6 +528,70 @@ void filterTable(char* columns, Table table, char* filters){
 							continue;
 						}
 					}
+
+					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "double")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) > stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								printf("Linha para verificar: %i\n", rawRowsToPrint[nLinesToVerify]);
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) < stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) >= stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) <= stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) == stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else{
+							continue;
+						}
+					}
+
+					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "float")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) > stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								printf("Linha para verificar: %i\n", rawRowsToPrint[nLinesToVerify]);
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) < stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) >= stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) <= stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) == stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else{
+							continue;
+						}
+					}
 				}
 			}
 			int cont=0;
