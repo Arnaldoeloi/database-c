@@ -423,3 +423,16 @@ double stringToDouble(char* string){
 	double tempDouble = atof(string);
 	return tempDouble;
 }
+
+char* switchCharToBar(char caracter, char* string){
+	char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
+	strcpy(stringNew, string); //Copia "string" e atribui o valor a "stringNew"
+	
+	for(int i=0; i < (int)strlen(string) ; i++){
+		if(string[i] == caracter){
+			stringNew[i] = '/';
+		}
+	}
+	return stringNew;
+	free(stringNew);
+}

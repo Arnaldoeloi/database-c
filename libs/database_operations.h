@@ -1,8 +1,21 @@
 #include <stdlib.h>
 #include "database_types.h"
 
+/*
+*   Recebe um caminho para um arquivo .csv depois
+*    retorna um struct do tipo Table
+*
+*   Recebe
+*   @string
+*/
 Table csvToTable(char* pathToFile);
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 Database commandToDatabase(char* command);
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 int countRowsInCsv(char* pathToFile);
 void selectFromTable();
 void createTable(Table table);
@@ -14,3 +27,26 @@ void insertIntoTable();
 void selectFromTable();
 char* concat(char *string1, char *string2);
 void listAllTables();
+/*
+*   Remove a existência de um banco de dados por 
+*   meio de um comando
+*
+*   Recebe
+*   @string
+*/
+void dropDatabase(char* string);
+/*
+*   Remove a existência de uma tabela por meio de
+*   um comando
+*
+*   Recebe
+*   @string
+*/
+void dropTable(char* string);
+/*
+*   Reescreve uma table existênte por outra criada
+*
+*   Recebe
+*   @Table
+*/
+void replaceTable(Table table);

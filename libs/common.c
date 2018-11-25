@@ -853,22 +853,26 @@ int execute(char* command){
 		printf("Inserting into table\n");
 		validateInsertIntoTable(command);
 
-	}else if(findInVector("delete from ", command)){
-		printf("Deleting table\n");
+
+	}else if(findInVector("drop table ", command)){
+		dropTable(command);
 
 
 	}else if(findInVector("drop database ", command)){
-		printf("Drop table\n");
+		dropDatabase(command);
 
 
 	}else if(findInVector("select ", command)){
 		printf("Selecting data from table\n");
 		validateSelect(command);
 
+
 	}else if(findInVector("list tables", command)){
 		listAllTables();
+
 	}else if(findInVector("teste", command)){
 		printf("%lf", stringToDouble("12.23924"));
+		
 	}
 	else{
 		boldRed();
