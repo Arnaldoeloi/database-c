@@ -574,9 +574,6 @@ void filterTable(char* columns, Table table, char* filters){
 	}
 	/**/
 
-	for(int i=0; i< filteredTable.numRows-1; i++){
-		printf("printableRows[%i]=%i\n",i,printableRows[i]);
-	}
 
 	/*Popula uma tabela com quais linhas e colunas serão mostradas*/
 	if(strcmp(columns, "*")==0){ //==0 significa que são iguais
@@ -591,7 +588,6 @@ void filterTable(char* columns, Table table, char* filters){
 					if(i==0){
 						filteredTable.data[i][j] = table.data[i][j];
 					}else{
-						printf("printableRows[%i]: %i\n", i, printableRows[i-1]);
 						filteredTable.data[i][j] = table.data[printableRows[i-1]][j];
 					}
 				}
@@ -624,29 +620,25 @@ void filterTable(char* columns, Table table, char* filters){
 
 		if(!columnNotFound){
 			if(filteredTable.numRows != table.numRows){
-				for(int i=0; i < filteredTable.numRows; i++){
-					int cont=0;
+				for(int i=0; i < filteredTable.numRows; i++){ 
 					filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
-					printf("filteredTable.numCols=%i\n", filteredTable.numCols);
-					for(int j=0; j<filteredTable.numCols; j++){
-						printf("table.data[%i][%i]=%s\n", i, printableCollums[j], table.data[i][printableCollums[j]]);
-						printf("table.data[0][0]=%s\n", table.data[0][0]);
-						filteredTable.data[i][cont]=table.data[i][printableCollums[j]];
-						printf("540: %s\n",filteredTable.data[i][cont]);
-						cont++;
+
+					for(int j=0; j < filteredTable.numCols; j++){
+						if(i==0){
+							filteredTable.data[i][j] = table.data[i][j];
+						}else{
+							printf("634: printableRows[%i]: %i\n", i, printableRows[i-1]);
+							filteredTable.data[i][j] = table.data[printableRows[i-1]][j];
+						}
 					}
 				}
 			}else{
 				for(int i=0; i<filteredTable.numRows; i++){
 					int cont=0;
 					filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
-					printf("filteredTable.numCols=%i\n", filteredTable.numCols);
+					printf("643: filteredTable.numCols=%i\n", filteredTable.numCols);
 					for(int j=0; j<filteredTable.numCols; j++){
-						if(i==0){
-							filteredTable.data[i][cont] = table.data[i][printableCollums[j]];
-						}else{
-							filteredTable.data[i][cont] = table.data[printableRows[i]][printableCollums[j]];
-						}
+						filteredTable.data[i][cont] = table.data[i][printableCollums[j]];
 						cont++;
 					}
 				}
