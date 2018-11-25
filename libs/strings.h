@@ -44,7 +44,7 @@ int isInFormat(char* type, char* string);
 */
 int howManyOcurrencesInString(char caracter, char* string);
 /*  
-*   Reponsável por transformar uma string em um tipo inteiro
+*   Responsável por transformar uma string em um tipo inteiro
 *   
 *   Recebe
 *   @string
@@ -53,6 +53,36 @@ int howManyOcurrencesInString(char caracter, char* string);
 *   @int
 */
 int stringToInt(char* string);
+/*
+*   Responsável por transformar uma string em uma varíavel do tipo char
+*
+*   Recebe
+*   @string
+*
+*   Retorna
+*   @char   
+*/
+char stringToChar(char* string);
+/*
+*   Responsável por transformar uma string em uma varíavel do tipo float
+*
+*   Recebe
+*   @string
+*
+*   Retorna
+*   @char   
+*/
+float stringToFloat(char* string);
+/*
+*   Responsável por transformar uma string em uma varíavel do tipo double
+*
+*   Recebe
+*   @string
+*
+*   Retorna
+*   @char   
+*/
+double stringToDouble(char* string);
 char* switchCommaToVerticalBar(char* string);
 char* switchCommaToVerticalBarWithQMarks(char* string);
 char* invertString(char* string);

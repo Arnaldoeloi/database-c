@@ -178,7 +178,7 @@ int howManyOcurrencesInString(char caracter, char* string){
 	}
 	return ocurrences;
 }
-// 48 to 57
+
 int isInFormat(char* type, char* string){
 	if (strcmp(type, "int") == 0){
 
@@ -402,3 +402,24 @@ char* invertString(char* string){
 	return string;
 }
 
+char* removeSubStringFromString (char* subString, char* string){
+}
+
+char stringToChar(char* string){
+	return string[0];
+}
+
+float stringToFloat(char* string){
+	/*
+	*	char* endtoken será a posição de memória que será salva a string convertida
+	*	depois será retornada para tempFloat
+	*/
+	char* endtoken = NULL;
+	float tempFloat = strtof(string, &endtoken);
+	return tempFloat;
+}
+
+double stringToDouble(char* string){
+	double tempDouble = atof(string);
+	return tempDouble;
+}
