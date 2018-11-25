@@ -1,0 +1,16 @@
+create database imd ;
+create table imd.alunos(int id pk, string name, string matricula) ;
+
+insert (1, Arnaldo Barbosa Eloi de Souza, 20180062020) into imd.alunos ;
+insert (2, Nathanael Derick, 20170602010) into imd.alunos ;
+insert (3, Paulo Sandino, 201466666661969) into imd.alunos ;
+insert (4, Andrade Silveira Carlos, 20141041111) into imd.alunos ;
+
+create table imd.professores(int id pk, string name, string matricula) ;
+insert (1, Tonhao, 20180062020) into imd.professores ;
+insert (2, Rafaela Horacina, 20170602010) into imd.professores ;
+insert (3, Charles Madeira, 201466666661969) into imd.professores ;
+insert (4, Antonio Djackson , 20141041111) into imd.professores ;
+
+select * from imd.alunos
+select * from imd.professores

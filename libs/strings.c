@@ -51,6 +51,7 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 	for(int i=0; token != NULL; i++) {
 		for(int j=0; j < (int)strlen(token)+1; j++){
 			m[i][j] = token[j];
+			printf("token:%s\n",token[j]);
 		}
 		token = strtok(NULL, caracteres);
 	}
@@ -60,6 +61,23 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 		word=realloc(word, i*sizeof(char)+sizeof(char));
 		word[i]=m[pos][i];
 	}
+	return word;
+}
+
+char* wordInPositionAfterSeparations2(char* string, char* caracteres, int pos){
+	char *token;
+	char* endptr=NULL;
+	token = strtok_r(string, caracteres, &endptr);
+	
+	int cont=0;
+	while(cont<pos) {
+		printf("token:%s\n",token);
+		token = strtok_r(NULL, caracteres, &endptr);
+		cont++;
+	}
+	char* word = malloc(strlen(token)*sizeof(char)+sizeof(char));
+	strcpy(word,token);
+	printf("word: %s\n", word);
 	return word;
 }
 
@@ -238,8 +256,8 @@ int isInFormat(char* type, char* string){
 		return 1;
 	} else if(strcmp(type, "date") == 0){
 		if((int)strlen(string) == 10){
+				printf("260\n");
 			if(howManyOcurrencesInString('/', string) == 2){
-
 				char *tempString = NULL;
 				int tempValue = 0;
 				char *endToken = NULL;

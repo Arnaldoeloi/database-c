@@ -1,0 +1,8 @@
+select * from escola.planilha where (id > 5) ;
+create database arquivo ;
+create table arquivo.tabela(int id pk, string name, double salario) ;
+insert (1, Arnaldo Souza, 750) into arquivo.tabela ;
+insert (2, Nathanael Derick, 400) into arquivo.tabela ;
+insert (3, Paulo Sandino, 1300) into arquivo.tabela ;
+insert (4, Luciano, 2500) into arquivo.tabela ;
+insert (5, Matheus Ricardo, 750) into arquivo.tabela ;
