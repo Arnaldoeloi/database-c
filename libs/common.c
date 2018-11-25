@@ -86,8 +86,8 @@ void printHelp(){
 }
 
 void printTable(Table table){
-	// printf("table.numRows=%i\n", table.numRows);
-	// printf("table.numCols=%i\n", table.numCols);
+	printf("table.numRows=%i\n", table.numRows);
+	printf("table.numCols=%i\n", table.numCols);
 	for(int i=0; i < table.numRows; i++){
 
 		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
@@ -417,90 +417,124 @@ void filterTable(char* columns, Table table, char* filters){
 
 	int filterColumns[10]; //guarda a posição das colunas utilizadas na validação dos dados de filtro
 
-	// if(filters!=NULL){
-	// 	Filter* filtersObj=calloc (1,sizeof(Filter));
+	/*Armazenam que linhas serão selecionadas (FILTRO)*/
+	if(filters!=NULL){
+		printf("Filters!=NULL\n");
+		Filter* filtersObj=calloc (1,sizeof(Filter));
 
-	// 	char *end_token1=NULL;
-	// 	int numberOfFilters=0;
-	// 	char *token1 = strtok_r(filters, ",", &end_token1);
+		char *end_token1=NULL;
+		int numberOfFilters=0;
+		char *token1 = strtok_r(filters, ",", &end_token1);
 
 
 
-	// 	while(token1!=NULL){
-	// 		char *end_token2=NULL;			
-	// 		char *token2 = strtok_r(token1, " ", &end_token2);
+		while(token1!=NULL){
+			char *end_token2=NULL;			
+			char *token2 = strtok_r(token1, " ", &end_token2);
 			
 			
-	// 		int contAux=0;
-	// 		while(token2!=NULL){
-	// 			/*
-	// 				contAux==0:
-	// 					filter.column
-	// 				contAux==1:
-	// 					filter.typeOfFilter
-	// 				contAux==2:
-	// 					filter.value
-	// 			*/
+			int contAux=0;
+			while(token2!=NULL){
+				/*
+					contAux==0:
+						filter.column
+					contAux==1:
+						filter.typeOfFilter
+					contAux==2:
+						filter.value
+				*/
 
-	// 			printf("token2:%s\n", token2);
-	// 			if(contAux==0){
-	// 				filtersObj[numberOfFilters].column=(char*) calloc(strlen(token2)+1, sizeof(char));
-	// 				filtersObj[numberOfFilters].column=token2;
-	// 			}
-	// 			else if(contAux==1){
-	// 				filtersObj[numberOfFilters].typeOfFilter=(char*) calloc(strlen(token2)+1, sizeof(char));
-	// 				filtersObj[numberOfFilters].typeOfFilter=token2;
-	// 			}
-	// 			else if(contAux==2){
-	// 				filtersObj[numberOfFilters].value=(char*) calloc(strlen(token2)+1, sizeof(char));
-	// 				filtersObj[numberOfFilters].value=token2;
-	// 			}
-	// 			token2 = strtok_r(NULL, " ", &end_token2);
-	// 			contAux++;
-	// 		}
+				printf("token2:%s\n", token2);
+				if(contAux==0){
+					filtersObj[numberOfFilters].column=(char*) calloc(strlen(token2)+1, sizeof(char));
+					filtersObj[numberOfFilters].column=token2;
+				}
+				else if(contAux==1){
+					filtersObj[numberOfFilters].typeOfFilter=(char*) calloc(strlen(token2)+1, sizeof(char));
+					filtersObj[numberOfFilters].typeOfFilter=token2;
+				}
+				else if(contAux==2){
+					filtersObj[numberOfFilters].value=(char*) calloc(strlen(token2)+1, sizeof(char));
+					filtersObj[numberOfFilters].value=token2;
+				}
+				token2 = strtok_r(NULL, " ", &end_token2);
+				contAux++;
+			}
 
-	// 		token1 = strtok_r(NULL, ",", &end_token1);
-	// 		numberOfFilters++;
-	// 	}
+			token1 = strtok_r(NULL, ",", &end_token1);
+			numberOfFilters++;
+		}
 
-	// 	numberOfFilters--; //pois na ultima iteração do while um filtro a mais foi levado em consideração (numberOfFilters++)
+		printf("numberOfFilters:%i\n", numberOfFilters);
+		/*
+			Valida se as colunas do filtro existem existem
+		*/
+		
+		int contAux=0;
+		for(int i=0; i < numberOfFilters; i++){
+			int hasValidType=0;
+			for(int j=0; j<table.numCols; j++ ){
+				// printf("table.data[0][j]=%s\n",table.data[0][j]);
+				// printf("filtersObj[i].column=%s\n",filtersObj[i].column);
+				if(strstr(table.data[0][j],filtersObj[i].column)){
+					// printf("strstr\n%s", table.data[0][j]);
+					filterColumns[contAux]=j;
+					hasValidType=1;
+					contAux++;
+				}
+			}
+			if(!hasValidType){
+				hasInvalidType=1;
+				break;
+			}
+		}
 
-	// 	/*
-	// 		Valida se as colunas do filtro existem existem
-	// 	*/
+		if(!hasInvalidType){
+			printf("Sem colunas invalidas!\n");
+			printf("table.numRows=%i\n", table.numRows);
+			for(int i=1; i < table.numRows; i++){
+				for(int j=0; j < numberOfFilters; j++){
+					if(strcmp(stringTillChar(table.data[0][filterColumns[j]], ' '), "int")==0){
+						// printf("Deve aparecer na linha abaixo: %s\n", table.data[i][j]);
+						// printf("É inteiro: %d\n\n", stringToInt(table.data[i][j]));
+						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
+							printf(">\n");
+							if(stringToInt(table.data[i][j])>stringToInt(filtersObj[j].value)){
+								printf("É PARA PRINTAR A LINHA %i\n",i);
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							printf("<\n");
+						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							printf(">=\n");
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							printf("<=\n");
+						}else{
+							continue;
+						}
+					}
+					// printf("STR TsILL CHAR parameter:%s\n",table.data[0][filterColumns[j]]);
+					// printf("STR TsILL CHAR:%s\n",stringTillChar(table.data[0][filterColumns[j]], ' '));
+				}
+			}
+		}else{
+			printf("Algumas colunas de filtro são invalidas!\n");
+		}
+	}else{
+		filteredTable.numRows=table.numRows;
+	}
+	/**/
 
-	// 	int contAux=0;
-	// 	for(int i=0; i<numberOfFilters; i++){
-	// 		int hasValidType=0;
-	// 		for(int j=0; j<table.numCols; j++ ){
-	// 			if(strstr(table.data[0][j],filtersObj[i].column)==0){
-	// 				filterColumns[contAux]=j;
-	// 				hasValidType=1;
-	// 				contAux++;
-	// 			}
-	// 		}
-	// 		if(!hasValidType){
-	// 			hasInvalidType=1;
-	// 		}
-	// 	}
-
-	// 	if(!hasInvalidType){
-	// 		for(int i=0; i < table.numRows; i++){
-	// 			for(int j=0; j < contAux; j++){
-	// 				//filterColumns
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	printf("416\n");
+	/*Mostram quais colunas serão mostradas*/
+	printf("498\n");
 	if(strcmp(columns, "*")==0){ //==0 significa que são iguais
 		filteredTable.numCols=table.numCols;
 		filteredTable=table;
 	}else{
+		printf("503");
 		char *end_token=NULL;
 		char *token = strtok_r(columns, ",", &end_token);
 		
+		//OK
 		while(token!=NULL){
 			int columnFound=0;
 			for (int i=0; i < table.numCols; i++){
@@ -509,28 +543,31 @@ void filterTable(char* columns, Table table, char* filters){
 					resetColor();
 					columnFound=1;
 					printableCollums[filteredTable.numCols]=i;
+					printf("TOKEN: %s\n", token);
 					filteredTable.numCols++;
 				}
-				//table.data[0][i] = token;
+				// table.data[0][i] = token;
 			}
 			if(!columnFound){
 				columnNotFound=1;
 			}
 			token = strtok_r(NULL, ",", &end_token); 
 		}
+		//
+
 		//free(token);
 
 		if(!columnNotFound){
 			for(int i=0; i<table.numRows; i++){
 				int cont=0;
 				filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
-				//printf("444\n");
+				printf("filteredTable.numCols=%i\n", filteredTable.numCols);
 				for(int j=0; j<filteredTable.numCols; j++){
 					//printf("446\n");
-					//printf("table.data[%i][%i]=%s\n", i, printableCollums[j], table.data[i][printableCollums[j]]);
-					//printf("table.data[0][0]=%s\n", table.data[0][0]);
+					printf("table.data[%i][%i]=%s\n", i, printableCollums[j], table.data[i][printableCollums[j]]);
+					printf("table.data[0][0]=%s\n", table.data[0][0]);
 					filteredTable.data[i][cont]=table.data[i][printableCollums[j]];
-					//printf("448: %s\n",filteredTable.data[i][cont]);
+					printf("540: %s\n",filteredTable.data[i][cont]);
 					cont++;
 				}
 			}
@@ -540,6 +577,7 @@ void filterTable(char* columns, Table table, char* filters){
 			resetColor();
 		}
 	}
+	/**/
 
 	boldCyan();
 	printf("545 !columnNotFound=%i | !hasInvalidType=%i,\n",!columnNotFound, !hasInvalidType);
@@ -551,20 +589,20 @@ void filterTable(char* columns, Table table, char* filters){
 
 void validateSelect(char* command){
 	boldCyan();
-	printf("318\n");
+	// printf("318\n");
 	resetColor();
 	char* commandTemp=(char*)calloc(strlen(command)+1, sizeof(char)); 
 	strcpy(commandTemp, command);
 
 	boldCyan();
-	printf("324\n");
+	// printf("324\n");
 	resetColor();
 	
 	char *end_str=NULL;
     char *token = strtok_r(command, " ", &end_str);
 
 	boldCyan();
-	printf("331\n");
+	// printf("331\n");
 	resetColor();
 
 	char** commands=(char**) calloc(10, sizeof(char**));
@@ -576,7 +614,7 @@ void validateSelect(char* command){
 		cont++;
 	}
 	boldCyan();
-	printf("343\n");
+	// printf("343\n");
 	resetColor();
 	char* collumns=NULL;
 	char* filters=NULL;
@@ -590,7 +628,7 @@ void validateSelect(char* command){
 		}
 	}else{
 		boldCyan();
-		printf("357\n");
+		// printf("357\n");
 		resetColor();
 
 		//esse for eliminará a primeira ocorrência de parenteseses.
@@ -598,7 +636,7 @@ void validateSelect(char* command){
 		collumns = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
 		
 		boldCyan();
-		printf("365\n");
+		// printf("365\n");
 		resetColor();
 		
 		/*
@@ -607,12 +645,12 @@ void validateSelect(char* command){
 		collumns = betweenParenthesis(commandTemp);
 
 		boldCyan();
-		printf("371\n");
+		// printf("371\n");
 		resetColor();
 
 		collumns =  removeSpacesAfterCommas(collumns);
 
-		printf("365: %s\n", commandTemp);
+		// printf("365: %s\n", commandTemp);
 
 		//limpa os primeiros parenteses para que haja apenas os parenteses dos filtros (após o where)
 		if(isSubstringInString(commandTemp, "where")){
