@@ -417,29 +417,16 @@ char stringToChar(char* string){
 }
 
 float stringToFloat(char* string){
-	char *tempString = NULL;
-	float tempFloat = 0;
-	int numbersAfterDot=0;
-	strcpy(tempString, string);
 	/*
-	*	char* endtoken, declara até que ponto irá o strtok_r enquanto o char* token é defi-
-	*	nido como a string cortada antes do '.', logo após será declarada novamente, porém
-	*	com o valor após o ponto.
+	*	char* endtoken será a posição de memória que será salva a string convertida
+	*	depois será retornada para tempFloat
 	*/
 	char* endtoken = NULL;
-	char* token = strtok_r(string, ".", &endtoken);
-	tempFloat = stringToInt(token);
-	token = strtok_r(string, ".", &endtoken);
-	//	O laço de repetição serve para contar quantos digitos existem depois do ponto
-	for(int i=0; i < (int)strlen(token); i++){
-		numbersAfterDot++;
-	}
-	/* 	
-	*	Com os pontos contados, iguala-se o valor anterior, antes da vírgula, com os depois
-	*	os valores contidos após a vírgula é transformado em inteiros e dividos por 10 para 
-	*	cada valor após a vírgula.
-	*/
-	tempFloat = tempFloat + (stringToInt(token))/(10*numbersAfterDot);
-
+	float tempFloat = strtof(string, &endtoken);
 	return tempFloat;
+}
+
+double stringToDouble(char* string){
+	double tempDouble = atof(string);
+	return tempDouble;
 }
