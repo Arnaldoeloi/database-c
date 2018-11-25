@@ -973,7 +973,6 @@ void externalInstructions(char* command){
 	int fileOpen=0;
 
 	char* tempCommand= malloc(255*sizeof(char));
-	char* copiedString = NULL;
 	if( file == NULL ) {
 		boldRed();
 		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
@@ -986,12 +985,9 @@ void externalInstructions(char* command){
 			resetColor();
 			boldCyan();
 			printf("%s",tempCommand);
-			copiedString= (char*) realloc(copiedString, strlen(tempCommand)+sizeof(char));
-			memcpy(copiedString,tempCommand,strlen(tempCommand)*sizeof(char)+sizeof(char));
 			resetColor();
-			execute(copiedString);
+			execute(tempCommand);
 			count++;
-			free(copiedString);
 		}
 		fileOpen=1;
 	}
