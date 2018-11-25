@@ -730,7 +730,7 @@ void validateSelect(char* command){
 	char* commandTemp=(char*) calloc (strlen(command)+1, sizeof(char)); 
 	memcpy(commandTemp, command, strlen(command)+1);
 	printf("Command: %s | ", command);
-	printf("CommandTemp: %s\n\n", commandTemp);
+	// printf("CommandTemp: %s\n\n", commandTemp);
 	boldCyan();
 	// printf("324\n");
 	resetColor();
@@ -758,16 +758,16 @@ void validateSelect(char* command){
 	if(strcmp(commands[1], "*")==0){
 		collumns=(char*) calloc (2, sizeof(char));
 		collumns="*";
-		printf("639\n");
+		// printf("639\n");
 		if(strstr(commandTemp, "where")){
-			printf("641\n");
+			// printf("641\n");
 			filters = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
 			filters = betweenParenthesis(commandTemp);
 			filters = removeSpacesAfterCommas(filters);
 		}
 	}else{
 		boldCyan();
-		printf("357\n");
+		// printf("357\n");
 		resetColor();
 
 		//esse for eliminará a primeira ocorrência de parenteseses.
@@ -945,6 +945,63 @@ char* input(){
 	return string;
 }
 
+int execute(char* command);
+
+void externalInstructions(char* command){
+	char* pathToFile=NULL;
+
+	int spaces=0;
+	int cont=0;
+	for(int i=0; i< (int)strlen(command); i++){
+		if(command[i]==' ' && !spaces){
+			spaces++;
+		}
+
+		if(spaces == 1 && command[i]!=' '){
+			pathToFile = (char*) realloc (pathToFile, cont*sizeof(char) + sizeof(char));
+			pathToFile[cont]=command[i];
+			cont++;
+		}
+	}
+	pathToFile = (char*) realloc (pathToFile, cont*sizeof(char) + sizeof(char));
+	pathToFile[cont]='\0';
+	
+	FILE *file;
+	file = fopen( pathToFile, "r" );
+	char ch;
+
+	int fileOpen=0;
+
+	char* tempCommand= malloc(255*sizeof(char));
+	char* copiedString = NULL;
+	if( file == NULL ) {
+		boldRed();
+		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
+		resetColor();
+	}else{
+		int count=0;
+		while( fgets(tempCommand, 255, file) ){ 
+			magenta();
+			printf("Executanto o comando:\n");
+			resetColor();
+			boldCyan();
+			printf("%s",tempCommand);
+			copiedString= (char*) realloc(copiedString, strlen(tempCommand)+sizeof(char));
+			memcpy(copiedString,tempCommand,strlen(tempCommand)*sizeof(char)+sizeof(char));
+			resetColor();
+			execute(copiedString);
+			count++;
+			free(copiedString);
+		}
+		fileOpen=1;
+	}
+	if(fileOpen==1){
+		fclose(file);
+	}
+
+
+}
+
 int execute(char* command){
 	if((strcmp("help", command)==0) || (strcmp("man", command)==0) || (strcmp("h", command)==0)){ 
 		printHelp();
@@ -991,9 +1048,8 @@ int execute(char* command){
 	}else if(findInVector("list tables", command)){
 		listAllTables();
 
-	}else if(findInVector("teste", command)){
-		printf("%lf", stringToDouble("12.23924"));
-		
+	}else if(findInVector("import ", command)){
+		externalInstructions(command);
 	}
 	else{
 		boldRed();
@@ -1009,6 +1065,12 @@ int execute(char* command){
 
 Database commandToDatabase(char* command){
 	Database db;
-	db.name = wordInPositionAfterSeparations(command, " ", 2);
+	db.name = wordInPositionAfterSeparations2(command, " ", 2);
+
+	for(int i=(int)strlen(db.name); i > (int) strlen(db.name); i--){
+		if(db.name[i]==' '){
+			db.name[i]='\0';
+		}
+	}
 	return db;
 }

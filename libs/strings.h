@@ -17,6 +17,7 @@ char* lowerCase(char* string);
 char* betweenParenthesis(char* string);
 char* removeSpacesAfterCommas(char* string);
 int isInString(char* string, char caracter);
+char* wordInPositionAfterSeparations2(char* string, char* caracteres, int pos);
 char* stringTillChar(char* string, char c);
 int isSubstringInString(char* string, char* subString);
 char* getSubstringAfterSubstringInString(char* string, char* subString);

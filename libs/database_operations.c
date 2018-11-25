@@ -48,8 +48,6 @@ void createDatabase(Database db){
 	}
 }
 
-void selectFromTable();
-
 void createTable(Table table){
 	struct stat st = {0}; //buffer do stat
 	char* path= NULL;
