@@ -437,5 +437,7 @@ void replaceTable(Table table){
 			}
 		}
 	}
+	boldGreen();
+	printf("Dado deletado com sucesso.\n");
 	fclose(file);
 }
