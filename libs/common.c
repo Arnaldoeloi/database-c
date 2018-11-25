@@ -1648,37 +1648,3 @@ Database commandToDatabase(char* command){
 	}
 	return db;
 }
-
-// Table t;
-// 	char* database=NULL;
-// 	char* table=NULL;
-// 	char* commandCpy=malloc(sizeof(char)*strlen(command)+sizeof(char));
-
-// 	memcpy(commandCpy, command, strlen(command) + 1);
-// 	commandCpy[strlen(command)+1]='\0';
-// 	int pointFound=0;
-// 	for(int i=0; i < (int)strlen(commandCpy); i++){
-// 		if(commandCpy[i]=='.'){
-// 			pointFound=1;
-// 			//for regressivo até achar o espaço, irá printar ao contrário
-// 			int cont=0;
-// 			for(int j=i-1; commandCpy[j]!=' '; j--){
-// 				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
-// 				database[cont]=commandCpy[j];
-// 				cont++;
-// 			}
-// 			database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
-// 			database[cont]='\0';
-// 			cont=0;
-
-
-// 			//for progressivo até achar o espaço
-// 			for(int j=i+1; (commandCpy[j]!=' ' && commandCpy[j]!='\0'); j++){
-// 				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
-// 				table[cont]=commandCpy[j];
-// 				cont++;
-// 			}
-// 			table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
-// 			table[cont]='\0';
-// 			break;
-// 		}
