@@ -18,13 +18,22 @@ Database commandToDatabase(char* command);
 */
 int countRowsInCsv(char* pathToFile);
 void selectFromTable();
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 void createTable(Table table);
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 void createDatabase(Database db);
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
 void insertIntoTable();
 void selectFromTable();
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 char* concat(char *string1, char *string2);
 void listAllTables();
 /*

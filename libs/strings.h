@@ -88,7 +88,7 @@ float stringToFloat(char* string);
 */
 double stringToDouble(char* string);
 char* switchCharToBar(char caracter, char* string);
-char* switchCommaToVerticalBar(char* string); // será substituída
+char* switchCommaToVerticalBar(char* string);
 char* switchCommaToVerticalBarWithQMarks(char* string);
 char* invertString(char* string);
 char* betweenSymbols(char* string, char symbol1, char symbol2);
