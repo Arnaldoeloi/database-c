@@ -178,8 +178,8 @@ Table csvToTable(char* pathToFile){
 
 	if(fileOpen){
 		Table table;
-		table.name = "TODO";
-		table.database = "TODO";
+		table.database = betweenSymbols(pathToFile,'/','/');
+		table.name = betweenSymbols(betweenSymbols(pathToFile,'/','.'), '/','\0');
 		table.numRows=countRowsInCsv(pathToFile);
 		table.numCols=countColsInCsv(pathToFile);
 		

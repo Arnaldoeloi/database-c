@@ -1257,6 +1257,7 @@ void validateSelect(char* command){
 		char* stringTemp=concat(pathToFile, concat(concat(t.database,"/"),t.name));
 		pathToFile=concat(stringTemp, ".csv");
 		t=csvToTable(pathToFile);
+		
 	}
 
 
