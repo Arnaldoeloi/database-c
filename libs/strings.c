@@ -164,13 +164,6 @@ int stringToInt(char* string){
 	char* ptr;
 
 	intValue=strtoimax(string,&ptr,10);
-	// for (int i=0; i < (int)strlen(string); i++){
-	// 	int tempValue = string[i] - 47;
-	// 	for(int j=0; j < (int)strlen(string) - i; j++){
-	// 		tempValue = tempValue*10;
-	// 	}
-	// 	intValue = intValue + tempValue;
-	// }
 
 	return intValue;
 }
