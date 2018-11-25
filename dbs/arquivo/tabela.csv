@@ -1,6 +1,5 @@
 int id pk|string name|double salario
 1|Arnaldo Souza|750
-2|Nathanael Derick|400
 3|Paulo Sandino|1300
 4|Luciano|2500
 5|Matheus Ricardo|750

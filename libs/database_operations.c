@@ -426,28 +426,16 @@ void replaceTable(Table table){
 	path = concat(path, ".csv");
 
 	file = fopen(path, "w");
-	printf("%s\n",table.database);
-	printf("%s\n",table.name);
-	printf("%d\n",table.numCols);
-	printf("%d\n",table.numRows);
-	// fprintf(file, "%s", "\n");
 	for(int i=0; i < table.numRows; i++){
 		for(int j=0; j < table.numCols; j++){
 			if(j == table.numCols-1){
-				printf("table.data[%d][%d] : %s\n",i, j, table.data[i][j]);
-				// printf("433\n");
-				// fprintf(file,"%s",table.data[i][j]);
-				// fprintf(file, "%s", "\n");
+				fprintf(file,"%s",table.data[i][j]);
+				fprintf(file, "%s", "\n");
 			} else{
-				printf("table.data[%d][%d] : %s\n",i, j, table.data[i][j]);
-				// printf("437\n");
-				// fprintf(file,"%s",table.data[i][j]);
-				// fprintf(file,"|");
+				fprintf(file,"%s",table.data[i][j]);
+				fprintf(file,"|");
 			}
 		}
 	}
-
 	fclose(file);
-	printf("449\n");
-
 }

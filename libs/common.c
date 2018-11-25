@@ -86,6 +86,21 @@ void printHelp(){
 }
 
 void printTable(Table table){
+	cyan();
+	printf("Selecting table ");
+	resetColor();
+	yellow();
+	printf("%s ", table.name);
+	resetColor();
+	cyan();
+	printf("from database ");
+	resetColor();
+	yellow();
+	printf("%s", table.database);
+	resetColor();
+	cyan();
+	printf(".\n");
+	resetColor();
 	for(int i=0; i < table.numRows; i++){
 
 		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
@@ -1567,7 +1582,6 @@ int execute(char* command){
 		validateDeleteFrom(command);
 
 	}else if(findInVector("select ", command)){
-		printf("Selecting data from table\n");
 		validateSelect(command);
 
 
