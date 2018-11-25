@@ -811,6 +811,8 @@ int execute(char* command){
 
 	}else if(findInVector("list tables", command)){
 		listAllTables();
+	}else if(findInVector("teste", command)){
+		printf("%f", stringToFloat("12.23924"));
 	}
 	else{
 		boldRed();

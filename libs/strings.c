@@ -163,7 +163,7 @@ int howManyOcurrencesInString(char caracter, char* string){
 	}
 	return ocurrences;
 }
-// 48 to 57
+
 int isInFormat(char* type, char* string){
 	if (strcmp(type, "int") == 0){
 
@@ -387,3 +387,37 @@ char* invertString(char* string){
 	return string;
 }
 
+char* removeSubStringFromString (char* subString, char* string){
+}
+
+char stringToChar(char* string){
+	return string[0];
+}
+
+float stringToFloat(char* string){
+	char *tempString = NULL;
+	float tempFloat = 0;
+	int numbersAfterDot=0;
+	strcpy(tempString, string);
+	/*
+	*	char* endtoken, declara até que ponto irá o strtok_r enquanto o char* token é defi-
+	*	nido como a string cortada antes do '.', logo após será declarada novamente, porém
+	*	com o valor após o ponto.
+	*/
+	char* endtoken = NULL;
+	char* token = strtok_r(string, ".", &endtoken);
+	tempFloat = stringToInt(token);
+	token = strtok_r(string, ".", &endtoken);
+	//	O laço de repetição serve para contar quantos digitos existem depois do ponto
+	for(int i=0; i < (int)strlen(token); i++){
+		numbersAfterDot++;
+	}
+	/* 	
+	*	Com os pontos contados, iguala-se o valor anterior, antes da vírgula, com os depois
+	*	os valores contidos após a vírgula é transformado em inteiros e dividos por 10 para 
+	*	cada valor após a vírgula.
+	*/
+	tempFloat = tempFloat + (stringToInt(token))/(10*numbersAfterDot);
+
+	return tempFloat;
+}
