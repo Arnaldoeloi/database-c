@@ -86,8 +86,14 @@ void printHelp(){
 }
 
 void printTable(Table table){
-	printf("table.numRows=%i\n", table.numRows);
-	printf("table.numCols=%i\n", table.numCols);
+	printf("table.numCols=%i\n",table.numCols);
+	printf("table.numRows=%i\n",table.numRows);
+	printf("table.data[0][0]=%s\n", table.data[0][0]);
+	printf("table.data[1][0]=%s\n", table.data[1][0]);
+	printf("table.data[2][0]=%s\n", table.data[2][0]);
+	printf("table.data[3][0]=%s\n", table.data[3][0]);
+	printf("table.data[4][0]=%s\n", table.data[4][0]);
+	// printf("table.data[5][0]=%s\n", table.data[5][0]);
 	for(int i=0; i < table.numRows; i++){
 
 		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
@@ -172,19 +178,7 @@ void printTable(Table table){
 	resetColor();
 }
 
-int findInVector(char* subvector, char* vector){
-	if (strlen(subvector) > strlen(vector)){
-		return 0;
-	}else{
-		for (int i=0; subvector[i] != '\0'; i++){
-			if(subvector[i] ==  vector[i]){
-				if (i == (int)strlen(subvector)-1) return 1;
-			}else{
-				return 0;
-			} 
-		}
-	}
-}
+
 
 //a função receberá uma string e retornará 1 se é um tipo válido ou 0, caso não seja
 int hasValidType(char* data){
@@ -534,7 +528,6 @@ void filterTable(char* columns, Table table, char* filters){
 						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
 							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) > stringToDouble(filtersObj[j].value)){
 								rawRowsToPrint[nLinesToVerify]=i;
-								// printf("Linha para verificar: %i\n", rawRowsToPrint[nLinesToVerify]);
 								nLinesToVerify++;
 							}
 						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
@@ -591,6 +584,74 @@ void filterTable(char* columns, Table table, char* filters){
 							}
 						}else{
 							continue;
+						}
+					}
+
+					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "string")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,"like")==0){
+							char* auxString = betweenSymbols(filtersObj[j].value,'\'','\'');
+							if(auxString[0]=='%' && auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(strstr(table.data[i][filtersObj[j].filteredColumn], auxString)){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(findInVector(auxString,table.data[i][filtersObj[j].filteredColumn])){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]=='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn])){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]!='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn])){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else{
+								continue;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"&like")==0){
+							char* auxString = betweenSymbols(filtersObj[j].value,'\'','\'');
+							auxString=lowerCase(auxString);
+							if(auxString[0]=='%' && auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(strstr(lowerCase(table.data[i][filtersObj[j].filteredColumn]), auxString)){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(findInVector(auxString,lowerCase(table.data[i][filtersObj[j].filteredColumn]))){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]=='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,lowerCase(table.data[i][filtersObj[j].filteredColumn]))){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]!='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,lowerCase(table.data[i][filtersObj[j].filteredColumn]))){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else{
+								continue;
+							}
+																						
 						}
 					}
 				}
@@ -724,6 +785,386 @@ void filterTable(char* columns, Table table, char* filters){
 	}
 }
 
+void deleteFromTable(char* columns, Table table, char* filters){
+	// printf("collums: %s\n", columns);
+	// printf("filter: %s\n", filters);
+
+	Table filteredTable;
+	filteredTable.database	=	table.database;
+	filteredTable.name		=	table.name;
+	filteredTable.data		=	(char***) calloc(table.numRows, sizeof(char***));
+
+	int columnNotFound=0; 	//se alguma coluna passado por parâmetro não for encontrada, não deve selecionar a tabela, default=false
+	int hasInvalidType=0;	//se alguma coluna de filtro (Ex: where coluna >= 5) for inválida
+
+	filteredTable.numCols=0;
+	
+	int printableCollums[99];
+	int printableRows[99];
+
+	int filterColumns[10]; //guarda a posição das colunas utilizadas na validação dos dados de filtro
+
+	/*Armazenam que linhas serão selecionadas (FILTRO)*/
+	if(filters!=NULL){
+		printf("Filters!=NULL\n");
+		Filter* filtersObj=calloc (1,sizeof(Filter));
+
+		char *end_token1=NULL;
+		int numberOfFilters=0;
+		char *token1 = strtok_r(filters, ",", &end_token1);
+
+
+
+		while(token1!=NULL){
+			char *end_token2=NULL;			
+			char *token2 = strtok_r(token1, " ", &end_token2);
+			
+			
+			int contAux=0;
+			while(token2!=NULL){
+				/*
+					contAux==0:
+						filter.column
+					contAux==1:
+						filter.typeOfFilter
+					contAux==2:
+						filter.value
+				*/
+
+				// printf("token2:%s\n", token2);
+				if(contAux==0){
+					filtersObj[numberOfFilters].column=(char*) calloc(strlen(token2)+1, sizeof(char));
+					filtersObj[numberOfFilters].column=token2;
+				}
+				else if(contAux==1){
+					filtersObj[numberOfFilters].typeOfFilter=(char*) calloc(strlen(token2)+1, sizeof(char));
+					filtersObj[numberOfFilters].typeOfFilter=token2;
+				}
+				else if(contAux==2){
+					filtersObj[numberOfFilters].value=(char*) calloc(strlen(token2)+1, sizeof(char));
+					filtersObj[numberOfFilters].value=token2;
+				}
+				token2 = strtok_r(NULL, " ", &end_token2);
+				contAux++;
+			}
+
+			token1 = strtok_r(NULL, ",", &end_token1);
+			numberOfFilters++;
+		}
+
+		/*
+			Valida se as colunas do filtro existem
+		*/
+		int contAux=0;
+		for(int i=0; i < numberOfFilters; i++){
+			int hasValidType=0;
+			for(int j=0; j<table.numCols; j++ ){
+				// printf("table.data[0][j]=%s\n",table.data[0][j]);
+				// printf("filtersObj[i].column=%s\n",filtersObj[i].column);
+				if(strstr(table.data[0][j],filtersObj[i].column)){
+					// printf("strstr\n%s", table.data[0][j]);
+					filtersObj[i].filteredColumn=j;
+					hasValidType=1;
+					contAux++;
+				}
+			}
+			if(!hasValidType){
+				hasInvalidType=1;
+				break;
+			}
+		}
+
+		if(!hasInvalidType){
+			// printf("Sem colunas invalidas!\n");
+			// printf("table.numRows=%i\n", table.numRows);
+
+
+			//empilhará todas as linhas que se enquadram com cada filtro (deverá ainda ter uma interseção para as operações)
+			int rawRowsToPrint[99];
+			int nLinesToVerify=0;
+			for(int i=1; i < table.numRows; i++){
+				for(int j=0; j < numberOfFilters; j++){
+					if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "int")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) > stringToInt(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								// printf("Linha para verificar: %i\n", rawRowsToPrint[nLinesToVerify]);
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) < stringToInt(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) >= stringToInt(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) <= stringToInt(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
+							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) == stringToInt(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else{
+							continue;
+						}
+					}
+
+					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "double")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) > stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) < stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) >= stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) <= stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
+							if(stringToDouble(table.data[i][filtersObj[j].filteredColumn]) == stringToDouble(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else{
+							continue;
+						}
+					}
+
+					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "float")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) > stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) < stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) >= stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) <= stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
+							if(stringToFloat(table.data[i][filtersObj[j].filteredColumn]) == stringToFloat(filtersObj[j].value)){
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
+							}
+						}else{
+							continue;
+						}
+					}
+
+					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "string")==0){
+						if(strcmp(filtersObj[j].typeOfFilter,"like")==0){
+							char* auxString = betweenSymbols(filtersObj[j].value,'\'','\'');
+							if(auxString[0]=='%' && auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(strstr(table.data[i][filtersObj[j].filteredColumn], auxString)){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(findInVector(auxString,table.data[i][filtersObj[j].filteredColumn])){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]=='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn])){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]!='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn])){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else{
+								continue;
+							}
+						}else if(strcmp(filtersObj[j].typeOfFilter,"&like")==0){
+							char* auxString = betweenSymbols(filtersObj[j].value,'\'','\'');
+							auxString=lowerCase(auxString);
+							if(auxString[0]=='%' && auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(strstr(lowerCase(table.data[i][filtersObj[j].filteredColumn]), auxString)){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[strlen(auxString)-1]=='%'){
+								auxString=removeCharsFromString(auxString, '%');
+								if(findInVector(auxString,lowerCase(table.data[i][filtersObj[j].filteredColumn]))){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]=='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,lowerCase(table.data[i][filtersObj[j].filteredColumn]))){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else if(auxString[0]!='%' && auxString[strlen(auxString)]=='\0'){
+								auxString=removeCharsFromString(auxString, '%');
+								findInVectorReverse(auxString,table.data[i][filtersObj[j].filteredColumn]);
+								if(findInVectorReverse(auxString,lowerCase(table.data[i][filtersObj[j].filteredColumn]))){
+									rawRowsToPrint[nLinesToVerify]=i;
+									nLinesToVerify++;
+								}
+							}else{
+								continue;
+							}
+																						
+						}
+					}
+				}
+			}
+			int cont=0;
+			contAux=0;
+			filteredTable.numRows=0;
+			// printf("LINES TO VERIFY: %i \n", nLinesToVerify);
+			if(nLinesToVerify!=1){
+				for(int i=1; i < nLinesToVerify + 1; i++){
+					/*
+						cont==numberOfFilters-1 
+						pois desconsideramos a primeira ocorrência de um valor que se repetirá 
+						(já que ainda não sabemos que ele irá se repetir o numero de vezes do filtro)
+					*/
+					if(cont==numberOfFilters-1){
+						printableRows[contAux]=rawRowsToPrint[i-1];
+						cyan();
+						printf("DEVE DELETAR A LINHA %i\n", printableRows[contAux]);
+						resetColor();
+						cont=0;
+						contAux++;
+					}
+					if(i!=0 && i!=nLinesToVerify){
+						if(rawRowsToPrint[i]==rawRowsToPrint[i-1]){
+							cont++;
+						}else{
+							cont=0;
+						}
+					}
+				}
+				filteredTable.numRows = contAux+1; //numero de linhas da tabela filtrada é igual ao numero de linhas filtradas
+			}else{
+				printableRows[0]=rawRowsToPrint[0];
+				filteredTable.numRows=2;
+			}
+		}else{
+			boldRed();
+			printf("Algumas colunas de filtro são inválidas!\n");
+			resetColor();
+		}
+	}else{
+		filteredTable.numRows=table.numRows;
+	}
+	/**/
+
+
+	/*Popula uma tabela com quais linhas e colunas serão mostradas*/
+	
+	
+	/*
+	for(int i=0; i<filteredTable.numRows; i++){
+		int cont=0;
+		filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+		// printf("643: filteredTable.numCols=%i\n", filteredTable.numCols);
+		for(int j=0; j<filteredTable.numCols; j++){
+			filteredTable.data[i][cont] = table.data[i][printableCollums[j]];
+			cont++;
+		}
+	}
+	*/
+
+	// filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+	// for(int j=0; j < filteredTable.numCols; j++){
+	// 	if(i==0){
+	// 		filteredTable.data[i][j] = table.data[i][j];
+	// 	}else{
+	// 		filteredTable.data[i][j] = table.data[printableRows[i-1]][j];
+	// 	}
+	// }
+
+	filteredTable.numCols = table.numCols;
+	int cont=0;
+	int lastLineChecked=0;
+	if(filteredTable.numRows != table.numRows){
+		printf("1102\n");
+		printf("filteredTable.numRows-1=%i\n", filteredTable.numRows-1);
+		for(int i=0; i < table.numRows; i++){
+			printf("i=%i\n", i);
+			if(i==0){
+				filteredTable.data[cont]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+				for(int j=0; j < filteredTable.numCols; j++){
+					printf("cont=%i\n", cont);
+					filteredTable.data[cont][j]=table.data[i][j];
+					printf("filteredTable.data[%i][%i]=%s\n",cont,j,filteredTable.data[cont][j]);
+				}
+				cont++;
+			}else{
+				int shouldPrint=1;
+				for(int j=0; j< filteredTable.numRows; j++){
+					if(i==printableRows[j]){
+						shouldPrint=0;
+					}
+				}
+				if(shouldPrint){
+					printf("Should print line %i\n", i);
+					filteredTable.data[cont]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+					for(int j=0; j < filteredTable.numCols; j++){
+						printf("cont=%i\n", cont);
+						filteredTable.data[cont][j]=table.data[i][j];
+						printf("filteredTable.data[%i][%i]=%s\n",cont,j,filteredTable.data[cont][j]);
+					}
+					cont++;
+				}
+			}
+		}
+		filteredTable.numRows=table.numRows-(filteredTable.numRows-1);
+		printf("SAIU 1117\n");
+	}else{
+		filteredTable=table;
+	}
+
+	/**/
+
+	boldCyan();
+	// printf("545 !columnNotFound=%i | !hasInvalidType=%i,\n",!columnNotFound, !hasInvalidType);
+
+	if(!columnNotFound && !hasInvalidType){
+		printTable(filteredTable);
+	}
+}
+
 void validateSelect(char* command){
 	boldCyan();
 	// printf("318\n");
@@ -822,6 +1263,66 @@ void validateSelect(char* command){
 	if(t.database!=NULL){
 		// printf("PathToFile:%s\n", pathToFile);
 		filterTable(collumns, t, filters);
+	}else{
+		boldRed();
+		printf("Você não selecionou nenhum banco de dados válido. Reescreva o comando. \n");
+		resetColor();
+	}
+	
+}
+
+void validateDeleteFrom(char* command){
+	boldCyan();
+	// printf("318\n");
+	resetColor();
+	char* commandTemp=(char*) calloc (strlen(command)+1, sizeof(char)); 
+	memcpy(commandTemp, command, strlen(command)+1);
+	// printf("Command: %s | ", command);
+	// printf("CommandTemp: %s\n\n", commandTemp);
+	boldCyan();
+	// printf("324\n");
+	resetColor();
+	
+	char *end_str=NULL;
+    char *token = strtok_r(command, " ", &end_str);
+
+	boldCyan();
+	// printf("331\n");
+	resetColor();
+
+	char** commands=(char**) calloc(20, sizeof(char**));
+	int cont=0;
+	while (token != NULL){
+		char *end_token=NULL;
+		commands[cont]=token;
+		token = strtok_r(NULL, " ", &end_str);
+		cont++;
+	}
+	boldCyan();
+	// printf("343\n");
+	resetColor();
+	char* collumns=NULL;
+	char* filters=NULL;
+	collumns=(char*) calloc (2, sizeof(char));
+	collumns="*";
+	if(strstr(commandTemp, "where")){
+		filters = malloc( strlen(betweenParenthesis(commandTemp))*sizeof(char)+sizeof(char));
+		filters = betweenParenthesis(commandTemp);
+		filters = removeSpacesAfterCommas(filters);
+	}
+	Table t = findTableInCommand(commandTemp);
+	char* pathToFile="dbs/";
+	if(t.database!=NULL){
+		//"dbs/ nomeDoBanco / nomeDaTabela .csv"
+		char* stringTemp=concat(pathToFile, concat(concat(t.database,"/"),t.name));
+		pathToFile=concat(stringTemp, ".csv");
+		t=csvToTable(pathToFile);
+	}
+
+
+	if(t.database!=NULL){
+		// printf("PathToFile:%s\n", pathToFile);
+		deleteFromTable(collumns, t, filters);
 	}else{
 		boldRed();
 		printf("Você não selecionou nenhum banco de dados válido. Reescreva o comando. \n");
@@ -1037,7 +1538,8 @@ int execute(char* command){
 
 	}else if(findInVector("drop database ", command)){
 		dropDatabase(command);
-
+	}else if(findInVector("delete from ", command)){
+		validateDeleteFrom(command);
 
 	}else if(findInVector("select ", command)){
 		printf("Selecting data from table\n");

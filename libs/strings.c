@@ -4,7 +4,33 @@
 #include<ctype.h>
 #include <inttypes.h> //funções para inteiros
 
-
+int findInVector(char* subvector, char* vector){
+	if (strlen(subvector) > strlen(vector)){
+		return 0;
+	}else{
+		for (int i=0; subvector[i] != '\0'; i++){
+			if(subvector[i] ==  vector[i]){
+				if (i == (int)strlen(subvector)-1) return 1;
+			}else{
+				return 0;
+			} 
+		}
+	}
+}
+int findInVectorReverse(char* subvector, char* vector){
+	if (strlen(subvector) > strlen(vector)){
+		return 0;
+	}else{
+		for (int i=0; i < (int) strlen(subvector)+1; i++){
+			if(subvector[strlen(subvector)+1-i] !=  vector[strlen(vector)+1-i]){
+				return 0;
+			}else{
+				continue;
+			} 
+		}
+		return 1;
+	}
+}
 
 char* stringTillChar(char* string, char c){
 	char* newString=NULL;
@@ -36,6 +62,8 @@ char* betweenSymbols(char* string, char symbol1, char symbol2){
 				newString[cont]=string[i];
 				cont++;
 			}else{
+				newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
+				newString[cont]='\0';
 				break;
 			}
 		}
@@ -51,7 +79,6 @@ char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
 	for(int i=0; token != NULL; i++) {
 		for(int j=0; j < (int)strlen(token)+1; j++){
 			m[i][j] = token[j];
-			printf("token:%s\n",token[j]);
 		}
 		token = strtok(NULL, caracteres);
 	}
@@ -71,13 +98,11 @@ char* wordInPositionAfterSeparations2(char* string, char* caracteres, int pos){
 	
 	int cont=0;
 	while(cont<pos) {
-		printf("token:%s\n",token);
 		token = strtok_r(NULL, caracteres, &endptr);
 		cont++;
 	}
 	char* word = malloc(strlen(token)*sizeof(char)+sizeof(char));
 	strcpy(word,token);
-	printf("word: %s\n", word);
 	return word;
 }
 
@@ -107,7 +132,8 @@ char* capitalize(char* string){
 }
 
 char* lowerCase(char* string){
-	char* lowerCaseString=string;
+	char* lowerCaseString = malloc (strlen(string)*sizeof(char)+sizeof(char));
+	
 	strcpy(lowerCaseString, string);
 	for(int i=0; i< (int)strlen(string)+1; i++){
 		lowerCaseString[i]=tolower(string[i]);
@@ -256,7 +282,6 @@ int isInFormat(char* type, char* string){
 		return 1;
 	} else if(strcmp(type, "date") == 0){
 		if((int)strlen(string) == 10){
-				printf("260\n");
 			if(howManyOcurrencesInString('/', string) == 2){
 				char *tempString = NULL;
 				int tempValue = 0;
@@ -296,7 +321,7 @@ int isInFormat(char* type, char* string){
 						return 1;
 					}
 				}
-				free(token);
+				// free(token);
 			} else{
 				return 0;
 			}
@@ -316,7 +341,7 @@ char* switchCommaToVerticalBar(char* string){
 		}
 	}
 	return stringNew;
-	free(stringNew);
+	// free(stringNew);
 }
 
 char* switchCommaToVerticalBarWithQMarks(char* string){
@@ -347,7 +372,7 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 		}
 	}
 	return stringNew;
-	free(stringNew);
+	// free(stringNew);
 }
 
 int isSubstringInString(char* string, char* subString){
@@ -360,10 +385,10 @@ int isSubstringInString(char* string, char* subString){
 	}
 	if (strcmp(validatedString,subString) == 0){
 		return 1;
-		free(validatedString);
+		// free(validatedString);
 	} else {
 		return 0;
-		free(validatedString);
+		// free(validatedString);
 	}
 }
 
@@ -406,8 +431,8 @@ char* getSubstringAfterSubstringInString(char* string, char* subString){
 			}	
 		}
 	}
-	free(validatedString);
-	free(subStringAfter);
+	// free(validatedString);
+	// free(subStringAfter);
 }
 
 char* invertString(char* string){
@@ -420,7 +445,21 @@ char* invertString(char* string){
 	return string;
 }
 
-char* removeSubStringFromString (char* subString, char* string){
+char* removeCharsFromString (char* string, char c){
+	char* newString=NULL;
+	int cont=0;
+	for(int i=0; i<(int) strlen(string); i++){
+		if(string[i]!=c){
+			newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
+			newString[cont]=string[i];
+			cont++;
+		}else{
+			continue;
+		}
+	}
+	newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
+	newString[cont]='\0';
+	return newString;
 }
 
 char stringToChar(char* string){
@@ -452,5 +491,5 @@ char* switchCharToBar(char caracter, char* string){
 		}
 	}
 	return stringNew;
-	free(stringNew);
+	// free(stringNew);
 }

@@ -12,10 +12,13 @@
 */
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos);
 int numberOfWords(char* string, char* caracteres);
+int findInVector(char* subvector, char* vector);
+int findInVectorReverse(char* subvector, char* vector);
 char* capitalize(char* string);
 char* lowerCase(char* string);
 char* betweenParenthesis(char* string);
 char* removeSpacesAfterCommas(char* string);
+char* removeCharsFromString (char* string, char c);
 int isInString(char* string, char caracter);
 char* wordInPositionAfterSeparations2(char* string, char* caracteres, int pos);
 char* stringTillChar(char* string, char c);
