@@ -465,11 +465,9 @@ void filterTable(char* columns, Table table, char* filters){
 			numberOfFilters++;
 		}
 
-		printf("numberOfFilters:%i\n", numberOfFilters);
 		/*
-			Valida se as colunas do filtro existem existem
+			Valida se as colunas do filtro existem
 		*/
-		
 		int contAux=0;
 		for(int i=0; i < numberOfFilters; i++){
 			int hasValidType=0;
@@ -493,63 +491,118 @@ void filterTable(char* columns, Table table, char* filters){
 			printf("Sem colunas invalidas!\n");
 			printf("table.numRows=%i\n", table.numRows);
 
+
+			//empilhará todas as linhas que se enquadram com cada filtro (deverá ainda ter uma interseção para as operações)
+			int rawRowsToPrint[99];
+			int nLinesToVerify=0;
 			for(int i=1; i < table.numRows; i++){
 				for(int j=0; j < numberOfFilters; j++){
 					if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "int")==0){
-						// printf("Deve aparecer na linha abaixo: %s\n", table.data[i][j]);
-						// printf("É inteiro: %d\n\n", stringToInt(table.data[i][j]));
 						if(strcmp(filtersObj[j].typeOfFilter,">")==0){
-							printf(">\n");
 							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) > stringToInt(filtersObj[j].value)){
-								printf("É PARA PRINTAR A LINHA %i\n",i);
+								rawRowsToPrint[nLinesToVerify]=i;
+								printf("Linha para verificar: %i\n", rawRowsToPrint[nLinesToVerify]);
+								nLinesToVerify++;
 							}
 						}else if(strcmp(filtersObj[j].typeOfFilter,"<")==0){
 							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) < stringToInt(filtersObj[j].value)){
-								printf("É PARA PRINTAR A LINHA %i\n",i);
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
 							}
-							printf("<\n");
 						}else if(strcmp(filtersObj[j].typeOfFilter,">=")==0){
 							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) >= stringToInt(filtersObj[j].value)){
-								printf("É PARA PRINTAR A LINHA %i\n",i);
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
 							}
-							printf(">=\n");
 						}else if(strcmp(filtersObj[j].typeOfFilter,"<=")==0){
 							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) <= stringToInt(filtersObj[j].value)){
-								printf("É PARA PRINTAR A LINHA %i\n",i);
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
 							}
-							printf("<=\n");
 						}else if(strcmp(filtersObj[j].typeOfFilter,"==")==0){
 							if(stringToInt(table.data[i][filtersObj[j].filteredColumn]) == stringToInt(filtersObj[j].value)){
-								printf("É PARA PRINTAR A LINHA %i\n",i);
+								rawRowsToPrint[nLinesToVerify]=i;
+								nLinesToVerify++;
 							}
-							printf("==\n");
 						}else{
 							continue;
 						}
 					}
-					// printf("STR TsILL CHAR parameter:%s\n",table.data[0][filterColumns[j]]);
-					// printf("STR TsILL CHAR:%s\n",stringTillChar(table.data[0][filterColumns[j]], ' '));
 				}
 			}
+			int cont=0;
+			contAux=0;
+			filteredTable.numRows=0;
+			printf("LINES TO VERIFY: %i \n", nLinesToVerify);
+			if(nLinesToVerify!=1){
+				for(int i=1; i < nLinesToVerify + 1; i++){
+					printf("536\n");
+					/*
+						cont==numberOfFilters-1 
+						pois desconsideramos a primeira ocorrência de um valor que se repetirá 
+						(já que ainda não sabemos que ele irá se repetir o numero de vezes do filtro)
+					*/
+					if(cont==numberOfFilters-1){
+						printableRows[contAux]=rawRowsToPrint[i-1];
+						cyan();
+						printf("DEVE PRINTAR A LINHA %i\n", printableRows[contAux]);
+						resetColor();
+						cont=0;
+						contAux++;
+					}
+					if(i!=0 && i!=nLinesToVerify){
+						if(rawRowsToPrint[i]==rawRowsToPrint[i-1]){
+							cont++;
+						}else{
+							cont=0;
+						}
+					}
+				}
+				filteredTable.numRows = contAux+1; //numero de linhas da tabela filtrada é igual ao numero de linhas filtradas
+			}else{
+				printableRows[0]=rawRowsToPrint[0];
+				filteredTable.numRows=2;
+			}
+			printf("filteredTable.numRows = %i\n", filteredTable.numRows);
 		}else{
-			printf("Algumas colunas de filtro são invalidas!\n");
+			boldRed();
+			printf("Algumas colunas de filtro são inválidas!\n");
+			resetColor();
 		}
 	}else{
 		filteredTable.numRows=table.numRows;
 	}
 	/**/
 
-	/*Mostram quais colunas serão mostradas*/
-	printf("498\n");
+	for(int i=0; i< filteredTable.numRows-1; i++){
+		printf("printableRows[%i]=%i\n",i,printableRows[i]);
+	}
+
+	/*Popula uma tabela com quais linhas e colunas serão mostradas*/
 	if(strcmp(columns, "*")==0){ //==0 significa que são iguais
-		filteredTable.numCols=table.numCols;
-		filteredTable=table;
+		filteredTable.numCols = table.numCols;
+		//filteredTable=table;
+		printf("TODAS AS COLUNAS\n");
+		if(filteredTable.numRows != table.numRows){
+			for(int i=0; i < filteredTable.numRows; i++){ 
+				filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+
+				for(int j=0; j < filteredTable.numCols; j++){
+					if(i==0){
+						filteredTable.data[i][j] = table.data[i][j];
+					}else{
+						printf("printableRows[%i]: %i\n", i, printableRows[i-1]);
+						filteredTable.data[i][j] = table.data[printableRows[i-1]][j];
+					}
+				}
+			}
+		}else{
+			filteredTable=table;
+		}
 	}else{
-		printf("503");
 		char *end_token=NULL;
 		char *token = strtok_r(columns, ",", &end_token);
 		
-		//OK
 		while(token!=NULL){
 			int columnFound=0;
 			for (int i=0; i < table.numCols; i++){
@@ -568,22 +621,34 @@ void filterTable(char* columns, Table table, char* filters){
 			}
 			token = strtok_r(NULL, ",", &end_token); 
 		}
-		//
-
-		//free(token);
 
 		if(!columnNotFound){
-			for(int i=0; i<table.numRows; i++){
-				int cont=0;
-				filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
-				printf("filteredTable.numCols=%i\n", filteredTable.numCols);
-				for(int j=0; j<filteredTable.numCols; j++){
-					//printf("446\n");
-					printf("table.data[%i][%i]=%s\n", i, printableCollums[j], table.data[i][printableCollums[j]]);
-					printf("table.data[0][0]=%s\n", table.data[0][0]);
-					filteredTable.data[i][cont]=table.data[i][printableCollums[j]];
-					printf("540: %s\n",filteredTable.data[i][cont]);
-					cont++;
+			if(filteredTable.numRows != table.numRows){
+				for(int i=0; i < filteredTable.numRows; i++){
+					int cont=0;
+					filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+					printf("filteredTable.numCols=%i\n", filteredTable.numCols);
+					for(int j=0; j<filteredTable.numCols; j++){
+						printf("table.data[%i][%i]=%s\n", i, printableCollums[j], table.data[i][printableCollums[j]]);
+						printf("table.data[0][0]=%s\n", table.data[0][0]);
+						filteredTable.data[i][cont]=table.data[i][printableCollums[j]];
+						printf("540: %s\n",filteredTable.data[i][cont]);
+						cont++;
+					}
+				}
+			}else{
+				for(int i=0; i<filteredTable.numRows; i++){
+					int cont=0;
+					filteredTable.data[i]=(char**) calloc(filteredTable.numCols, sizeof(char**));
+					printf("filteredTable.numCols=%i\n", filteredTable.numCols);
+					for(int j=0; j<filteredTable.numCols; j++){
+						if(i==0){
+							filteredTable.data[i][cont] = table.data[i][printableCollums[j]];
+						}else{
+							filteredTable.data[i][cont] = table.data[printableRows[i]][printableCollums[j]];
+						}
+						cont++;
+					}
 				}
 			}
 		}else{
