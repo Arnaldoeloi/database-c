@@ -256,8 +256,8 @@ int isInFormat(char* type, char* string){
 		return 1;
 	} else if(strcmp(type, "date") == 0){
 		if((int)strlen(string) == 10){
+				printf("260\n");
 			if(howManyOcurrencesInString('/', string) == 2){
-
 				char *tempString = NULL;
 				int tempValue = 0;
 				char *endToken = NULL;

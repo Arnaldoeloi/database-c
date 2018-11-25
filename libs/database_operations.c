@@ -294,13 +294,15 @@ void listAllTables(){
 }
 
 void insertIntoTable(Table table){
-	char* path = (char*)calloc(5,sizeof(char));
+	char* path = (char*)calloc(255,sizeof(char));
+	
 	path = "dbs/";
 	path = concat(path, table.database);
 	path = concat(path, "/");
 	path = concat(path, table.name);
 	path = concat(path, ".csv");
 	FILE *file = fopen(path, "a+");
+
 	if(file == NULL){
 		fclose(file);
 		boldRed();
