@@ -29,7 +29,7 @@ void createDatabase(Database db);
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
-void insertIntoTable();
+void insertIntoTable(Table table);
 void selectFromTable();
 /*
 *   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
@@ -37,13 +37,13 @@ void selectFromTable();
 char* concat(char *string1, char *string2);
 void listAllTables();
 /*
-*   Remove a existência de um banco de dados por 
+*   Remove a existência de um banco de dados por
 *   meio de um comando
 *
 *   Recebe
 *   @string
 */
-void dropDatabase(char* string);
+void dropDatabase(Database database);
 /*
 *   Remove a existência de uma tabela por meio de
 *   um comando
@@ -51,7 +51,7 @@ void dropDatabase(char* string);
 *   Recebe
 *   @string
 */
-void dropTable(char* string);
+void dropTable(Table table);
 /*
 *   Reescreve uma table existênte por outra criada
 *

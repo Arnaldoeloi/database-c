@@ -1,1 +1,7 @@
-int id pk|string name|string matricula|date join_date|date birthday
+int id pk|string name|string matricula
+1|Tonhao|20180062020
+3|Derick|102143988128791938194
+4|Arnaldo|12031904121412!
+5|Matheus|1
+6|Aluno|99999999999999999999999999999999999999999999
+7|profissor|9999999999999999

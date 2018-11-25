@@ -239,9 +239,9 @@ int isInFormat(char* type, char* string){
 		}
 	} else if(strcmp(type, "float") == 0){
 
-		if (howManyOcurrencesInString(',', string) <= 1){
+		if (howManyOcurrencesInString('.', string) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
-				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 44 || string[i] == 'f')){
+				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 46 || string[i] == 'f')){
 					if(i == (int)strlen(string)-1){
 						return 1;
 					} else{
@@ -256,9 +256,9 @@ int isInFormat(char* type, char* string){
 		}
 	} else if(strcmp(type, "double") == 0){
 		
-		if (howManyOcurrencesInString(',', string) <= 1){
+		if (howManyOcurrencesInString('.', string) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
-				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 44 || string[i] == 'd')){
+				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 46 || string[i] == 'd')){
 					if(i == (int)strlen(string)-1){
 						return 1;
 					} else{

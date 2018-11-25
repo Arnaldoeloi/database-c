@@ -337,18 +337,51 @@ Table findTableInCommand(char* command){
 	char* database=NULL;
 	char* table=NULL;
 	char* commandCpy=malloc(sizeof(char)*strlen(command)+sizeof(char));
-
+	/*
+	*	commandCpy será uma variável do tipo string que copia o valor contido
+	*	na posição da memória de command, pois a função strtok_r altera o valor
+	*	contino na posição da memória da string que é recebida
+	*/
 	memcpy(commandCpy, command, strlen(command) + 1);
 	commandCpy[strlen(command)+1]='\0';
+	/*
+	*	O laço de repetição checa se há um ponto antes do parêntesis, se sim
+	*	a condição boleana isPointBeforeParenthesis será verdadeira. Se existir
+	*	 um ponto antes do parêntesis, o endtoken e token vai cortar
+	* 	o comando para depois dos parênteses garantindo que pontos dentro do 
+	*	parênteses não sejam reconhecidos como nomes de bancos e tabelas.
+	*/
+	int isPointBeforeParenthesis=0;
+	for(int i=0; i < (int)strlen(commandCpy);i++){
+		if(commandCpy[i] == '.'){
+			isPointBeforeParenthesis = 1;
+			break;
+		}
+		if(commandCpy[i] == '('){
+			break;
+		}
+	}
+	char* endtoken = NULL;
+	char* token = "";
+	if (isPointBeforeParenthesis == 0){
+		char* token2 = strtok_r(commandCpy, ")", &endtoken);
+		token = concat(token, token2);
+		token = strtok_r(NULL, ")", &endtoken);
+	} else{
+		token = concat(token, commandCpy);
+	}
+	/*
+	*	O laço de estrutura vai ler o token até encontrar um ponto
+	*/
 	int pointFound=0;
-	for(int i=0; i < (int)strlen(commandCpy); i++){
-		if(commandCpy[i]=='.'){
+	for(int i=0; i < (int)strlen(token); i++){
+		if(token[i]=='.'){
 			pointFound=1;
 			//for regressivo até achar o espaço, irá printar ao contrário
 			int cont=0;
-			for(int j=i-1; commandCpy[j]!=' '; j--){
+			for(int j=i-1; token[j]!=' '; j--){
 				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
-				database[cont]=commandCpy[j];
+				database[cont]=token[j];
 				cont++;
 			}
 			database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
@@ -357,9 +390,9 @@ Table findTableInCommand(char* command){
 
 
 			//for progressivo até achar o espaço
-			for(int j=i+1; (commandCpy[j]!=' ' && commandCpy[j]!='\0'); j++){
+			for(int j=i+1; (token[j]!=' ' && token[j]!='\0'); j++){
 				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
-				table[cont]=commandCpy[j];
+				table[cont]=token[j];
 				cont++;
 			}
 			table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
@@ -369,7 +402,10 @@ Table findTableInCommand(char* command){
 	}
 	boldRed();
 	resetColor();
-	//Se o comando estiver inválido, retornará uma tabela com campos database e table = NULL
+	/*
+	*	Caso um ponto não tenha sido encontrado, será retornado uma tabela 
+	*	com nome da database e table = NULL
+	*/
 	if(!pointFound){
 		boldGreen();
 		resetColor();
@@ -377,16 +413,24 @@ Table findTableInCommand(char* command){
 		Table nullable;
 		nullable.name=NULL;
 		nullable.database=NULL;
+		free(commandCpy);
 		return nullable;
+	/*
+	*	Caso um ponto tenha sido encontrado, será retornado uma tabela com
+	*	os valores do nome da database e table iguais aos encontrados pela
+	*	função
+	*/
+	} else{
+		int cont=0;
+		database=invertString(database);
+		
+		t.name=(char*) malloc((int)strlen(table)*sizeof(char)+sizeof(char));
+		t.database=(char*) malloc((int)strlen(database)*sizeof(char)+sizeof(char));
+		t.name=table;
+		t.database=database;
+		free(commandCpy);
+		return t;
 	}
-	int cont=0;
-	database=invertString(database);
-
-	t.name=(char*) malloc((int)strlen(table)*sizeof(char)+sizeof(char));
-	t.database=(char*) malloc((int)strlen(database)*sizeof(char)+sizeof(char));
-	t.name=table;
-	t.database=database;
-	return t;
 }	
 /*
 *	Irá receber só as colunas que irá printar,
@@ -1354,27 +1398,27 @@ void validateInsertIntoTable(char* command){
 				} else{
 					string = switchCommaToVerticalBarWithQMarks(betweenParenthesis(removeSpacesAfterCommas(command)));
 				}
-				//Conta o número de colunas que há na string
+				//	Conta o número de colunas que há na string
 				for(int i=0;i < (int)strlen(string) ;i++){
 					if (string[i] == '|'){
 						table.numCols++;
 					}
 				}
-				//Define o valor para table.data[0][x], onde x é a posição na coluna;
+				//	Define o valor para table.data[0][x], onde x é a posição na coluna;
 				table.data  = (char***)calloc(1,sizeof(char**));
 				table.data[0] = (char**)calloc(table.numCols,sizeof(char*));
 
-				//Define o valor do token e a sua quebra que será usado pela função strok_r;
+				//	Define o valor do token e a sua quebra que será usado pela função strok_r;
 				char *end_token=NULL;
 				char *token = strtok_r(string, "|", &end_token);
 				
-				//Transforma o valor de table.data[0][i] no valor do token
+				//	Transforma o valor de table.data[0][i] no valor do token
 				for (int i=0; i < table.numCols; i++){;
 					table.data[0][i] = token;
 					token = strtok_r(NULL, "|", &end_token); // Define token como o valor após '|'
 				}
-				//free(token);
-				//Chama a função void insertIntoTable mandando a table criada.
+				//	free(token);
+				//	Chama a função void insertIntoTable mandando a table criada.
 				insertIntoTable(table);
 
 			}else {
@@ -1392,6 +1436,32 @@ void validateInsertIntoTable(char* command){
 		printf("Erro: Nao ha \"Into\" no comando digitado\n");
 		resetColor();
 	}
+}
+
+void validateDropDatabase(char* string){
+
+	Database database;
+	database.name = wordInPositionAfterSeparations2(string, " ", 2);
+
+	dropDatabase(database);
+}
+
+void validateDropTable(char* string){
+	if (isInString(string, '.') == 1){
+		Table table;
+		/*
+		*	findTableInCommand, retorna o nome e o banco de dados 
+		*	de uma table por meio de um comando
+		*/
+		table = findTableInCommand(string);
+
+		dropTable(table);
+	} else{
+		boldRed();
+		printf("Erro na abertura, a tabela nao foi especificada");
+		resetColor();
+	}
+	
 }
 
 Table commandCreateTabletoTable(char* command){
@@ -1448,7 +1518,7 @@ char* input(){
 	string[i-1]='\0';
 	return string;
 }
-
+// | INSERIR COMENTÁRIO | INSERIR COMENTÁRIO | INSERIR COMENTÁRIO |
 int execute(char* command);
 
 void externalInstructions(char* command){
@@ -1523,9 +1593,12 @@ int execute(char* command){
 
 		validateCreateTable(command);
 
-	}else if(findInVector("alter table ", command)){
-		printf("Altering table\n");
-
+	}else if(findInVector("test", command)){
+		//AAAAAAAAAAAAAA	
+		printf("TESTE\n");
+		Table table = findTableInCommand("insert penis into (3, minhabunda.com, Arnaldo) penis.rola");
+		printf("banco:  %s.%s\n", table.database, table.name);
+		//AAAAAAAAAAAAAA
 		
 	}else if(findInVector("insert ", command)){
 		printf("Inserting into table\n");
@@ -1533,7 +1606,7 @@ int execute(char* command){
 
 
 	}else if(findInVector("drop table ", command)){
-		dropTable(command);
+		validateDropTable(command);
 
 
 	}else if(findInVector("drop database ", command)){
@@ -1575,3 +1648,37 @@ Database commandToDatabase(char* command){
 	}
 	return db;
 }
+
+// Table t;
+// 	char* database=NULL;
+// 	char* table=NULL;
+// 	char* commandCpy=malloc(sizeof(char)*strlen(command)+sizeof(char));
+
+// 	memcpy(commandCpy, command, strlen(command) + 1);
+// 	commandCpy[strlen(command)+1]='\0';
+// 	int pointFound=0;
+// 	for(int i=0; i < (int)strlen(commandCpy); i++){
+// 		if(commandCpy[i]=='.'){
+// 			pointFound=1;
+// 			//for regressivo até achar o espaço, irá printar ao contrário
+// 			int cont=0;
+// 			for(int j=i-1; commandCpy[j]!=' '; j--){
+// 				database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
+// 				database[cont]=commandCpy[j];
+// 				cont++;
+// 			}
+// 			database=(char*) realloc(database, cont*sizeof(char)+sizeof(char));
+// 			database[cont]='\0';
+// 			cont=0;
+
+
+// 			//for progressivo até achar o espaço
+// 			for(int j=i+1; (commandCpy[j]!=' ' && commandCpy[j]!='\0'); j++){
+// 				table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
+// 				table[cont]=commandCpy[j];
+// 				cont++;
+// 			}
+// 			table=(char*) realloc(table, cont*sizeof(char)+sizeof(char));
+// 			table[cont]='\0';
+// 			break;
+// 		}
