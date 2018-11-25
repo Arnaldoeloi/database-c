@@ -372,36 +372,34 @@ void insertIntoTable(Table table){
 
 void deleteFromTable();
 
-void dropDatabase(char* string){
+void dropDatabase(Database database){
 	FILE *file;
 	
 	int ret; // Retorna 1 para caso o arquivo tenha sido removido com sucesso;
 	char* path = "rm -r dbs/";
-	path = concat(path, wordInPositionAfterSeparations(string," ", 2));
+	path = concat(path, database.name);
 	ret = system(path);
 
 	if(ret==0){
-		yellow();
-		printf("Caminho %s foi removido com sucesso\n", path);
+		boldGreen();
+		printf("O banco de dados em %s foi removido com sucesso\n", path);
 		resetColor();
 	} else{
 		boldRed();
-		printf("O caminho %s não foi encontrado\n", path);
+		printf("O banco de dados em %s não foi encontrado\n", path);
 		resetColor();
 	}
 
 }
 
-void dropTable(char* string){
-	FILE *file;
+void dropTable(Table table){
 	
 	int ret; // Retorna 1 para caso o arquivo tenha sido removido com sucesso;
 
 	char* path = "rm dbs/";
-	path = concat(path, wordInPositionAfterSeparations(string," ", 2));
-	//	Substitui os pontos presente na string, que serve para separar database
-	//	de table, por barras.
-	path = switchCharToBar('.',path);
+	path = concat(path, table.database);
+	path = concat(path, "/");
+	path = concat(path, table.name);
 	path = concat(path, ".csv");
 
 	ret = system(path);
@@ -429,13 +427,15 @@ void replaceTable(Table table){
 
 	file = fopen(path, "w");
 
-	for(int i=0; i < table.numCols; i++){
-		if(i == table.numCols-1){
-			fprintf(file,"%s",table.data[0][i]);
-			fprintf(file, "%s", "\n");
-		} else{
-			table.data[0][i] = concat(table.data[0][i], "|");
-			fprintf(file,"%s",table.data[0][i]);
+	for(int j=0; j < table.numRows; j++){
+		for(int i=0; i < table.numCols; i++){
+			if(i == table.numCols-1){
+				fprintf(file,"%s",table.data[j][i]);
+				fprintf(file, "%s", "\n");
+			} else{
+				table.data[0][i] = concat(table.data[j][i], "|");
+				fprintf(file,"%s",table.data[j][i]);
+			}
 		}
 	}
 

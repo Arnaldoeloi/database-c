@@ -51,7 +51,25 @@ int execute(char* command);
 *	0->não encontrou;
 */
 int findInVector(char* subvector, char* vector);
-
-
+/*
+*	Responsável por ler uma string e trata-la de forma
+*   que essa fique escrita em uma Table com seu nome.
+*   Depois a struct Table é posta na função dropDatabase
+*
+*	Recebe
+*	@char* string
+*	
+*/
+void validateDropDatabase(char* string);
+/*
+*	Responsável por ler uma string e trata-la de forma
+*   que essa fique escrita em uma Table com seu nome e 
+*   banco que está contida.
+*   Depois a struct Table é posta na função dropDatabase
+*
+*	Recebe
+*	@char* string
+*/
+void validateDropTable(char* string);
 
 int numberOfWords(char* string, char* caracteres);

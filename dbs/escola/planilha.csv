@@ -9,3 +9,4 @@ int id pk|string nome|string email|string senha|double salario
 8|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|205
 9|Arnaldo Barbosa|arnaldeloi2@gmail.com|senha|905
 10|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|130.000
+11|Derick|nathanael.derick@gmail.com|derickzinhofofo|2.500
