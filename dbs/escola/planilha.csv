@@ -1,11 +1,11 @@
 int id pk|string nome|string email|string senha|double salario
 1|Arnaldo Barbosa|arnaldeloi2@gmail.com|senha|20.000
 2|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|300
-3|Arnaldo Barbosa|arnaldeloi2@gmail.com|senha|40.00
-4|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|750
-5|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|750
-6|Arnaldo Barbosa|arnaldeloi2@gmail.com|senha|209.00
-7|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|104
-8|Matheus Ricardo|meudeusricardo@gmail.com|leagueoflegends|205
-9|Arnaldo Barbosa|arnaldeloi2@gmail.com|senha|905
-11|Derick|nathanael.derick@gmail.com|derickzinhofofo|2.500
+3|William Jose|williamjose@hotmail.com|senha123|400.00
+4|Nathanael Derick|derick@outlook.com|suenia|750
+5|Marjory Prof|profmarjory@ufrn.imd.com|itpptp|5000.00
+6|Charles Prof|profcharles@ufrn.imd.com|ufrnthegame|5000.00
+7|Ana Prof|profana@ufrn.imd.com|itpptp2|5000.00
+8|Otavio Prof|profotavio@ifrn.edu.com|laravel|4500.00
+9|Bill Gates|billgates@microsoft.com|appleisbetter|100000000
+11|Derick|nathanael.derick@gmail.com|derickzinho|2.500

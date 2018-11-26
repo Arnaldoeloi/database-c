@@ -3,6 +3,8 @@
 #include<stdio.h>
 #include<ctype.h>
 #include <inttypes.h> //funções para inteiros
+#include "database_types.h"
+
 
 int findInVector(char* subvector, char* vector){
 	if (strlen(subvector) > strlen(vector)){
@@ -493,3 +495,59 @@ char* switchCharToBar(char caracter, char* string){
 	return stringNew;
 	// free(stringNew);
 }
+
+// Filter extractFilterFromToken(char* token){
+// 	Filter filter;
+// 	if(howManyOcurrencesInString(' ', token)>=1){
+
+// 		char *end_token2=NULL;			
+// 		char *token2 = strtok_r(token, " ", &end_token2);
+		
+		
+// 		int contAux=0;
+// 		while(token2!=NULL){
+// 			/*
+// 				contAux==0:
+// 					filter.column
+// 				contAux==1:
+// 					filter.typeOfFilter
+// 				contAux==2:
+// 					filter.value
+// 			*/
+
+// 			// printf("token2:%s\n", token2);
+// 			if(contAux==0){
+// 				filter.column=(char*) calloc(strlen(token2)+1, sizeof(char));
+// 				filter.column=token2;
+// 			}
+// 			else if(contAux==1){
+// 				filter.typeOfFilter=(char*) calloc(strlen(token2)+1, sizeof(char));
+// 				filter.typeOfFilter=token2;
+// 			}
+// 			else if(contAux==2){
+// 				filter.value=(char*) calloc(strlen(token2)+1, sizeof(char));
+// 				filter.value=token2;
+// 			}
+// 			token2 = strtok_r(NULL, " ", &end_token2);
+// 			contAux++;
+// 		}
+// 		return filter;
+// 	}else{
+// 		int cont1=0;
+// 		int cont2=0;
+// 		int cont3=0;
+		
+// 		int columnSet=0;
+// 		int typeSet=0;
+// 		int valueSet=0;
+
+// 		int cont=0;
+// 		for(int i=0; i< (int) strlen(token); i++){
+// 			if(!columnSet){
+// 				if(token[i]==' ' || token[i]=='>' || token[i]=='<' || token[i]=='='){
+
+// 				}
+// 			}
+// 		}
+// 	}
+// }
