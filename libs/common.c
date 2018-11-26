@@ -1624,6 +1624,9 @@ int execute(char* command){
 
 	}else if(findInVector("import ", command)){
 		externalInstructions(command);
+	}else if(findInVector("clear", command)){
+		system("clear");
+		commandVersion();
 	}
 	else{
 		boldRed();
