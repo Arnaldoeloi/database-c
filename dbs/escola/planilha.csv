@@ -8,4 +8,3 @@ int id pk|string nome|string email|string senha|double salario
 7|Ana Prof|profana@ufrn.imd.com|itpptp2|5000.00
 8|Otavio Prof|profotavio@ifrn.edu.com|laravel|4500.00
 9|Bill Gates|billgates@microsoft.com|appleisbetter|100000000
-11|Derick|nathanael.derick@gmail.com|derickzinho|2.500

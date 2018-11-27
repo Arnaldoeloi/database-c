@@ -7,7 +7,16 @@
 
 
 void commandVersion(){
-	printf("Alpha 1.0.0 All rights reserved to Go Horse enterprise LTDA (The Original One).\n");
+	
+	printf("\n");
+	printf("\t  ____         _   _                     \n");
+	printf("\t / ___| ___   | | | | ___  _ __ ___  ___ \n");
+	printf("\t| |  _ / _ \\  | |_| |/ _ \\| '__/ __|/ _ \\\n");
+	printf("\t| |_| | (_) | |  _  | (_) | |  \\__ \\  __/\n");
+	printf("\t \\____|\\___/  |_| |_|\\___/|_|  |___/\\___| SGBD\n\n");
+											
+
+	printf("Beta 3.0.0 All rights reserved to Go Horse enterprise LTDA (The Original One).\n");
 	printf("Digite ");
 	yellow();
 	printf("help ");
@@ -117,6 +126,24 @@ void printHelp(){
 	printf("\tdelete database ");
 	yellow();
 	printf("nome_do_banco\n\n");
+	resetColor();
+
+	printf("##Deletar ");
+	printf("uma tabela:\n\n ");
+	green();
+	printf("\tdelete table ");
+	yellow();
+	printf("nome_do_banco.nome_da_tabela\n\n");
+	resetColor();
+	
+	printf("##Deletar ");
+	printf("um (ou mais) dado(s) de uma tabela:\n\n ");
+	green();
+	printf("\tdelete from ");
+	yellow();
+	printf("nome_do_banco.nome_da_tabela ");
+	green();
+	printf("where (id == 4)\n\n");
 	resetColor();
 
 	printf("Digite ");
