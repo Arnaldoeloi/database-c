@@ -71,5 +71,3 @@ void validateDropDatabase(char* string);
 *	@char* string
 */
 void validateDropTable(char* string);
-
-int numberOfWords(char* string, char* caracteres);

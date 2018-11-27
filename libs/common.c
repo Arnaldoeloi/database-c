@@ -21,11 +21,10 @@ void commandVersion(){
 
 void printHelp(){
 	printf("-----------------\\-------//----------------------------------\\-------//-----------------\n");
-	printf("Criar um novo ");
-	yellow();
+	printf("## Criar um novo ");
 	printf("banco de dados ");
-	resetColor();
 	printf("(disponivel na pasta 'dbs/'):\n\n");
+
 	green();
 	printf("\tcreate database ");
 	magenta();
@@ -34,15 +33,14 @@ void printHelp(){
 
 	printf("\n\n");
 
-	printf("Criar uma nova ");
-	yellow();
+	printf("## Criar uma nova ");
 	printf("tabela ");
-	resetColor();
 	printf("(disponivel na pasta 'dbs/");
 	yellow();
 	printf("nome_do_banco ");
 	resetColor();
 	printf("'):\n\n");
+
 	green();
 	printf("\tcreate table ");
 	magenta();
@@ -70,14 +68,57 @@ void printHelp(){
 
 	printf("\n\n");
 
+	printf("## Selecionar os dados de uma ");
 	yellow();
-	printf("Listar ");
+	printf("tabela \n");
+	printf("\n*Obs: o where e seus parametros são opcionais; existem para filtragem.");
 	resetColor();
+	green();
+	printf("\n\n\tselect ");
+	
+	cyan();
+	printf("[");
+	resetColor;
+
+	magenta();
+	printf("*");
+	
+	cyan();
+	printf(" ou ");
+	resetColor;
+	
+	magenta();
+	printf("(nome_coluna, nome_coluna2, nome_coluna3...)");
+
+	cyan();
+	printf("] ");
+	resetColor;
+	
+	yellow();
+	printf("where (");
+	resetColor();
+	
+	magenta();
+	printf("nome_coluna >= valor, nome_coluna2 like '%%string%%', ...");
+
+	yellow();
+	printf(")\n\n");
+	resetColor();
+
+	printf("##Listar ");
 	printf("todas as tabelas:\n\n ");
 	green();
 	printf("\tlist tables\n\n");
-
 	resetColor();
+	
+	printf("##Deletar ");
+	printf("um banco de dados:\n\n ");
+	green();
+	printf("\tdelete database ");
+	yellow();
+	printf("nome_do_banco\n\n");
+	resetColor();
+
 	printf("Digite ");
 	boldRed();
 	printf("exit ");
@@ -1449,7 +1490,7 @@ void validateInsertIntoTable(char* command){
 void validateDropDatabase(char* string){
 
 	Database database;
-	database.name = wordInPositionAfterSeparations2(string, " ", 2);
+	database.name = wordInPositionAfterSeparations(string, " ", 2);
 
 	dropDatabase(database);
 }
@@ -1644,7 +1685,7 @@ int execute(char* command){
 
 Database commandToDatabase(char* command){
 	Database db;
-	db.name = wordInPositionAfterSeparations2(command, " ", 2);
+	db.name = wordInPositionAfterSeparations(command, " ", 2);
 
 	for(int i=(int)strlen(db.name); i > (int) strlen(db.name); i--){
 		if(db.name[i]==' '){

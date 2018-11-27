@@ -74,26 +74,6 @@ char* betweenSymbols(char* string, char symbol1, char symbol2){
 }
 
 char* wordInPositionAfterSeparations(char* string, char* caracteres, int pos){
-	char m[100][strlen(string)]; 
-	char *token;
-	token = strtok(string, caracteres);
-	
-	for(int i=0; token != NULL; i++) {
-		for(int j=0; j < (int)strlen(token)+1; j++){
-			m[i][j] = token[j];
-		}
-		token = strtok(NULL, caracteres);
-	}
-
-	char* word=NULL;
-	for (int i = 0; i < (int)strlen(m[pos])+1; i++){
-		word=realloc(word, i*sizeof(char)+sizeof(char));
-		word[i]=m[pos][i];
-	}
-	return word;
-}
-
-char* wordInPositionAfterSeparations2(char* string, char* caracteres, int pos){
 	char *token;
 	char* endptr=NULL;
 	token = strtok_r(string, caracteres, &endptr);
@@ -106,22 +86,6 @@ char* wordInPositionAfterSeparations2(char* string, char* caracteres, int pos){
 	char* word = malloc(strlen(token)*sizeof(char)+sizeof(char));
 	strcpy(word,token);
 	return word;
-}
-
-int numberOfWords(char* string, char* caracteres){
-	char m[100][strlen(string)];
-	char *token;
-	int nWords;
-	token = strtok(string, caracteres);
-	
-	for(int i=0; token != NULL; i++) {
-		for(int j=0; j < (int)strlen(token); j++){
-			m[i][j] = token[j];
-		}
-		token = strtok(NULL, caracteres);
-		nWords = i + 1;
-	}
-	return nWords;
 }
 
 char* capitalize(char* string){
@@ -375,7 +339,6 @@ char* switchCommaToVerticalBarWithQMarks(char* string){
 		}
 	}
 	return stringNew;
-	// free(stringNew);
 }
 
 int isSubstringInString(char* string, char* subString){
@@ -434,8 +397,6 @@ char* getSubstringAfterSubstringInString(char* string, char* subString){
 			}	
 		}
 	}
-	// free(validatedString);
-	// free(subStringAfter);
 }
 
 char* invertString(char* string){
@@ -494,7 +455,6 @@ char* switchCharToBar(char caracter, char* string){
 		}
 	}
 	return stringNew;
-	// free(stringNew);
 }
 
 // Filter extractFilterFromToken(char* token){
