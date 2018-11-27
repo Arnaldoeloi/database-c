@@ -214,16 +214,17 @@ int stringToInt(char* string){
 	return intValue;
 }
 
-int howManyOcurrencesInString(char caracter, char* string){
-	int ocurrences = 0;
-	for(int i=0; i < (int)strlen(string); i++){
-		if (string[i] == caracter){
-			ocurrences++;
-			continue;
-		}
+int howManyOcurrencesInString(char caracter, char* string, int ocurrences){
+	if (*string == caracter){
+		return howManyOcurrencesInString(caracter, string+1, ocurrences+1);
 	}
-	return ocurrences;
+	else if(*string == '\0'){
+		return ocurrences;
+	}else{
+		return howManyOcurrencesInString(caracter, string+1, ocurrences);
+	}
 }
+
 
 int isInFormat(char* type, char* string){
 	if (strcmp(type, "int") == 0){
@@ -241,7 +242,7 @@ int isInFormat(char* type, char* string){
 		}
 	} else if(strcmp(type, "float") == 0){
 
-		if (howManyOcurrencesInString('.', string) <= 1){
+		if (howManyOcurrencesInString('.', string, 0) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
 				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 46 || string[i] == 'f')){
 					if(i == (int)strlen(string)-1){
@@ -258,7 +259,7 @@ int isInFormat(char* type, char* string){
 		}
 	} else if(strcmp(type, "double") == 0){
 		
-		if (howManyOcurrencesInString('.', string) <= 1){
+		if (howManyOcurrencesInString('.', string, 0) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
 				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 46 || string[i] == 'd')){
 					if(i == (int)strlen(string)-1){
@@ -284,7 +285,7 @@ int isInFormat(char* type, char* string){
 		return 1;
 	} else if(strcmp(type, "date") == 0){
 		if((int)strlen(string) == 10){
-			if(howManyOcurrencesInString('/', string) == 2){
+			if(howManyOcurrencesInString('/', string, 0) == 2){
 				char *tempString = NULL;
 				int tempValue = 0;
 				char *endToken = NULL;

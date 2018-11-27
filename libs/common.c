@@ -1317,7 +1317,9 @@ void validateSelect(char* command){
 		t=csvToTable(pathToFile);
 	}
 
-
+	/*
+	*	Se o banco é válido com os dados passados por parâmetro
+	*/
 	if(t.database!=NULL){
 		filterTable(collumns, t, filters);
 	}else{
