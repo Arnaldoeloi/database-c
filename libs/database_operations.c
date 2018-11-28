@@ -454,7 +454,8 @@ void replaceTable(Table table){
 			}
 		}
 	}
-	boldGreen();
-	printf("Dado deletado com sucesso.\n");
 	fclose(file);
+	boldGreen();
+	printf("Tabela com as alterações salva com sucesso.\n");
+	resetColor();
 }

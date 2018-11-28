@@ -1417,6 +1417,194 @@ void validateSelect(char* command){
 	
 }
 
+void alterTable(Table table, char* typeOfAlter, char* newColumn, char* typeOfColumn){
+
+	if(typeOfColumn!=NULL && strcmp(typeOfAlter, "add")==0){
+		int columnAlreadyExists=0;
+		for(int i=0; i<table.numCols;i++){
+			if(strstr(table.data[0][i],newColumn)){
+				columnAlreadyExists=1;
+				boldRed();
+				printf("Uma coluna com esse nome já existe na tabela, tente outro.\n");
+				resetColor();
+				break;
+			}
+		}
+		if(!columnAlreadyExists){
+			for(int i=0; i<table.numRows;i++){
+				if(i==0){
+					typeOfColumn=concat(typeOfColumn," ");
+					typeOfColumn=concat(typeOfColumn, newColumn);
+					table.data[0][table.numCols]=(char*)malloc(strlen(typeOfColumn)*sizeof(char));
+					printf("1431\n");
+					table.data[0][table.numCols]=typeOfColumn;
+				}else{
+					table.data[i][table.numCols]=(char*)malloc(2*sizeof(char));
+					printf("1435\n");
+					table.data[i][table.numCols]=" ";
+				}
+			}
+			table.numCols+=1;
+			replaceTable(table);
+			printTable(table);
+		}	
+	}else if(typeOfColumn==NULL && strcmp(typeOfAlter, "remove")==0){
+		printf("adsads\n");
+		Table tableWoColumn;
+		int columnExists=0;
+		int addressToRemove=0;
+
+		printf("table.numCols: %d\n",table.numCols);
+		for(int i=0; i< table.numCols;i++){
+			printf("TESTE\n");
+			if(strstr(table.data[0][i],newColumn)){
+				columnExists=1;
+				printf("i: %d\n", i);
+				addressToRemove = i;
+				printf("addressToRemove: %d\n", addressToRemove);
+				printf("Address: %d\n", addressToRemove);
+				break;
+			}
+
+		}
+		
+		if(columnExists){
+			int cont=0;
+			tableWoColumn.data=(char***) calloc(tableWoColumn.numCols-1, sizeof(char**));
+			for(int i=0; i<table.numRows;i++){
+				cont=0;
+				tableWoColumn.data[i]=(char**) calloc(tableWoColumn.numCols-1, sizeof(char**));
+				for(int j=0; j<table.numCols;j++){
+					if(j!=addressToRemove){
+						printf("i=%d|j=%d\n",i,j);
+						tableWoColumn.data[i][cont]=(char*) calloc(strlen(table.data[i][j])+1, sizeof(char));
+						tableWoColumn.data[i][cont] = table.data[i][j];
+						cont++;
+						printf("tableWoColumn.data[i][cont] = %s\n",tableWoColumn.data[i][cont]);
+					}
+				}
+			}
+			tableWoColumn.numCols--;
+			printTable(tableWoColumn);
+		}else{
+			boldRed();
+			printf("Uma coluna com esse nome não existe na tabela. Tente outro.\n");
+			resetColor();
+		}
+
+
+
+	}else if(typeOfColumn!=NULL && strcmp(typeOfAlter, "alter")==0){
+		int columnExists=0;
+		int toAlterAdress;
+		for(int i=0; i<table.numCols;i++){
+			if(strstr(table.data[0][i],newColumn)){
+				columnExists=1;
+				toAlterAdress=i;
+				break;
+			}
+		}
+		if(!columnExists){
+			boldRed();
+			printf("Uma coluna com esse nome não existe na tabela, tente outro.\n");
+			resetColor();
+		}else{
+			for(int i=0; i<table.numRows;i++){
+				if(i==0){
+					typeOfColumn=concat(typeOfColumn," ");
+					typeOfColumn=concat(typeOfColumn, newColumn);
+					table.data[0][toAlterAdress]=typeOfColumn;
+				}else{
+					table.data[i][toAlterAdress]=" ";
+				}
+			}
+			replaceTable(table);
+			printTable(table);
+		}
+	}
+
+}
+
+void validateAlterTable(char* command){
+	char* commandTemp=(char*) calloc (strlen(command)+1, sizeof(char)); 
+	memcpy(commandTemp, command, strlen(command)+1);
+
+	char *end_str=NULL;
+    char *token = strtok_r(command, ". ", &end_str);
+	char* pathToFile="dbs/";
+
+	char* typeOfAlter=NULL;
+	char* newColumn=NULL;
+	char* typeOfColumn=NULL;
+
+	int cont=0;
+	while (token != NULL){
+		/*	
+			cont=0:
+				alter
+			cont=1:
+				table
+			cont=2:
+				table.database
+			cont=3:
+				table.name
+			cont=4:
+				add
+			cont=5:
+				coluna
+			cont=6:
+				tipo
+			cont=7:
+				NULL
+		*/
+		if(cont==2){
+			pathToFile=concat(pathToFile, token);
+		}else if(cont==3){
+			pathToFile=concat(pathToFile, "/");
+			pathToFile=concat(pathToFile, token);
+			pathToFile=concat(pathToFile, ".csv");
+		}else if(cont==4){
+			typeOfAlter=(char*) realloc (typeOfAlter, strlen(token)*sizeof(char)+sizeof(char)); 
+			strcpy(typeOfAlter, token);
+		}else if(cont==5){
+			newColumn=(char*) realloc (newColumn, strlen(token)*sizeof(char)+sizeof(char)); 
+			strcpy(newColumn, token);
+		}else if(cont==6){
+			typeOfColumn=(char*) realloc (typeOfColumn, strlen(token)*sizeof(char)+sizeof(char)); 
+			strcpy(typeOfColumn, token);
+		}
+		char* pathToFile=(char*) calloc (strlen(token), sizeof(char)); 
+		token = strtok_r(NULL, ". ", &end_str);
+		cont++;
+	}
+
+	Table table = csvToTable(pathToFile);
+	if(table.database!=NULL && table.name!=NULL){
+		if(typeOfColumn!=NULL){
+			if(!hasValidType(concat(typeOfColumn," "))){
+				boldRed();
+				printf("O novo tipo da coluna é inválido. Tente outro.\n");
+				resetColor();
+			}else{
+				alterTable(table, typeOfAlter, newColumn, typeOfColumn);
+			}
+		}else{
+			if(strcmp(typeOfAlter,"remove")==0){
+				printf("alter\n");
+				alterTable(table, typeOfAlter, newColumn, typeOfColumn);
+			}else{
+				boldRed();
+				printf("Erro de sintaxe.\n");
+				resetColor();
+			}
+		}
+	}else{
+		boldRed();
+		printf("Tabela inválida! Você digitou corretamente?\n");
+		resetColor();
+	}
+}
+
 void validateDeleteFrom(char* command){
 	boldCyan();
 	resetColor();
@@ -1688,12 +1876,12 @@ int execute(char* command){
 
 		validateCreateTable(command);
 
-	}else if(findInVector("test", command)){
-		
+	}else if(findInVector("alter table ", command)){
+		validateAlterTable(command);
+
 	}else if(findInVector("insert ", command)){
 		printf("Inserting into table\n");
 		validateInsertIntoTable(command);
-
 
 	}else if(findInVector("drop table ", command)){
 		validateDropTable(command);
@@ -1707,12 +1895,12 @@ int execute(char* command){
 	}else if(findInVector("select ", command)){
 		validateSelect(command);
 
-
 	}else if(findInVector("list tables", command)){
 		listAllTables();
 
 	}else if(findInVector("import ", command)){
 		externalInstructions(command);
+
 	}else if(findInVector("clear", command)){
 		system("clear");
 		commandVersion();
