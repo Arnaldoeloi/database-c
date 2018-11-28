@@ -375,10 +375,14 @@ void deleteFromTable();
 void dropDatabase(Database database){
 	FILE *file;
 	
-	int ret; // Retorna 1 para caso o arquivo tenha sido removido com sucesso;
-	char* path = "rm -r dbs/";
+	int ret; // Retorna 0 para caso o arquivo tenha sido removido com sucesso;
+	/*
+	*	o path é escrito com iniciais "rm -r dbs/" pois é usado a função system()
+	*	para deletar o arquivo, por isso o rm -r, no início.
+	*/
+	char* path = "rm -r dbs/"; // deleta recursivamente todos os arquivos presentes em dbs/
 	path = concat(path, database.name);
-	ret = system(path);
+	ret = system(path); // system retorna um inteiro 0 para sucesso e 1 para falha.
 
 	if(ret==0){
 		boldGreen();
@@ -394,15 +398,19 @@ void dropDatabase(Database database){
 
 void dropTable(Table table){
 	
-	int ret; // Retorna 1 para caso o arquivo tenha sido removido com sucesso;
+	int ret; //	Retorna 1 para caso o arquivo tenha sido removido com sucesso;
 
-	char* path = "rm dbs/";
+	/*
+	*	o path é escrito com iniciais "rm dbs/" pois é usado a função system()
+	*	para deletar o arquivo, por isso o rm, no início.
+	*/
+	char* path = "rm dbs/"; //	O commando rm em system() remove um arquivo ou diretório.
 	path = concat(path, table.database);
 	path = concat(path, "/");
 	path = concat(path, table.name);
 	path = concat(path, ".csv");
 
-	ret = system(path);
+	ret = system(path);//  system retorna o inteiro 0 para sucesso e 1 para falha.
 
 	if(ret==0){
 		yellow();
@@ -419,13 +427,22 @@ void dropTable(Table table){
 void replaceTable(Table table){
 	FILE *file;
 	char* path = "dbs/";
-	
+	/*
+	*	Concatena o nome do path a ser recebido pelo file utilziando
+	*	o nome da table.database e table.name
+	*/
 	path = concat(path, table.database);
 	path = concat(path, "/");
 	path = concat(path, table.name);
 	path = concat(path, ".csv");
-
+	/*
+	*	Substitui o arquivo com o caminho anterior pelo novo
+	*/
 	file = fopen(path, "w");
+	/*
+	*	O laço de repetição vai escrever os dados no arquivo colocando
+	*	'|' no final de cada item, com exceção do último.
+	*/
 	for(int i=0; i < table.numRows; i++){
 		for(int j=0; j < table.numCols; j++){
 			if(j == table.numCols-1){
@@ -433,7 +450,6 @@ void replaceTable(Table table){
 				fprintf(file, "%s", "\n");
 			} else{
 				fprintf(file,"%s",table.data[i][j]);
-				fprintf(file,"|");
 			}
 		}
 	}

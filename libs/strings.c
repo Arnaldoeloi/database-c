@@ -19,6 +19,7 @@ int findInVector(char* subvector, char* vector){
 		}
 	}
 }
+
 int findInVectorReverse(char* subvector, char* vector){
 	if (strlen(subvector) > strlen(vector)){
 		return 0;
@@ -49,6 +50,7 @@ char* stringTillChar(char* string, char c){
 	
 	return newString;
 }
+
 char* betweenSymbols(char* string, char symbol1, char symbol2){
 	char* newString=NULL;
 	int cont=0;
@@ -188,7 +190,6 @@ int howManyOcurrencesInString(char caracter, char* string, int ocurrences){
 		return howManyOcurrencesInString(caracter, string+1, ocurrences);
 	}
 }
-
 
 int isInFormat(char* type, char* string){
 	if (strcmp(type, "int") == 0){

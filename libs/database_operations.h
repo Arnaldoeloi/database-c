@@ -29,6 +29,9 @@ void createDatabase(Database db);
 void deleteFromTable();
 void alterTableModify();
 void alterTableDrop();
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 void insertIntoTable(Table table);
 void selectFromTable();
 /*

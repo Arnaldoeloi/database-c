@@ -169,39 +169,52 @@ void printTable(Table table){
 	cyan();
 	printf(".\n");
 	resetColor();
+	/*
+	*	O laço de repetição serve para printar da primeira até a última linha
+	*/
 	for(int i=0; i < table.numRows; i++){
 
-		int* biggestStringOfCols = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
-
+		/*
+		*	O laço a seguir encontra a maior string presente em uma coluna, e a armazena
+		* 	em um vetor de strings.
+		*/
+		int* biggestStringOfACol = (int*)calloc(strlen(table.data[i][0]),sizeof(int*));
 		for(int j=0; j < table.numCols; j++){
 
 			for (int k=0; k < table.numRows; k++){
 
-				if ((int)strlen(table.data[k][j]) < biggestStringOfCols[j]){
+				if ((int)strlen(table.data[k][j]) < biggestStringOfACol[j]){
 					continue;
 				} else{
-					biggestStringOfCols[j] = (int)strlen(table.data[k][j]);
+					biggestStringOfACol[j] = (int)strlen(table.data[k][j]);
 				}
 			}
 		}
-		
+		/*
+		*	se for o primeiro laço (i = 0) será printado duas linha para separar
+		*	os itens de suas declaracões de tipos, uma em cima e outra em baixo,
+		*	deixando mais fácil ao usuário de visualizar. Depois será printado as
+		*	declarações do tipos das colunas.
+		*/
 		if(i==0){
+			//	Printa uma linha sem valores
 			for(int j=0; j < table.numCols+1; j++){
 				resetColor();
 				printf("|");
 				if (j == table.numCols){
 					continue;
 				} else{
-					int z = biggestStringOfCols[j];
-					for (int k=0; k < z ;k++){
+					int z = biggestStringOfACol[j];
+					for (int k=0; k < z ;k++){	//Adiciona '=' até atingir o número da maior linha de uma coluna
 						printf("=");
 					}
 			    }
 
 			}
+			//	Printa uma linha com a declaração dos tipos da coluna
 			printf("\n");
 			for(int j=0; j < table.numCols; j++){
-				int z = biggestStringOfCols[j];
+				int z = biggestStringOfACol[j];
 				resetColor();
 				printf("|");
 				magenta();
@@ -209,11 +222,13 @@ void printTable(Table table){
 				if (j == table.numCols-1){
 					continue;
 				} else{
+					//Adiciona espaços até atingir o número da maior linha de uma coluna
 					for (int k=0; k < z - (int)strlen(table.data[i][j]);k++){
 						printf(" ");
 					}
 			    }
 			}
+			//	Printa uma linha sem valores
 			printf("\n");
 			for(int j=0; j < table.numCols+1; j++){
 				resetColor();
@@ -221,20 +236,25 @@ void printTable(Table table){
 				if (j == table.numCols){
 					continue;
 				} else{
-					int z = biggestStringOfCols[j];
+					int z = biggestStringOfACol[j];
 					for (int k=0; k < z ;k++){
 						printf("=");
 					}
 			    }
 
 			}
+		/*
+		*	Caso não seja a primeira interação do laço, apenas as linhas, onde
+		*	terão seus espaços, após sua escrita, adicionados baseados no tamannho
+		*	da maior string de sua coluna.
+		*/
 		}else{
 			for(int j=0; j < table.numCols; j++){
 				resetColor();
 				printf("|");
 				yellow();
 				printf("%s", table.data[i][j]);
-				int z = biggestStringOfCols[j];
+				int z = biggestStringOfACol[j];
 				if (j == table.numCols-1){
 					continue;
 				} else{
@@ -252,8 +272,6 @@ void printTable(Table table){
 	}
 	resetColor();
 }
-
-
 
 //a função receberá uma string e retornará 1 se é um tipo válido ou 0, caso não seja
 int hasValidType(char* data){
@@ -505,6 +523,7 @@ Table findTableInCommand(char* command){
 		return t;
 	}
 }	
+
 /*
 *	Irá receber só as colunas que irá printar,
 *	a tabela filtrada e

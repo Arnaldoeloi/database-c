@@ -7,6 +7,9 @@
 */
 void commandVersion();
 
+/*
+*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*/
 void printTable(Table table);
 
 /*
@@ -17,7 +20,6 @@ void printTable(Table table);
 *	@char* string lida
 */
 char* input();
-
 
 /*
 *	Responsável por executar o
@@ -35,7 +37,6 @@ char* input();
 */
 int execute(char* command);
 
-
 /*
 *	Responsável por descobrir se
 *	um vetor está contido no outro
@@ -51,6 +52,7 @@ int execute(char* command);
 *	0->não encontrou;
 */
 int findInVector(char* subvector, char* vector);
+
 /*
 *	Responsável por ler uma string e trata-la de forma
 *   que essa fique escrita em uma Table com seu nome.
@@ -61,6 +63,7 @@ int findInVector(char* subvector, char* vector);
 *	
 */
 void validateDropDatabase(char* string);
+
 /*
 *	Responsável por ler uma string e trata-la de forma
 *   que essa fique escrita em uma Table com seu nome e 
