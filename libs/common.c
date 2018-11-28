@@ -1418,7 +1418,6 @@ void validateSelect(char* command){
 }
 
 void alterTable(Table table, char* typeOfAlter, char* newColumn, char* typeOfColumn){
-
 	if(typeOfColumn!=NULL && strcmp(typeOfAlter, "add")==0){
 		int columnAlreadyExists=0;
 		for(int i=0; i<table.numCols;i++){
@@ -1436,11 +1435,9 @@ void alterTable(Table table, char* typeOfAlter, char* newColumn, char* typeOfCol
 					typeOfColumn=concat(typeOfColumn," ");
 					typeOfColumn=concat(typeOfColumn, newColumn);
 					table.data[0][table.numCols]=(char*)malloc(strlen(typeOfColumn)*sizeof(char));
-					printf("1431\n");
 					table.data[0][table.numCols]=typeOfColumn;
 				}else{
 					table.data[i][table.numCols]=(char*)malloc(2*sizeof(char));
-					printf("1435\n");
 					table.data[i][table.numCols]=" ";
 				}
 			}
@@ -1448,44 +1445,58 @@ void alterTable(Table table, char* typeOfAlter, char* newColumn, char* typeOfCol
 			replaceTable(table);
 			printTable(table);
 		}	
-	}else if(typeOfColumn==NULL && strcmp(typeOfAlter, "remove")==0){
-		printf("adsads\n");
+	}else if(strcmp(typeOfAlter, "remove")==0){
 		Table tableWoColumn;
 		int columnExists=0;
 		int addressToRemove=0;
 
-		printf("table.numCols: %d\n",table.numCols);
+		tableWoColumn.database=table.database;
+		tableWoColumn.name=table.name;
+		tableWoColumn.numCols=table.numCols;
+		tableWoColumn.numRows=table.numRows;
+
+		/*
+		*	Verifica a existência da coluna a ser removida e guarda se endereço
+		*	(uma coluna só pode ser removida se existir, pois.)
+		*/
 		for(int i=0; i< table.numCols;i++){
-			printf("TESTE\n");
 			if(strstr(table.data[0][i],newColumn)){
 				columnExists=1;
-				printf("i: %d\n", i);
 				addressToRemove = i;
-				printf("addressToRemove: %d\n", addressToRemove);
-				printf("Address: %d\n", addressToRemove);
 				break;
 			}
-
 		}
-		
+
+		/*
+		*	Cria uma nova tabela copiando todas os dados da antiga, exceto os da coluna armazenada
+		*/		
 		if(columnExists){
 			int cont=0;
-			tableWoColumn.data=(char***) calloc(tableWoColumn.numCols-1, sizeof(char**));
+			tableWoColumn.data=(char***) calloc(1, sizeof(char***));
+			tableWoColumn.data[0]=(char**) calloc(1, sizeof(char**));
+
 			for(int i=0; i<table.numRows;i++){
 				cont=0;
 				tableWoColumn.data[i]=(char**) calloc(tableWoColumn.numCols-1, sizeof(char**));
 				for(int j=0; j<table.numCols;j++){
 					if(j!=addressToRemove){
-						printf("i=%d|j=%d\n",i,j);
-						tableWoColumn.data[i][cont]=(char*) calloc(strlen(table.data[i][j])+1, sizeof(char));
-						tableWoColumn.data[i][cont] = table.data[i][j];
+						tableWoColumn.data[i][cont]=(char*) malloc(strlen(table.data[i][j])*sizeof(char));
+						memcpy(tableWoColumn.data[i][cont], table.data[i][j],strlen(table.data[i][j])+1);
 						cont++;
-						printf("tableWoColumn.data[i][cont] = %s\n",tableWoColumn.data[i][cont]);
 					}
 				}
 			}
-			tableWoColumn.numCols--;
+			tableWoColumn.numCols--; //agora, a tabela tem uma coluna a menos
+			
+			/*
+			*	Printa a tabela sem a coluna removida
+			*/
 			printTable(tableWoColumn);
+
+			/*
+			*	Substitui no arquivo a tabela sem a coluna removida
+			*/
+			replaceTable(tableWoColumn);
 		}else{
 			boldRed();
 			printf("Uma coluna com esse nome não existe na tabela. Tente outro.\n");
@@ -1580,8 +1591,9 @@ void validateAlterTable(char* command){
 
 	Table table = csvToTable(pathToFile);
 	if(table.database!=NULL && table.name!=NULL){
-		if(typeOfColumn!=NULL){
+		if(typeOfColumn!=NULL && strcmp(typeOfAlter,"remove")!=0){
 			if(!hasValidType(concat(typeOfColumn," "))){
+				printf("concat(typeOfColumn," ")=%s\n", concat(typeOfColumn," "));
 				boldRed();
 				printf("O novo tipo da coluna é inválido. Tente outro.\n");
 				resetColor();
@@ -1590,7 +1602,6 @@ void validateAlterTable(char* command){
 			}
 		}else{
 			if(strcmp(typeOfAlter,"remove")==0){
-				printf("alter\n");
 				alterTable(table, typeOfAlter, newColumn, typeOfColumn);
 			}else{
 				boldRed();

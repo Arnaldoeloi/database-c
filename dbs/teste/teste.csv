@@ -1,8 +1,8 @@
-int id pk|string name|string password|int coluna|string coluna|string coluna|string coluna
-1|priscila|hob123| | | | 
-2|derick|carro| | | | 
-3|carro|aviao| | | | 
-4|carro|lancha| | | | 
-10|Karol|Pamanha| | | | 
-6|dasd|desde| | | | 
-7|suenia|cavalo| | | | 
+int id pk|string name|string senha
+1|priscila|hob123
+2|derick|carro
+3|carro|aviao
+4|carro|lancha
+10|Karol|Pamanha
+6|dasd|desde
+7|suenia|cavalo

@@ -1,1 +1,6 @@
-select * from escola.planilha where (nome like '%a') ;
+select * from teste.teste ;
+alter table teste.teste add coluna string ;
+select * from teste.teste ;
+alter table teste.teste alter coluna int ;
+select * from teste.teste ;
+alter table teste.teste remove coluna ;
