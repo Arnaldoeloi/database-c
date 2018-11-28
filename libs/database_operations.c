@@ -450,6 +450,7 @@ void replaceTable(Table table){
 				fprintf(file, "%s", "\n");
 			} else{
 				fprintf(file,"%s",table.data[i][j]);
+				fprintf(file, "|");
 			}
 		}
 	}
