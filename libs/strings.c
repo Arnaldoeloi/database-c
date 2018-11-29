@@ -21,18 +21,20 @@ int findInVector(char* subvector, char* vector){
 }
 
 int findInVectorReverse(char* subvector, char* vector){
-	if (strlen(subvector) > strlen(vector)){
+	/*
+	*	Se a string menor cabe dentro da maior
+	*/
+	if (strlen(vector) < strlen(subvector)){
 		return 0;
-	}else{
-		for (int i=0; i < (int) strlen(subvector)+1; i++){
-			if(subvector[strlen(subvector)+1-i] !=  vector[strlen(vector)+1-i]){
-				return 0;
-			}else{
-				continue;
-			} 
-		}
-		return 1;
-	}
+	} 
+	
+	/*
+	*	strcmp retorna false se são iguais e true se são diferentes.
+	*	Comparamos fazendo um 'shift' na string maior de comparação,
+	*	passando seu início mais a frente a fim de ambas serem iguais(ou diferentes)
+	*	para as últimas posições de caractere
+	*/
+    return !strcmp (vector+ (strlen(vector) - strlen(subvector)), subvector); 
 }
 
 char* stringTillChar(char* string, char c){
