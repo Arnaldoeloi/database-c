@@ -145,6 +145,58 @@ void printHelp(){
 	green();
 	printf("where (id == 4)\n\n");
 	resetColor();
+	
+	printf("##Inserir ");
+	printf("um dado em uma tabela:\n\n ");
+	green();
+	printf("\tinsert  ");
+	yellow();
+	printf(" (id, nome, ...)  ");
+	green();
+	printf("into nome_do_banco.nome_da_tabela \n\n");
+	resetColor();
+	
+	printf("##Adicionar ");
+	printf("uma coluna de uma tabela:\n\n ");
+	green();
+	printf("\talter table ");
+	yellow();
+	printf("nome_do_banco.nome_da_tabela ");
+	green();
+	printf("add");
+	yellow();
+	printf(" nome_da_coluna ");
+	printf(" tipo_da_coluna\n\n ");
+	green();
+	resetColor();
+	
+	
+	printf("##Remover ");
+	printf("uma coluna de uma tabela:\n\n ");
+	green();
+	printf("\talter table ");
+	yellow();
+	printf("nome_do_banco.nome_da_tabela ");
+	green();
+	printf("remove");
+	yellow();
+	printf(" nome_da_coluna\n\n ");
+	green();
+	resetColor();
+	
+	printf("##Alterar ");
+	printf("o tipo de uma coluna de uma tabela:\n\n ");
+	green();
+	printf("\talter table ");
+	yellow();
+	printf("nome_do_banco.nome_da_tabela ");
+	green();
+	printf("alter");
+	yellow();
+	printf(" nome_da_coluna");
+	printf(" novo_tipo\n\n ");
+	green();
+	resetColor();
 
 	printf("Digite ");
 	boldRed();
