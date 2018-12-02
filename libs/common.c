@@ -1732,22 +1732,22 @@ void validateInsertIntoTable(char* command){
 	}
 }
 
-void validateDropDatabase(char* string){
+void validateDropDatabase(char* command){
 
 	Database database;
-	database.name = wordInPositionAfterSeparations(string, " ", 2);
+	database.name = wordInPositionAfterSeparations(command, " ", 2);
 
 	dropDatabase(database);
 }
 
-void validateDropTable(char* string){
-	if (isInString(string, '.') == 1){
+void validateDropTable(char* command){
+	if (isInString(command, '.') == 1){
 		Table table;
 		/*
 		*	findTableInCommand, retorna o nome e o banco de dados 
 		*	de uma table por meio de um comando
 		*/
-		table = findTableInCommand(string);
+		table = findTableInCommand(command);
 
 		dropTable(table);
 	} else{
@@ -1812,7 +1812,7 @@ char* input(){
 	string[i-1]='\0';
 	return string;
 }
-// | INSERIR COMENTÁRIO | INSERIR COMENTÁRIO | INSERIR COMENTÁRIO |
+// O execute é declarado duas vezes pois a função externalInstructions chama execute e vice-versa
 int execute(char* command);
 
 void externalInstructions(char* command){

@@ -8,7 +8,138 @@
 void commandVersion();
 
 /*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*   Printa os comandos utilizados no sistema.
+*
+*/
+void printHelp();
+
+/*
+*   Recebe uma string e verifica se nela há presença dos tipos reservados pelo sistema.
+*
+*   Recebe
+*   @char* data
+*
+*   Retorna
+*   @int Se tem ou não um tipo válido
+*/
+int hasValidType(char* data);
+
+/*
+*   Recebe uma string e valida se deve ou não executar o comando
+*   de criar um arquivo de tabela.
+*
+*   Recebe
+*   @char* command
+*
+*   Retorna
+*   @int Se pôde ou não criar um arquivo de tabela
+*/
+int validateCreateTable(char* command);
+
+/*
+*   Recebe uma string e encontra uma tabela nela (com o banco e nome, apenas).
+*
+*   Recebe
+*   @char* command
+*
+*   Retorna
+*   @Table com apenas o database e o name preenchidos
+*/
+Table findTableInCommand(char* command);
+
+/*
+*   Recebe duas strings e uma tabela e printa uma tabela com os filtros
+*   aplicados. 
+*
+*   Recebe
+*   @char* columns
+*   @char* filteres
+*   @Table table
+*/
+void filterTable(char* columns, Table table, char* filters);
+
+/*
+*   Recebe duas strings e uma tabela e deleta uma tabela com os filtros
+*   aplicados. 
+*
+*   Recebe
+*   @char* columns
+*   @char* filteres
+*   @Table table
+*/
+void deleteFromTable(char* columns, Table table, char* filters);
+
+/*
+*   Valida o comando de selecionar uma tabela e chama a filterTable()
+*   caso o comando esteja de acordo com o esperado.
+*
+*   Recebe
+*   @char* command
+*/
+void validateSelect(char* command);
+
+/*
+*   Altera a coluna de uma tabela (remove, adiciona ou muda seu tipo)
+*
+*   Recebe
+*   @Table table
+*   @char* typeOfAlter
+*   @char* newColumn
+*   @char* typeOfColumn
+*/
+void alterTable(Table table, char* typeOfAlter, char* newColumn, char* typeOfColumn);
+
+/*
+*   Valida o comando de alterar uma coluna de uma tabela e chama a alterTable()
+*   caso o comando esteja de acordo com o esperado.
+*
+*   Recebe
+*   @char* command
+*/
+void validateAlterTable(char* command);
+
+/*
+*   Valida o comando de deletar uma tabela e chama a deleteFromTable()
+*   caso o comando esteja de acordo com o esperado.
+*
+*   Recebe
+*   @char* command
+*/
+void validateDeleteFrom(char* command);
+
+/*
+*   Valida o comando de inserir dado em uma tabela e chama
+*   a função de escrita em arquivo para inserir um novo dado em uma
+*   tabela.
+*
+*   Recebe
+*   @char* command
+*/
+void validateInsertIntoTable(char* command);
+
+/*
+*   Valida o comando de excluir um banco de dados chama
+*   a função de delete recursivo de arquivos.
+*
+*   Recebe
+*   @char* command
+*/
+void validateDropDatabase(char* command);
+
+/*
+*   Valida o comando de excluir uma tabela e chama
+*   a função de delete de arquivo.
+*
+*   Recebe
+*   @char* command
+*/
+void validateDropTable(char* command);
+
+/*
+*   Printa todos dados de uma tabela em formato de uma tabela.
+*
+*   Recebe
+*   @Table table
 */
 void printTable(Table table);
 
@@ -38,39 +169,33 @@ char* input();
 int execute(char* command);
 
 /*
-*	Responsável por descobrir se
-*	um vetor está contido no outro
+*	Responsável por ler uma string e encontrar e ler, linha à linha,
+*   um arquivo e executar as funções desse arquivo dentro do sistema.
 *
 *	Recebe
-*	@char* subvector	
-*	@char* vector
-*	
-*	Retorna
-*	@int 
-*	
-*	1->encontrou;
-*	0->não encontrou;
+*	@char* command
 */
-int findInVector(char* subvector, char* vector);
+void externalInstructions(char* command);
 
 /*
-*	Responsável por ler uma string e trata-la de forma
-*   que essa fique escrita em uma Table com seu nome.
-*   Depois a struct Table é posta na função dropDatabase
+*	Responsável por ler uma string e encontrar a struct
+*   de um banco na string.
 *
 *	Recebe
-*	@char* string
-*	
+*	@char* command
+*
+*   Retorna
+*   @Database 
 */
-void validateDropDatabase(char* string);
+Database commandToDatabase(char* command);
 
 /*
-*	Responsável por ler uma string e trata-la de forma
-*   que essa fique escrita em uma Table com seu nome e 
-*   banco que está contida.
-*   Depois a struct Table é posta na função dropDatabase
+*   Responsável por retornar uma tabela de um comando de criação de tabela
 *
-*	Recebe
-*	@char* string
+*   Recebe
+*   @char* commmand 
+*
+*   Retorna
+*   @Table
 */
-void validateDropTable(char* string);
+Table commandCreateTabletoTable(char* command);
