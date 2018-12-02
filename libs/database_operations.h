@@ -3,62 +3,89 @@
 
 /*
 *   Recebe um caminho para um arquivo .csv depois
-*    retorna um struct do tipo Table
+*   retorna um struct do tipo Table
 *
 *   Recebe
-*   @string
+*   @char*
 */
 Table csvToTable(char* pathToFile);
 /*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*
 */
 Database commandToDatabase(char* command);
 /*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*   Recebe um caminho para um arquivo .cs, depois
+*   retorna um inteiro com a quantidade de linhas
+*   na tabela do banco.
+*
+*   Recebe
+*   @char* pathToFile
+*
+*   Retorna
+*   @int   
 */
 int countRowsInCsv(char* pathToFile);
 void selectFromTable();
 /*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
+*   Recebe uma tabela e cria um arquivo .csv dentro
+*   de um banco
+*   
+*   Recebe
+*   @Table table
 */
 void createTable(Table table);
 /*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
-*/
-void createDatabase(Database db);
-void deleteFromTable();
-void alterTableModify();
-void alterTableDrop();
-/*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
-*/
-void insertIntoTable(Table table);
-void selectFromTable();
-/*
-*   | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI | INSERIR COMENTÁRIO AQUI |
-*/
-char* concat(char *string1, char *string2);
-void listAllTables();
-/*
-*   Remove a existência de um banco de dados por
-*   meio de um comando
+*   Recebe uma struct Database e cria uma pasta que
+*   funciona como um banco
 *
 *   Recebe
-*   @string
+*   @Database db
+*/
+void createDatabase(Database db);
+/*
+*   Recebe uma struct do tipo Table e insere o dado
+*   contido em uma tabela .csv
+*   
+*   Recebe
+*   @Table table
+*/
+void insertIntoTable(Table table);
+/*
+*   Concatena duas strings, colocando a segunda logo
+*   após o final da primeira. Também realoca o espaço
+*   na memória da primeira string
+*   
+*   Recebe
+*   @char* string1
+*   @char* string2
+*/
+char* concat(char *string1, char *string2);
+/*
+*   Lista todas as tabelas e seus respectivos bancos
+*   onde estão inseridas
+*/
+void listAllTables();
+/*
+*   Recebe uma struct do tipo Database e deleta um
+*   banco de dados contindo no caminho especificado.
+*
+*   Recebe
+*   @Database database
 */
 void dropDatabase(Database database);
 /*
-*   Remove a existência de uma tabela por meio de
-*   um comando
+*   Recebe uma struct do tipo Table e deleta um
+*   arquivo .csv contindo no caminho especificado.
 *
 *   Recebe
-*   @string
+*   @Table table
 */
 void dropTable(Table table);
 /*
-*   Reescreve uma table existênte por outra criada
+*   Recebe uma table e Reescreve um arquivo .csv 
+*   existênte por outra criada a partir dessa table
 *
 *   Recebe
-*   @Table
+*   @Table table
 */
 void replaceTable(Table table);

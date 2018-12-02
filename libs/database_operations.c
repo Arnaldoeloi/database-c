@@ -6,6 +6,7 @@
 #include "colors.h"
 
 //Bibliotecas de arquivos
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -102,11 +103,6 @@ void createTable(Table table){
 
 	}
 }
-
-void deleteFromTable();
-void alterTableModify();
-void alterTableDrop();
-void selectFromTable();
 
 int countRowsInCsv(char* pathToFile){
 	int rows=0;
@@ -369,8 +365,6 @@ void insertIntoTable(Table table){
 	}
 
 }
-
-void deleteFromTable();
 
 void dropDatabase(Database database){
 	FILE *file;
