@@ -566,16 +566,14 @@ void filterTable(char* columns, Table table, char* filters){
 			char *end_token2=NULL;			
 			char *token2 = strtok_r(token1, " ", &end_token2);
 			
-			
+			//countAux é um contador auxiliar usado no laço a seguir
 			int contAux=0;
 			while(token2!=NULL){
 				/*
-					contAux==0:
-						filter.column
-					contAux==1:
-						filter.typeOfFilter
-					contAux==2:
-						filter.value
+				*	Para cada valor de countAux será feito uma das interações:
+				*	Quando countAux==0 será verificado as colunas
+				*	Quando countAux==1 será lido  o tipo dos filtros
+				*	Quando countAux==2 será verificado os valores
 				*/
 				if(contAux==0){
 					filtersObj[numberOfFilters].column=(char*) calloc(strlen(token2)+1, sizeof(char));
@@ -625,17 +623,20 @@ void filterTable(char* columns, Table table, char* filters){
 			int rawRowsToPrint[99];
 			int nLinesToVerify=0;
 			/*
-			*	Para cada linha da tabela original, passará o número de filtros por coluna
+			*	Para cada linha da tabela original, passará o número
+			*	de filtros por coluna
 			*
 			*/
 			for(int i=1; i < table.numRows; i++){
 				/*
-				*	O próximo for populará um vetor de inteiros com todas as linhas que devem ser avaliadas
+				*	O próximo for populará um vetor de inteiros com 
+				*	todas as linhas que devem ser avaliadas
 				*	
 				*/
 				for(int j=0; j < numberOfFilters; j++){
 					/*
-					*	Caso a coluna seja do tipo inteiro
+					*	Caso a coluna seja do tipo inteiro, será feito
+					*	as interações de filtragens respectivas
 					*
 					*/
 					if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "int")==0){
@@ -670,7 +671,8 @@ void filterTable(char* columns, Table table, char* filters){
 					}
 
 					/*
-					*	Caso a coluna seja do tipo double
+					*	Caso a coluna seja do tipo double será feito
+					*	as interações de filtragens respectivas
 					*
 					*/
 					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "double")==0){
@@ -705,7 +707,8 @@ void filterTable(char* columns, Table table, char* filters){
 					}
 
 					/*
-					*	Caso a coluna seja do tipo float
+					*	Caso a coluna seja do tipo float será feito
+					*	as interações de filtragens respectivas
 					*
 					*/
 					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "float")==0){
@@ -740,7 +743,8 @@ void filterTable(char* columns, Table table, char* filters){
 					}
 
 					/*
-					*	Caso a coluna seja do tipo char
+					*	Caso a coluna seja do tipo char será feito
+					*	as interações de filtragens respectivas
 					*
 					*/
 					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "char")==0){
@@ -775,12 +779,14 @@ void filterTable(char* columns, Table table, char* filters){
 					}
 
 					/*
-					*	Caso a coluna seja do tipo string
+					*	Caso a coluna seja do tipo string será feito
+					*	as interações de filtragens respectivas
 					*
 					*/
 					else if(strcmp(stringTillChar(table.data[0][filtersObj[j].filteredColumn], ' '), "string")==0){
 						/*
-						*	Busca por caseSensitive
+						*	Busca por caseSensitive, verificando os caracteres
+						*	mantendo letras Maiúsculas e Minúsculas.
 						*/
 						if(strcmp(filtersObj[j].typeOfFilter,"like")==0){
 							char* auxString = betweenSymbols(filtersObj[j].value,'\'','\'');
@@ -814,7 +820,8 @@ void filterTable(char* columns, Table table, char* filters){
 								continue;
 							}
 						/*
-						*	Busca sem caseSensitive
+						*	Busca sem caseSensitive, verifica os caracteres
+						*	independente de serem maiúsculas ou minúsculas
 						*/
 						}else if(strcmp(filtersObj[j].typeOfFilter,"$like")==0){
 							char* auxString = betweenSymbols(filtersObj[j].value,'\'','\'');
@@ -1820,6 +1827,7 @@ void externalInstructions(char* command){
 
 	int spaces=0;
 	int cont=0;
+	//Procura um arquivo com base no comando especificado e o armazena
 	for(int i=0; i< (int)strlen(command); i++){
 		if(command[i]==' ' && !spaces){
 			spaces++;
@@ -1840,7 +1848,7 @@ void externalInstructions(char* command){
 
 	int fileOpen=0;
 
-	char* tempCommand= malloc(255*sizeof(char));
+	char* tempCommand= malloc(255*sizeof(char)); // comando temporário que recebe uma linha
 	if( file == NULL ) {
 		boldRed();
 		printf( "Erro na abertura do arquivo! Você digitou corretamente?\n" );
@@ -1931,7 +1939,7 @@ int execute(char* command){
 Database commandToDatabase(char* command){
 	Database db;
 	db.name = wordInPositionAfterSeparations(command, " ", 2);
-
+	
 	for(int i=(int)strlen(db.name); i > (int) strlen(db.name); i--){
 		if(db.name[i]==' '){
 			db.name[i]='\0';

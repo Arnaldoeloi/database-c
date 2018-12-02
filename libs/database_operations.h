@@ -9,10 +9,12 @@
 *   @char*
 */
 Table csvToTable(char* pathToFile);
+
 /*
 *
 */
 Database commandToDatabase(char* command);
+
 /*
 *   Recebe um caminho para um arquivo .cs, depois
 *   retorna um inteiro com a quantidade de linhas
@@ -25,7 +27,7 @@ Database commandToDatabase(char* command);
 *   @int   
 */
 int countRowsInCsv(char* pathToFile);
-void selectFromTable();
+
 /*
 *   Recebe uma tabela e cria um arquivo .csv dentro
 *   de um banco
@@ -34,6 +36,7 @@ void selectFromTable();
 *   @Table table
 */
 void createTable(Table table);
+
 /*
 *   Recebe uma struct Database e cria uma pasta que
 *   funciona como um banco
@@ -42,6 +45,7 @@ void createTable(Table table);
 *   @Database db
 */
 void createDatabase(Database db);
+
 /*
 *   Recebe uma struct do tipo Table e insere o dado
 *   contido em uma tabela .csv
@@ -50,6 +54,7 @@ void createDatabase(Database db);
 *   @Table table
 */
 void insertIntoTable(Table table);
+
 /*
 *   Concatena duas strings, colocando a segunda logo
 *   após o final da primeira. Também realoca o espaço
@@ -60,11 +65,13 @@ void insertIntoTable(Table table);
 *   @char* string2
 */
 char* concat(char *string1, char *string2);
+
 /*
 *   Lista todas as tabelas e seus respectivos bancos
 *   onde estão inseridas
 */
 void listAllTables();
+
 /*
 *   Recebe uma struct do tipo Database e deleta um
 *   banco de dados contindo no caminho especificado.
@@ -73,6 +80,7 @@ void listAllTables();
 *   @Database database
 */
 void dropDatabase(Database database);
+
 /*
 *   Recebe uma struct do tipo Table e deleta um
 *   arquivo .csv contindo no caminho especificado.
@@ -81,6 +89,7 @@ void dropDatabase(Database database);
 *   @Table table
 */
 void dropTable(Table table);
+
 /*
 *   Recebe uma table e Reescreve um arquivo .csv 
 *   existênte por outra criada a partir dessa table

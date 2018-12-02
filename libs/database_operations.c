@@ -22,15 +22,21 @@ char* concat(char *string1, char *string2){
 }
 
 void createDatabase(Database db){
+	/*
+	*	struct stat st é um tipo de estrutura da biblioteca dirent.h que
+	*	permite modificações no caminho das pastas e criações dessas.
+	*/
 	struct stat st = {0};
 	char* path= NULL;
+
 	path = concat("dbs/", db.name); //concatena o nome do banco com a pasta onde ele será armazenado
 	printf("Caminho do banco: ");
 	yellow();
 	printf("%s/", path);
 	resetColor();
 	printf("\n");
-	if (stat(path, &st) == -1) { //verifica a existência do arquivo
+
+	if (stat(path, &st) == -1) {   //verifica a existência do arquivo
 	    if(mkdir(path, 0777)==-1){ //cria o arquivo com permissão 0777
 			boldRed();
 			printf("Ocorreu um problema, tente criar com outro nome ou execute o programa com privilegios de administrador.");
@@ -50,7 +56,7 @@ void createDatabase(Database db){
 }
 
 void createTable(Table table){
-	struct stat st = {0}; //buffer do stat
+	struct stat st = {0}; //buffer do stat como dito anteriormente
 	char* path= NULL;
 	path = concat("dbs/", table.database); //concatena o nome do banco com a pasta onde ele será armazenado
 	printf("Caminho do banco: ");
@@ -109,6 +115,10 @@ int countRowsInCsv(char* pathToFile){
 	char ch;
 	FILE *arq;
 	arq = fopen(pathToFile, "r");
+	/*
+	*	conta o número de '\n' contidos no final do arquivo
+	*	.csv especificados pelo File *arq.
+	*/
 	if(arq == NULL)
 		return -1;
 	else{
@@ -127,6 +137,10 @@ int countColsInCsv(char* pathToFile){
 	char ch;
 	FILE *arq;
 	arq = fopen(pathToFile, "r");
+	/*
+	*	Utiliza do mesmo esquema da countRowsInCsv, porém
+	*	conta os números de | até o primeiro '\n'
+	*/
 	if(arq == NULL)
 		return -1;
 	else{
@@ -182,8 +196,15 @@ Table csvToTable(char* pathToFile){
 		int count=0;
 		table.data=(char***) calloc(table.numRows, sizeof(char***));
 
+		/*
+		*	As estruturas de laço a seguir irão usar tokens para
+		*	quebrar as linhas do .csv transformando-as em itens
+		*	de uma struct to tipo tabela, armazenando-as em data[x][y]
+		*	sendo x uma linha de uma tabela e o y uma coluna
+		*/
+
 		char *end_str=NULL;
-		char *token = strtok_r(wholeFile, "\n", &end_str); //separa os dados para cada \n
+		char *token = strtok_r(wholeFile, "\n", &end_str); //recebe o valor da primeira linha
 
 		int row=0;
 		int col=0;
@@ -192,22 +213,17 @@ Table csvToTable(char* pathToFile){
 
 			table.data[row]=(char**) calloc(table.numCols, sizeof(char**));
 			char *end_token=NULL;
-			char *token2 = strtok_r(token, "|", &end_token); //separa os dados a cada ,
+			char *token2 = strtok_r(token, "|", &end_token); //recebe o valor do antes da primeira '|' 
 
 			while (token2 != NULL){
-
 				table.data[row][col] = token2;
-
-				token2 = strtok_r(NULL, "|", &end_token);
-
+				token2 = strtok_r(NULL, "|", &end_token); //recebe o valor seguinte após uma '|'
 				col++;
-				
-			// printf("table.data[%i][%i] = %s\n",row,col,table.data[row][col]);
 
 			}
 			col=0;
 			row++;
-			token = strtok_r(NULL, "\n", &end_str);	
+			token = strtok_r(NULL, "\n", &end_str);	//recebe a próxima linha
 		}
 		return table;
 	}
@@ -291,7 +307,10 @@ void listAllTables(){
 
 void insertIntoTable(Table table){
 	char* path = (char*)calloc(255,sizeof(char));
-	
+	/*
+	*	Concatena os valores de table.database e table.name em
+	*	uma variável char*, separando-os por '/'.
+	*/
 	path = "dbs/";
 	path = concat(path, table.database);
 	path = concat(path, "/");
@@ -299,22 +318,42 @@ void insertIntoTable(Table table){
 	path = concat(path, ".csv");
 	FILE *file = fopen(path, "a+");
 
-	if(file == NULL){
+	if(file == NULL){	//Caso não haja nada dentro do diretório
 		fclose(file);
 		boldRed();
 		printf( "Erro na abertura do arquivo! Voce digitou corretamente?\n");
 		resetColor();
+		
 	} else{
+		/*
+		*	Chama a função csvToTable, transformando o caminho em
+		*	uma struct do tipo tabela, depois checa se já existe uma
+		*	primaryKey igual a recebida pela tabela
+		*/
 		Table csvTable = csvToTable(path);
+		
 		int isAlreadyAPrimaryKey = 0;
+		/*
+		*	O laço de repetição checa as duas Tables para encontrar
+		*	se existe uma primaryKey igual a digitada
+		*/
 		for(int i=0; i < csvTable.numRows; i++){
 			if (strcmp(csvTable.data[i][0], table.data[0][0]) == 0){
 				isAlreadyAPrimaryKey = 1;
 			}
 		}
-		if(isAlreadyAPrimaryKey == 0){
+		if(isAlreadyAPrimaryKey == 0){	//Caso não exista uma primaryKey igual
+			/*
+			*	Checa se o número de colunas digitadas é o mesmo das
+			*	colunas contidas na tabela vinda do .csv
+			*/
 			if(table.numCols == csvTable.numCols){
 				int isTypesCorresponding = 0;
+				/*
+				*	Checa se os itens digitados para a tabela correspondem
+				*	aos seus respectivos tipos contidos nas colunas da 
+				*	primeira linha
+				*/
 				for(int i=0; i < csvTable.numCols; i++){
 					char* endToken = NULL;
 					char* token = strtok_r(csvTable.data[0][i], " ", &endToken);
@@ -326,9 +365,8 @@ void insertIntoTable(Table table){
 						break;
 					}
 				}
-				for (int i=0; i < table.numCols;i++){
-				}
-				if (isTypesCorresponding){
+				if (isTypesCorresponding){	//Caso os itens correspondam ao seus tipos
+					//Laço de repetição que insere os itens na tabela
 					for(int i=0; i < table.numCols; i++){
 						if(i == table.numCols-1){
 							fprintf(file,"%s",table.data[0][i]);

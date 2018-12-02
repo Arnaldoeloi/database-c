@@ -194,8 +194,8 @@ int howManyOcurrencesInString(char caracter, char* string, int ocurrences){
 }
 
 int isInFormat(char* type, char* string){
+	//	Se o tipo esperado é int
 	if (strcmp(type, "int") == 0){
-
 		for(int i=0; i < (int)strlen(string); i++){
 			if(string[i] >= 48 && string[i] <= 57){
 				if(i == (int)strlen(string)-1){
@@ -207,8 +207,8 @@ int isInFormat(char* type, char* string){
 				return 0;
 			} 
 		}
+	//	Se o tipo esperado é float
 	} else if(strcmp(type, "float") == 0){
-
 		if (howManyOcurrencesInString('.', string, 0) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
 				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 46 || string[i] == 'f')){
@@ -224,8 +224,9 @@ int isInFormat(char* type, char* string){
 		} else{
 			return 0;
 		}
+
+	//	Se o tipo esperado é double
 	} else if(strcmp(type, "double") == 0){
-		
 		if (howManyOcurrencesInString('.', string, 0) <= 1){
 			for(int i=0; i <= (int)strlen(string); i++){
 				if((string[i] >= 48 && string[i] <= 57) || (string[i] == 46 || string[i] == 'd')){
@@ -242,27 +243,44 @@ int isInFormat(char* type, char* string){
 			return 0;
 		}
 
+	//	Se o tipo esperando é char
 	} else if(strcmp(type, "char") == 0){
 		if ((int)strlen(string) == 1){
 			return 1;
 		} else{
 			return 0;
 		}
+	//	Se o tipo esperado é string
 	} else if(strcmp(type, "string") == 0){
 		return 1;
+	//	Se o tipo esperado é date
 	} else if(strcmp(type, "date") == 0){
 		if((int)strlen(string) == 10){
+			//	Checa se o número de barras contida é igual a 2
 			if(howManyOcurrencesInString('/', string, 0) == 2){
 				char *tempString = NULL;
 				int tempValue = 0;
 				char *endToken = NULL;
 
+				//	copia a string em uma outra string temporária
 				tempString = strcpy(tempString, string);
+
+				//	Atribui o valor do token como o primeiro valor antes da '/'
 				char *token = strtok_r(tempString, "/", &endToken);
 
+				/*
+				*	Laço de repetição que transforma o token em um inteiro e checa
+				*	se esse é menor 31, número de dias aproximado de um mês
+				*/
 				for(int i=0; i < (int)strlen(string); i++){
+					/*
+					*	Caso o i seja igual a 0, se o token (inteiro) for menor ou igual
+					*	a 31, o token será atribuido o valor após a primeira '/'. Caso não
+					*	ele retorna 0 e quebra o laço.
+					*/
 					if (i == 0){
 						if(stringToInt(token) <= 31){
+							
 							char *token = strtok_r(tempString, "/", &endToken);
 							continue;
 						} else{
@@ -270,6 +288,11 @@ int isInFormat(char* type, char* string){
 							break;
 						}
 					}
+					/*
+					*	Caso o i seja igual a 2 ou 5, se na string original seus valores
+					*	no vetor 2 e 5 forem iguais a '/' o laço continua, se não, retorna
+					*	0 e quebra o laço
+					*/
 					if (i == 2 || i == 5){
 						if(string[i] == '/'){
 							continue;
@@ -278,6 +301,10 @@ int isInFormat(char* type, char* string){
 							return 0;
 						}
 					}
+					/*
+					*	Caso o i seja igual a 3, se o token (inteiro) for menor ou igual
+					*	a 12, o laço continua. Caso não ele retorna 0 e quebra o laço
+					*/
 					if (i == 3){
 						if(stringToInt(token) <= 12){
 							char *token = strtok_r(tempString, "/", &endToken);
@@ -287,11 +314,15 @@ int isInFormat(char* type, char* string){
 							break;
 						}
 					}
+					/*
+					*	Caso o i seja igual a 9, todas as condições foram satisfeitas, então
+					*	ele retorna 1 e quebra o laço
+					*/
 					if (i == 9){
 						return 1;
+						break;
 					}
 				}
-				// free(token);
 			} else{
 				return 0;
 			}
@@ -304,21 +335,27 @@ int isInFormat(char* type, char* string){
 char* switchCommaToVerticalBar(char* string){
 	char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
 	strcpy(stringNew, string); //Copia "string" e atribui o valor a "stringNew"
-	
+	/*
+	*	O laço lê todos os valores do vetor e onde for igual a ',' será
+	*	trocado por '|'
+	*/
 	for(int i=0; i < (int)strlen(string) ; i++){
 		if(string[i] == ','){
 			stringNew[i] = '|';
 		}
 	}
 	return stringNew;
-	// free(stringNew);
+	free(stringNew);
 }
 
 char* switchCommaToVerticalBarWithQMarks(char* string){
 	char* stringNew = (char*)calloc((int)strlen(string),sizeof(char));
 	strcpy(stringNew, string); //Copia "string" e atribui o valor a "stringNew"
 
-	//"hasQMark" é uma boleana que é 0 quando o laço a seguir não está rodando dentro de aspas e é 1 quando está
+	/*
+	*	"hasQMark" é uma boleana que é 0 quando o laço a seguir
+	*	não está rodando dentro de aspas, e 1 quando está
+	*/
 	int hasQMark = 0; 
 
 	for(int i=0; i < (int)strlen(string) ; i++){
@@ -354,23 +391,21 @@ int isSubstringInString(char* string, char* subString){
 	}
 	if (strcmp(validatedString,subString) == 0){
 		return 1;
-		// free(validatedString);
 	} else {
 		return 0;
-		// free(validatedString);
 	}
 }
 
 char* getSubstringAfterSubstringInString(char* string, char* subString){
-	// Serve para chegar se há a substring dentro da string
+	//	Serve para chegar se há a substring dentro da string
 	char* validatedString = (char*)calloc((int)strlen(subString),sizeof(char));
-	// É a subString nova que fica logo após a subString dentro da string
+	//	É a subString nova que fica logo após a subString dentro da string
 	char* subStringAfter = (char*)calloc((int)strlen(string),sizeof(char));
-	// Verifica que a subString é igual a validatedString
+	//	Verifica que a subString é igual a validatedString
 	int alreadyValidated=0;
 	for(int i=0, j=0, k=0, fSpace=0; i <= (int)strlen(string); i++){
-		// Condição bool para ver se o primeiro espaço já foi usado
-		//Checa se a posição i da string e a posição j da subString são iguais e se forem, salva em validatedString[j]
+		//	Condição bool para ver se o primeiro espaço já foi usado
+		//	Checa se a posição i da string e a posição j da subString são iguais e se forem, salva em validatedString[j]
 		if (string[i] == subString[j]){
 			if(alreadyValidated == 0){
 				validatedString[j] = string[i];
@@ -414,7 +449,7 @@ char* invertString(char* string){
 
 char* removeCharsFromString (char* string, char c){
 	char* newString=NULL;
-	int cont=0;
+	int cont=0; // contador usado para receber o número de dados dentro do vetor de char*
 	for(int i=0; i<(int) strlen(string); i++){
 		if(string[i]!=c){
 			newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
@@ -424,9 +459,12 @@ char* removeCharsFromString (char* string, char c){
 			continue;
 		}
 	}
-	newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char));
+
+	newString=(char*) realloc(newString, cont*sizeof(char)+sizeof(char)); //Realoca o tamanho da string para a nova
 	newString[cont]='\0';
+
 	return newString;
+	free(newString);
 }
 
 char stringToChar(char* string){
@@ -459,59 +497,3 @@ char* switchCharToBar(char caracter, char* string){
 	}
 	return stringNew;
 }
-
-// Filter extractFilterFromToken(char* token){
-// 	Filter filter;
-// 	if(howManyOcurrencesInString(' ', token)>=1){
-
-// 		char *end_token2=NULL;			
-// 		char *token2 = strtok_r(token, " ", &end_token2);
-		
-		
-// 		int contAux=0;
-// 		while(token2!=NULL){
-// 			/*
-// 				contAux==0:
-// 					filter.column
-// 				contAux==1:
-// 					filter.typeOfFilter
-// 				contAux==2:
-// 					filter.value
-// 			*/
-
-// 			// printf("token2:%s\n", token2);
-// 			if(contAux==0){
-// 				filter.column=(char*) calloc(strlen(token2)+1, sizeof(char));
-// 				filter.column=token2;
-// 			}
-// 			else if(contAux==1){
-// 				filter.typeOfFilter=(char*) calloc(strlen(token2)+1, sizeof(char));
-// 				filter.typeOfFilter=token2;
-// 			}
-// 			else if(contAux==2){
-// 				filter.value=(char*) calloc(strlen(token2)+1, sizeof(char));
-// 				filter.value=token2;
-// 			}
-// 			token2 = strtok_r(NULL, " ", &end_token2);
-// 			contAux++;
-// 		}
-// 		return filter;
-// 	}else{
-// 		int cont1=0;
-// 		int cont2=0;
-// 		int cont3=0;
-		
-// 		int columnSet=0;
-// 		int typeSet=0;
-// 		int valueSet=0;
-
-// 		int cont=0;
-// 		for(int i=0; i< (int) strlen(token); i++){
-// 			if(!columnSet){
-// 				if(token[i]==' ' || token[i]=='>' || token[i]=='<' || token[i]=='='){
-
-// 				}
-// 			}
-// 		}
-// 	}
-// }
